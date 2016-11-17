@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="javaBench:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/javaBench_jar</output-path>
+    <root id="archive" name="javaBench.jar">
+      <element id="module-output" name="javaBench" />
+    </root>
+  </artifact>
+</component>
