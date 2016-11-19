@@ -1,7 +1,8 @@
 package Controller;
 
-import Helper.Timer;
-import Test.CPU;
+import Test.CPU.DoubleTest;
+import Test.CPU.IntTest;
+import Test.CPU.LongTest;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -28,10 +29,9 @@ public class StartBtnController {
                         @Override
                         public void run() {
                             super.run();
-                            CPU.addInt();
-                            CPU.subtractInt();
-                            CPU.multiplyInt();
-                            CPU.divideInt();
+                            DoubleTest.measureAll();
+                            LongTest.measureAll();
+                            IntTest.measureAll();
                         }
                     }.start();
 			    }
