@@ -24,13 +24,16 @@ public class StartBtnController {
 		StartBtn.setOnAction(new EventHandler<ActionEvent>(){
 			 @Override
 			    public void handle(ActionEvent e) {
-				 int[] n = new int[100_000_000];
-				 for (int i = 0; i<n.length; i++) {
-                     n[i] = rand.nextInt(Integer.MAX_VALUE);
-                 }
-                 Timer t = new Timer();
-				 CPU.measure(n, CPU::dzielInt);
-                 StartBtn.setText(String.valueOf(t.check()/n.length));
+				    new Thread(){
+                        @Override
+                        public void run() {
+                            super.run();
+                            CPU.addInt();
+                            CPU.subtractInt();
+                            CPU.multiplyInt();
+                            CPU.divideInt();
+                        }
+                    }.start();
 			    }
 		});
 	}
