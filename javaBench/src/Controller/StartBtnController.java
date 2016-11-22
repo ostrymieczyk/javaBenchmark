@@ -1,8 +1,7 @@
 package Controller;
 
-import Test.CPU.DoubleTest;
-import Test.CPU.IntTest;
-import Test.CPU.LongTest;
+import Test.CPU.Quicksort;
+import Test.CPU.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -29,9 +28,13 @@ public class StartBtnController {
                         @Override
                         public void run() {
                             super.run();
-                            DoubleTest.measureAll();
-                            LongTest.measureAll();
-                            IntTest.measureAll();
+//							IntTest.measureAll();
+//							LongTest.measureAll();
+//                            DoubleTest.measureAll();
+//                            CompressTest.warmupAndTest(5, 10);
+//                            DataEncryptior.warmupAndTest(20, 140);
+//                            Quicksort.warmupAndTest(10,40);
+                            PrimeNumberTest.warmupAndTest(5,10);
                         }
                     }.start();
 			    }

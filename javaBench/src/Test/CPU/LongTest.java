@@ -4,7 +4,7 @@ import Helper.Timer;
 
 public class LongTest {
 
-    private static long RESULT = 0;
+    private static long RESULT = 50;
 
     private static long addLong(){
         int n = 10, count = 10_000_000;
@@ -12,10 +12,11 @@ public class LongTest {
         do {
             double st = 0.0;
             for (int j=0; j<n; j++) {
-                long i = 1;
                 Timer t = new Timer();
-                while (i<=count)
-                    RESULT += i++;
+                for (int i = 1; i <= count; i++) {
+                    long ii = (long) (i);
+                    RESULT += ii;
+                }
                 runningTime = t.check();
                 double time = runningTime / count;
                 st += time;
@@ -34,10 +35,11 @@ public class LongTest {
         do {
             double st = 0.0, sst = 0.0;
             for (int j=0; j<n; j++) {
-                long i = 1;
                 Timer t = new Timer();
-                while (i<=count)
-                    RESULT -= i++;
+                for (int i = 1; i <= count; i++) {
+                    long ii = (long) (i);
+                    RESULT -= ii;
+                }
                 runningTime = t.check();
                 double time = runningTime / count;
                 st += time;
@@ -56,10 +58,11 @@ public class LongTest {
         do {
             double st = 0.0, sst = 0.0;
             for (int j=0; j<n; j++) {
-                long i = 1;
                 Timer t = new Timer();
-                while (i<=count)
-                    RESULT *= i++;
+                for (int i = 1; i <= count; i++) {
+                    long ii = (long) (i);
+                    RESULT *= ii;
+                }
                 runningTime = t.check();
                 double time = runningTime / count;
                 st += time;
@@ -78,10 +81,11 @@ public class LongTest {
         do {
             double st = 0.0, sst = 0.0;
             for (int j=0; j<n; j++) {
-                long i = 1;
                 Timer t = new Timer();
-                while (i<=count)
-                    RESULT /= i++;
+                for (int i = 1; i <= count; i++) {
+                    long ii = (long) (i);
+                    RESULT /= ii;
+                }
                 runningTime = t.check();
                 double time = runningTime / count;
                 st += time;

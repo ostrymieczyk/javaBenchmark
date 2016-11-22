@@ -4,7 +4,7 @@ import Helper.Timer;
 
 public class DoubleTest {
 
-    private static double RESULT = 0.0;
+    private static double RESULT = 50.0;
 
     private static double addDouble(){
         int n = 10, count = 10_000_000;
@@ -12,10 +12,11 @@ public class DoubleTest {
         do {
             double st = 0.0;
             for (int j=0; j<n; j++) {
-                int i = 1;
                 Timer t = new Timer();
-                while (i<=count)
-                    RESULT += (double)(i++)*1.1;
+                for (int i = 1; i <= count; i++) {
+                    double ii = (double) (i);
+                    RESULT += ii;
+                }
                 runningTime = t.check();
                 double time = runningTime / count;
                 st += time;
@@ -34,10 +35,11 @@ public class DoubleTest {
         do {
             double st = 0.0, sst = 0.0;
             for (int j=0; j<n; j++) {
-                int i = 1;
                 Timer t = new Timer();
-                while (i<=count)
-                    RESULT -= (double)(i++)*1.1;
+                for (int i = 1; i <= count; i++) {
+                    double ii = (double) (i);
+                    RESULT -= ii;
+                }
                 runningTime = t.check();
                 double time = runningTime / count;
                 st += time;
@@ -56,10 +58,11 @@ public class DoubleTest {
         do {
             double st = 0.0, sst = 0.0;
             for (int j=0; j<n; j++) {
-                int i = 1;
                 Timer t = new Timer();
-                while (i<=count)
-                    RESULT *= (double)(i++)*1.1;
+                for (int i = 1; i <= count; i++) {
+                    double ii = (double) (i);
+                    RESULT *= ii;
+                }
                 runningTime = t.check();
                 double time = runningTime / count;
                 st += time;
@@ -78,10 +81,11 @@ public class DoubleTest {
         do {
             double st = 0.0, sst = 0.0;
             for (int j=0; j<n; j++) {
-                int i = 1;
                 Timer t = new Timer();
-                while (i<=count)
-                    RESULT /= (double)(i++)*1.1;
+                for (int i = 1; i <= count; i++) {
+                    double ii = (double) (i);
+                    RESULT /= ii;
+                }
                 runningTime = t.check();
                 double time = runningTime / count;
                 st += time;

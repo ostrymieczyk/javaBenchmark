@@ -4,48 +4,45 @@ import Helper.Timer;
 
 public class IntTest {
 
-    private static int RESULT = 0;
+    private static int RESULT = 50;
+    private static int N = 10, COUNT = 10_000_000;
 
     private static int addInt(){
-        int n = 10, count = 10_000_000;
         double runningTime = 0.0;
         do {
             double st = 0.0;
-            for (int j=0; j<n; j++) {
-                int i = 1;
+            for (int j=0; j<N; j++) {
                 Timer t = new Timer();
-                while (i<=count)
-                    RESULT += i++;
+                for (int i = 1; i <= COUNT; i++)
+                    RESULT += i;
                 runningTime = t.check();
-                double time = runningTime / count;
+                double time = runningTime / COUNT;
                 st += time;
             }
-            double mean = st/n;
-            System.out.printf("%6.1f  %10d%n", mean, count);
-            count *= 2;
-        } while (runningTime < 1e9 && count < Integer.MAX_VALUE/2);
+            double mean = st/N;
+            System.out.printf("%6.1f  %10d%n", mean, COUNT);
+            COUNT *= 2;
+        } while (runningTime < 1e9 && COUNT < Integer.MAX_VALUE/2);
         System.out.println("Add Int done");
         return RESULT;
     }
 
     private static int subtractInt(){
-        int n = 10, count = 10_000_000;
         double runningTime = 0.0;
         do {
             double st = 0.0, sst = 0.0;
-            for (int j=0; j<n; j++) {
-                int i = 1;
+            for (int j=0; j<N; j++) {
                 Timer t = new Timer();
-                while (i<=count)
-                    RESULT -= i++;
+                for (int i = 1; i <= COUNT; i++)
+                    RESULT -= i;
                 runningTime = t.check();
-                double time = runningTime / count;
+                double time = runningTime / COUNT;
                 st += time;
             }
-            double mean = st/n;
-            System.out.printf("%6.1f  %10d%n", mean, count);
-            count *= 2;
-        } while (runningTime < 1e9 && count < Integer.MAX_VALUE/2);
+            double mean = st/N;
+            System.out.printf("%6.1f  %10d%n", mean, COUNT);
+            COUNT *= 2;
+        } while (runningTime < 1e9 && COUNT < Integer.MAX_VALUE/2);
         System.out.println("Substract Int done");
         return RESULT;
     }
@@ -56,10 +53,9 @@ public class IntTest {
         do {
             double st = 0.0, sst = 0.0;
             for (int j=0; j<n; j++) {
-                int i = 1;
                 Timer t = new Timer();
-                while (i<=count)
-                    RESULT *= i++;
+                for (int i = 1; i <= count; i++)
+                    RESULT *= i;
                 runningTime = t.check();
                 double time = runningTime / count;
                 st += time;
@@ -77,11 +73,10 @@ public class IntTest {
         double runningTime = 0.0;
         do {
             double st = 0.0, sst = 0.0;
-            for (int j=0; j<n; j++) {
-                int i = 1;
+            for (int j=0; j<n; j++){
                 Timer t = new Timer();
-                while (i<=count)
-                    RESULT /= i++;
+                for (int i = 1; i <= count; i++)
+                    RESULT /= i;
                 runningTime = t.check();
                 double time = runningTime / count;
                 st += time;
