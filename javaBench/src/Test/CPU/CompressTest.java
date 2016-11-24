@@ -20,7 +20,6 @@ public class CompressTest {
     private static InputStream is = null;
     private static ByteArrayOutputStream out = null;
     private static BitOutputStream bitOut;
-    private static ByteBuffer bb;
 
     private static void initializeOutputStreams(){
         out = new ByteArrayOutputStream();
@@ -64,6 +63,7 @@ public class CompressTest {
     }
 
     private static int compressTest(int loop) throws IOException {
+        System.out.println("\nCompressTest\n");
         initializeOutputStreams();
         double speed = 0.0;
         for (int i = 0; i<loop; i++) {
@@ -76,7 +76,7 @@ public class CompressTest {
         }
         closeStreams();
         speed /= loop;
-        System.out.println(speed + " kb/s");
+        System.out.println(speed + " kb/s\n");
         return RESULT;
 
     }

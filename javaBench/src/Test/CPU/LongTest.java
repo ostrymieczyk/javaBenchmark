@@ -2,107 +2,116 @@ package Test.CPU;
 
 import Helper.Timer;
 
+import java.util.Random;
+
 public class LongTest {
 
     private static long RESULT = 50;
 
-    private static long addLong(){
-        int n = 10, count = 10_000_000;
-        double runningTime = 0.0;
-        do {
-            double st = 0.0;
-            for (int j=0; j<n; j++) {
-                Timer t = new Timer();
-                for (int i = 1; i <= count; i++) {
-                    long ii = (long) (i);
-                    RESULT += ii;
-                }
-                runningTime = t.check();
-                double time = runningTime / count;
-                st += time;
+    private static long[] generateRandomLongArray(int arraySize){
+        Random random = new Random();
+        long[] array = new long[arraySize];
+        for (int i = 0; i < arraySize; i++) {
+            array[i] = random.nextLong();
+            if (array[i] == 0)
+                array[i] ++;
+        }
+        return array;
+    }
+
+    private static double countOneOperationTime(int randomIntArraySize, int loops, double loopTime){
+        return loopTime/(randomIntArraySize*loops);
+    }
+
+    private static long measureAddLong(int loops, int intArraySize){
+        System.out.println("Add Start");
+        double time = 0.0;
+        for (int loop = 0; loop < loops; loop++) {
+            long[] intArray = generateRandomLongArray(intArraySize);
+            Timer t = new Timer();
+            for (long i : intArray) {
+                RESULT += i;
             }
-            double mean = st/n;
-            System.out.printf("%6.1f  %10d%n", mean, count);
-            count *= 2;
-        } while (runningTime < 1e9 && count < Integer.MAX_VALUE/2);
-        System.out.println("Add Long done");
+            time += t.check();
+        }
+        System.out.println(countOneOperationTime(intArraySize, loops, time)+" ns\n");
         return RESULT;
     }
 
-    private static long subtractLong(){
-        int n = 10, count = 10_000_000;
-        double runningTime = 0.0;
-        do {
-            double st = 0.0, sst = 0.0;
-            for (int j=0; j<n; j++) {
-                Timer t = new Timer();
-                for (int i = 1; i <= count; i++) {
-                    long ii = (long) (i);
-                    RESULT -= ii;
-                }
-                runningTime = t.check();
-                double time = runningTime / count;
-                st += time;
+    private static long measureSubstractLong(int loops, int intArraySize){
+        System.out.println("Substract Start");
+        double time = 0.0;
+        for (int loop = 0; loop < loops; loop++) {
+            long[] intArray = generateRandomLongArray(intArraySize);
+            Timer t = new Timer();
+            for (long i : intArray) {
+                RESULT -= i;
             }
-            double mean = st/n;
-            System.out.printf("%6.1f  %10d%n", mean, count);
-            count *= 2;
-        } while (runningTime < 1e9 && count < Integer.MAX_VALUE/2);
-        System.out.println("Substract Long done");
+            time += t.check();
+        }
+        System.out.println(countOneOperationTime(intArraySize, loops, time)+" ns\n");
         return RESULT;
     }
 
-    private static long multiplyLong(){
-        int n = 10, count = 10_000_000;
-        double runningTime = 0.0;
-        do {
-            double st = 0.0, sst = 0.0;
-            for (int j=0; j<n; j++) {
-                Timer t = new Timer();
-                for (int i = 1; i <= count; i++) {
-                    long ii = (long) (i);
-                    RESULT *= ii;
-                }
-                runningTime = t.check();
-                double time = runningTime / count;
-                st += time;
+    private static long measureMultiplyLong(int loops, int intArraySize){
+        System.out.println("Multiply Start");
+        double time = 0.0;
+        for (int loop = 0; loop < loops; loop++) {
+            long[] intArray = generateRandomLongArray(intArraySize);
+            Timer t = new Timer();
+            for (long i : intArray) {
+                RESULT *= i;
             }
-            double mean = st/n;
-            System.out.printf("%6.1f  %10d%n", mean, count);
-            count *= 2;
-        } while (runningTime < 1e9 && count < Integer.MAX_VALUE/2);
-        System.out.println("Multiply Long done");
+            time += t.check();
+        }
+        System.out.println(countOneOperationTime(intArraySize, loops, time)+" ns\n");
         return RESULT;
     }
 
-    private static long divideLong(){
-        int n = 10, count = 10_000_000;
-        double runningTime = 0.0;
-        do {
-            double st = 0.0, sst = 0.0;
-            for (int j=0; j<n; j++) {
-                Timer t = new Timer();
-                for (int i = 1; i <= count; i++) {
-                    long ii = (long) (i);
-                    RESULT /= ii;
-                }
-                runningTime = t.check();
-                double time = runningTime / count;
-                st += time;
+    private static long measureDivideLong(int loops, int intArraySize){
+        System.out.println("Divide Start");
+        double time = 0.0;
+        for (int loop = 0; loop < loops; loop++) {
+            long[] intArray = generateRandomLongArray(intArraySize);
+            Timer t = new Timer();
+            for (long i : intArray) {
+                RESULT /= i;
             }
-            double mean = st/n;
-            System.out.printf("%6.1f  %10d%n", mean, count);
-            count *= 2;
-        } while (runningTime < 1e9 && count < Integer.MAX_VALUE/2);
-        System.out.println("Divide Long done");
+            time += t.check();
+        }
+        System.out.println(countOneOperationTime(intArraySize, loops, time)+" ns\n");
         return RESULT;
     }
+     private static long warmupAndMeasureAdd(int warmupLoops, int testLoops, int arrySize){
+        long a = measureAddLong(warmupLoops, arrySize);
+        long b = measureAddLong(testLoops, arrySize);
+        return a + b;
+     }
 
-    public static long measureAll(){
-        long a = addLong();
-        long b = subtractLong();
-        long c = multiplyLong();
-        long d = divideLong();
+    private static long warmupAndMeasureSubstarct(int warmupLoops, int testLoops, int arrySize){
+        long a = measureSubstractLong(warmupLoops, arrySize);
+        long b = measureSubstractLong(testLoops, arrySize);
+        return a + b;
+    }
+
+    private static long warmupAndMeasureMultiply(int warmupLoops, int testLoops, int arrySize){
+        long a = measureMultiplyLong(warmupLoops, arrySize);
+        long b = measureMultiplyLong(testLoops, arrySize);
+        return a + b;
+    }
+
+    private static long warmupAndMeasureDivide(int warmupLoops, int testLoops, int arrySize){
+        long a = measureDivideLong(warmupLoops, arrySize);
+        long b = measureDivideLong(testLoops, arrySize);
+        return a + b;
+    }
+
+    public static long measureAll(int warmupLoops, int loops, int size){
+        System.out.println("\nLONG:\n");
+        long a = warmupAndMeasureAdd(warmupLoops, loops, size);
+        long b = warmupAndMeasureSubstarct(warmupLoops, loops, size);
+        long c = warmupAndMeasureMultiply(warmupLoops, loops, size);
+        long d = warmupAndMeasureDivide(warmupLoops, loops, size);
         return a+b+c+d;
     }
 }

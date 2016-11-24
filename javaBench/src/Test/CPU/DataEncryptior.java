@@ -62,13 +62,14 @@ public class DataEncryptior {
     }
 
     private static int encryptTest(int loop){
+        System.out.println("\nencryptTest\n");
         double time = 0;
         for (int i = 0; i<loop; i++){
             byte[] b = getRandomByteArrayInSize(10_000_000);
             time += measureEncryptTime("Bar12345Bar12345", "RandomInirVector", b);
             getIntFromCompressedDataAndAddItToResult();
         }
-        System.out.println(time/(1e6*loop));
+        System.out.println(time/(1e6*loop)+ " ms\n");
         return RESULT;
     }
 

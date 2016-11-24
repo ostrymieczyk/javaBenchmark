@@ -28,12 +28,12 @@ public class StartBtnController {
                         @Override
                         public void run() {
                             super.run();
-//							IntTest.measureAll();
-//							LongTest.measureAll();
-//                            DoubleTest.measureAll();
-//                            CompressTest.warmupAndTest(5, 10);
-//                            DataEncryptior.warmupAndTest(20, 140);
-//                            Quicksort.warmupAndTest(10,40);
+							IntTest.measureAll(50, 200, 2_500_000);
+							LongTest.measureAll(25, 200, 1_250_000);
+                            DoubleTest.measureAll(25, 200, 1_250_000);
+                            CompressTest.warmupAndTest(5, 10);
+                            DataEncryptior.warmupAndTest(20, 140);
+                            Quicksort.warmupAndTest(10,40);
                             PrimeNumberTest.warmupAndTest(5,10);
                         }
                     }.start();

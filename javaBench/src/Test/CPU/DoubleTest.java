@@ -2,107 +2,118 @@ package Test.CPU;
 
 import Helper.Timer;
 
+import java.util.Random;
+
 public class DoubleTest {
 
     private static double RESULT = 50.0;
 
-    private static double addDouble(){
-        int n = 10, count = 10_000_000;
-        double runningTime = 0.0;
-        do {
-            double st = 0.0;
-            for (int j=0; j<n; j++) {
-                Timer t = new Timer();
-                for (int i = 1; i <= count; i++) {
-                    double ii = (double) (i);
-                    RESULT += ii;
-                }
-                runningTime = t.check();
-                double time = runningTime / count;
-                st += time;
+    private static double[] generateRandomDoubleArray(int arraySize){
+        Random random = new Random();
+        double[] array = new double[arraySize];
+        for (int i = 0; i < arraySize; i++) {
+            array[i] = random.nextDouble();
+            if (array[i] == 0.0)
+                array[i] ++;
+        }
+        return array;
+    }
+
+    private static double countOneOperationTime(int randomIntArraySize, int loops, double loopTime){
+        return loopTime/(randomIntArraySize*loops);
+    }
+
+    private static double measureAdd(int loops, int intArraySize){
+        System.out.println("Add Start");
+        double time = 0.0;
+        for (int loop = 0; loop < loops; loop++) {
+            double[] intArray = generateRandomDoubleArray(intArraySize);
+            Timer t = new Timer();
+            for (double i : intArray) {
+                RESULT += i;
             }
-            double mean = st/n;
-            System.out.printf("%6.1f  %10d%n", mean, count);
-            count *= 2;
-        } while (runningTime < 1e9 && count < Integer.MAX_VALUE/2);
-        System.out.println("Add Double done");
+            time += t.check();
+        }
+        System.out.println(countOneOperationTime(intArraySize, loops, time)+" ns\n");
         return RESULT;
     }
 
-    private static double subtractDouble(){
-        int n = 10, count = 10_000_000;
-        double runningTime = 0.0;
-        do {
-            double st = 0.0, sst = 0.0;
-            for (int j=0; j<n; j++) {
-                Timer t = new Timer();
-                for (int i = 1; i <= count; i++) {
-                    double ii = (double) (i);
-                    RESULT -= ii;
-                }
-                runningTime = t.check();
-                double time = runningTime / count;
-                st += time;
+    private static double measureSubstract(int loops, int intArraySize){
+        System.out.println("Substract Start");
+        double time = 0.0;
+        for (int loop = 0; loop < loops; loop++) {
+            double[] intArray = generateRandomDoubleArray(intArraySize);
+            Timer t = new Timer();
+            for (double i : intArray) {
+                RESULT -= i;
             }
-            double mean = st/n;
-            System.out.printf("%6.1f  %10d%n", mean, count);
-            count *= 2;
-        } while (runningTime < 1e9 && count < Integer.MAX_VALUE/2);
-        System.out.println("Substract Double done");
+            time += t.check();
+        }
+        System.out.println(countOneOperationTime(intArraySize, loops, time)+" ns\n");
         return RESULT;
     }
 
-    private static double multiplyDouble(){
-        int n = 10, count = 10_000_000;
-        double runningTime = 0.0;
-        do {
-            double st = 0.0, sst = 0.0;
-            for (int j=0; j<n; j++) {
-                Timer t = new Timer();
-                for (int i = 1; i <= count; i++) {
-                    double ii = (double) (i);
-                    RESULT *= ii;
-                }
-                runningTime = t.check();
-                double time = runningTime / count;
-                st += time;
+    private static double measureMultiply(int loops, int intArraySize){
+        System.out.println("Multiply Start");
+        double time = 0.0;
+        for (int loop = 0; loop < loops; loop++) {
+            double[] intArray = generateRandomDoubleArray(intArraySize);
+            Timer t = new Timer();
+            for (double i : intArray) {
+                RESULT *= i;
             }
-            double mean = st/n;
-            System.out.printf("%6.1f  %10d%n", mean, count);
-            count *= 2;
-        } while (runningTime < 1e9 && count < Integer.MAX_VALUE/2);
-        System.out.println("Multiply Double done");
+            time += t.check();
+        }
+        System.out.println(countOneOperationTime(intArraySize, loops, time) +" ns\n");
         return RESULT;
     }
 
-    private static double divideDouble(){
-        int n = 10, count = 10_000_000;
-        double runningTime = 0.0;
-        do {
-            double st = 0.0, sst = 0.0;
-            for (int j=0; j<n; j++) {
-                Timer t = new Timer();
-                for (int i = 1; i <= count; i++) {
-                    double ii = (double) (i);
-                    RESULT /= ii;
-                }
-                runningTime = t.check();
-                double time = runningTime / count;
-                st += time;
+    private static double measureDivide(int loops, int ArraySize){
+        System.out.println("Divide Start");
+        double time = 0.0;
+        for (int loop = 0; loop < loops; loop++) {
+            double[] Array = generateRandomDoubleArray(ArraySize);
+            Timer t = new Timer();
+            for (double i : Array) {
+                RESULT /= i;
             }
-            double mean = st/n;
-            System.out.printf("%6.1f  %10d%n", mean, count);
-            count *= 2;
-        } while (runningTime < 1e9 && count < Integer.MAX_VALUE/2);
-        System.out.println("Divide Double done");
+            time += t.check();
+        }
+        System.out.println(countOneOperationTime(ArraySize, loops, time)+" ns\n");
         return RESULT;
     }
 
-    public static double measureAll(){
-        double a = addDouble();
-        double b = subtractDouble();
-        double c = multiplyDouble();
-        double d = divideDouble();
+    private static double warmupAndMeasureAdd(int warmupLoops, int testLoops, int arrySize){
+        double a = measureAdd(warmupLoops, arrySize);
+        double b = measureAdd(testLoops, arrySize);
+        return a + b;
+    }
+
+    private static double warmupAndMeasureSubstarct(int warmupLoops, int testLoops, int arrySize){
+        double a = measureSubstract(warmupLoops, arrySize);
+        double b = measureSubstract(testLoops, arrySize);
+        return a + b;
+    }
+
+    private static double warmupAndMeasureMultiply(int warmupLoops, int testLoops, int arrySize){
+        double a = measureMultiply(warmupLoops, arrySize);
+        double b = measureMultiply(testLoops, arrySize);
+        return a + b;
+    }
+
+    private static double warmupAndMeasureDivide(int warmupLoops, int testLoops, int arrySize){
+        double a = measureDivide(warmupLoops, arrySize);
+        double b = measureDivide(testLoops, arrySize);
+        return a + b;
+    }
+
+    public static double measureAll(int warmupLoops, int loops, int size){
+        System.out.println("\nDOUBLE:\n");
+        double a = warmupAndMeasureAdd(warmupLoops, loops, size);
+        double b = warmupAndMeasureSubstarct(warmupLoops, loops, size);
+        double c = warmupAndMeasureMultiply(warmupLoops, loops, size);
+        double d = warmupAndMeasureDivide(warmupLoops, loops, size);
         return a+b+c+d;
     }
+
 }

@@ -30,7 +30,7 @@ public class PrimeNumberTest {
     }
 
     private static int primeNumberTest(int loop){
-
+        System.out.println("\nprimeNumberTest\n");
         double time = 0.0;
         for(int i=0; i<loop; i++) {
             int[] array = generateNumbers(100_000);
@@ -41,7 +41,7 @@ public class PrimeNumberTest {
             }
             time += t.check();
         }
-        System.out.println(time/(1e9*loop));
+        System.out.println(time/(1e9*loop)+" ns\n");
 
         return RESULT;
     }

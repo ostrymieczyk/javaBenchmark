@@ -52,6 +52,7 @@ public class Quicksort {
     }
 
     private static int quicksortTest(int loop){
+        System.out.println("\nquicksortTest\n");
         double time = 0.0;
         for (int i = 0; i<loop; i++){
             int[] toSort = generateArray(2_500_000), sorted;
@@ -60,7 +61,7 @@ public class Quicksort {
             time += t.check();
             RESULT += sorted.hashCode();
         }
-        System.out.println(time/(1e6*loop));
+        System.out.println(time/(1e6*loop)+" ms\n");
         return RESULT;
     }
 
