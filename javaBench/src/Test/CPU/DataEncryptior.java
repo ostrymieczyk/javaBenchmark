@@ -17,7 +17,6 @@ public class DataEncryptior {
 
     private static int RESULT = 0;
     private static byte[] encryptedData;
-    private static ByteBuffer bb;
 
     public static byte[] encrypt(String key, String initVector, byte[] decryptedData) {
         return crypto(key, initVector, decryptedData, Cipher.ENCRYPT_MODE);
@@ -58,7 +57,7 @@ public class DataEncryptior {
     }
 
     private static void getIntFromCompressedDataAndAddItToResult(){
-        RESULT += ByteBuffer.wrap(encryptedData).getInt();
+        RESULT += encryptedData.hashCode();
     }
 
     private static int encryptTest(int loop){

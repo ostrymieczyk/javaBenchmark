@@ -75,7 +75,7 @@ public class LongTest {
             long[] intArray = generateRandomLongArray(intArraySize);
             Timer t = new Timer();
             for (long i : intArray) {
-                RESULT /= i;
+                RESULT += 700000000/i;
             }
             time += t.check();
         }

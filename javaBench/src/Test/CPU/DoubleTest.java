@@ -75,7 +75,7 @@ public class DoubleTest {
             double[] Array = generateRandomDoubleArray(ArraySize);
             Timer t = new Timer();
             for (double i : Array) {
-                RESULT /= i;
+                RESULT += 7000000000.4/i;
             }
             time += t.check();
         }

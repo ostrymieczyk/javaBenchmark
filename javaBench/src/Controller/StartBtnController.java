@@ -25,11 +25,11 @@ public class StartBtnController {
 			 @Override
 			    public void handle(ActionEvent e) {
 				    new Thread(){
-                        @Override
-                        public void run() {
-                            super.run();
-							IntTest.measureAll(50, 200, 2_500_000);
-							LongTest.measureAll(25, 200, 1_250_000);
+								@Override
+								public void run() {
+									super.run();
+							IntTest.measureAll(100, 300, 2_500_000);
+							LongTest.measureAll(50, 300, 1_250_000);
                             DoubleTest.measureAll(25, 200, 1_250_000);
                             CompressTest.warmupAndTest(5, 10);
                             DataEncryptior.warmupAndTest(20, 140);
