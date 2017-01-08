@@ -25,7 +25,7 @@ public final class MeasureIOPerformance {
 
     private static void measure(RW rw) throws IOException {
         for (int i = 0; i< files.length; i++) {
-            files[i] = new File("C:\\Users\\Robert\\Desktop\\CrystalDiskMark5_2_0\\test"+i+".ss");
+            files[i] = new File("C:\\Users\\Robert Ostaszewski\\test"+i+".ss");
             files[i].deleteOnExit();
         }
 
