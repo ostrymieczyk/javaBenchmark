@@ -4,7 +4,7 @@ import Helper.Timer;
 
 import java.util.Random;
 
-public class IntTest  {
+public class IntTest {
 
     private static int RESULT = 50;
 
@@ -45,11 +45,11 @@ public class IntTest  {
 
     private static void divide(int[] intArray){
         for (int i : intArray) {
-            RESULT += 700000000/i;
+            RESULT += 400000000/i;
         }
     }
 
-    private static int measure(int loops, int intArraySize, MathInterface testable){
+    private static double measure(int loops, int intArraySize, MathInterface testable){
         double time = 0.0;
         for (int loop = 0; loop < loops; loop++) {
             int[] intArray = generateRandomIntArray(intArraySize);
@@ -58,11 +58,16 @@ public class IntTest  {
             time += t.check();
         }
         System.out.println(countOneOperationTime(intArraySize, loops, time)+" ns");
-        return RESULT;
+        return countOneOperationTime(intArraySize, loops, time);
     }
 
-    private static int warmupAndMeasure(int mode, int warmupLoops, int testLoops, int arrySize){
-        int a = 0, b = 0;
+    private interface MathInterface {
+        void operate(int[] intArray);
+    }
+
+    private static double warmupAndMeasure(int mode, int warmupLoops, int testLoops, int arrySize){
+        double a = 0;
+        double b = 0;
         switch (mode){
             case ADD:
                 System.out.println("\nADD");
@@ -88,12 +93,12 @@ public class IntTest  {
         return a + b;
     }
 
-    public static int measureAll(int warmupLoops, int loops, int size){
+    public static double measureAll(int warmupLoops, int loops, int size){
         System.out.println("\nINT");
-        int a = warmupAndMeasure(ADD, warmupLoops, loops, size);
-        int b = warmupAndMeasure(SUBSTRACT, warmupLoops, loops, size);
-        int c = warmupAndMeasure(MULTIPLY, warmupLoops, loops, size);
-        int d = warmupAndMeasure(DIVIDE, warmupLoops, loops, size);
+        double a = warmupAndMeasure(ADD, warmupLoops, loops, size);
+        double b = warmupAndMeasure(SUBSTRACT, warmupLoops, loops, size);
+        double c = warmupAndMeasure(MULTIPLY, warmupLoops, loops, size);
+        double d = warmupAndMeasure(DIVIDE, warmupLoops, loops, size);
         return a+b+c+d;
     }
 

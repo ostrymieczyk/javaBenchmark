@@ -1,6 +1,8 @@
 package GUI;
 
+import Controller.DeviceInfoController;
 import Controller.StartBtnController;
+import Controller.TestTabController;
 import Model.Person;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -9,8 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -36,7 +38,9 @@ public class Main extends Application {
 
         initRootLayout();
 
-        showPersonOverview();
+        showTestTab();
+        showRankingTab();
+        showInfoTab();
     }
 
     /**
@@ -61,22 +65,55 @@ public class Main extends Application {
     /**
      * Shows the person overview inside the root layout.
      */
-    public void showPersonOverview() {
+    public void showTestTab() {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("TestTab.fxml"));
-            SplitPane personOverview = (SplitPane) loader.load();
+            AnchorPane testTab = (AnchorPane) loader.load();
 
             // Set person overview into the center of root layout.
-            rootLayout.getTabs().get(0).setContent(personOverview);
-            
-            StartBtnController start = loader.getController();
-            start.setHandler();
+            rootLayout.getTabs().get(0).setContent(testTab);
+
+//            TestTabController controller = loader.getController();
+//            controller.printWelcome();
+//            controller.setStartBtn();
+//            StartBtnController start = loader.getController();
+//            start.setHandler();
 
             // Give the controller access to the main app.
 //            PersonOverviewController controller = loader.getController();
 //            controller.setMainApp(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showRankingTab(){
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("ScoreTab.fxml"));
+            AnchorPane scoreTab = (AnchorPane) loader.load();
+            // Set person overview into the center of root layout.
+            rootLayout.getTabs().get(1).setContent(scoreTab);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showInfoTab(){
+        try {
+            // Load person overview.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("InfoTab.fxml"));
+            AnchorPane infoTab = (AnchorPane) loader.load();
+            // Set person overview into the center of root layout.
+            rootLayout.getTabs().get(2).setContent(infoTab);
+//            DeviceInfoController controller = new DeviceInfoController();
+//            controller.SystemInfo();
 
         } catch (IOException e) {
             e.printStackTrace();

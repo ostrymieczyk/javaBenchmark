@@ -8,6 +8,11 @@ public class LongTest {
 
     private static long RESULT = 50;
 
+    public static final int ADD = 0;
+    public static final int SUBSTRACT = 1;
+    public static final int MULTIPLY = 2;
+    public static final int DIVIDE = 3;
+
     private static long[] generateRandomLongArray(int arraySize){
         Random random = new Random();
         long[] array = new long[arraySize];
@@ -23,95 +28,80 @@ public class LongTest {
         return loopTime/(randomIntArraySize*loops);
     }
 
-    private static long measureAddLong(int loops, int intArraySize){
-        System.out.println("Add Start");
-        double time = 0.0;
-        for (int loop = 0; loop < loops; loop++) {
-            long[] intArray = generateRandomLongArray(intArraySize);
-            Timer t = new Timer();
-            for (long i : intArray) {
-                RESULT += i;
-            }
-            time += t.check();
+    private static void add(long[] intArray){
+        for (long i : intArray) {
+            RESULT += i;
         }
-        System.out.println(countOneOperationTime(intArraySize, loops, time)+" ns\n");
-        return RESULT;
     }
 
-    private static long measureSubstractLong(int loops, int intArraySize){
-        System.out.println("Substract Start");
-        double time = 0.0;
-        for (int loop = 0; loop < loops; loop++) {
-            long[] intArray = generateRandomLongArray(intArraySize);
-            Timer t = new Timer();
-            for (long i : intArray) {
-                RESULT -= i;
-            }
-            time += t.check();
+    private static void substract(long[] intArray){
+        for (long i : intArray) {
+            RESULT -= i;
         }
-        System.out.println(countOneOperationTime(intArraySize, loops, time)+" ns\n");
-        return RESULT;
     }
 
-    private static long measureMultiplyLong(int loops, int intArraySize){
-        System.out.println("Multiply Start");
-        double time = 0.0;
-        for (int loop = 0; loop < loops; loop++) {
-            long[] intArray = generateRandomLongArray(intArraySize);
-            Timer t = new Timer();
-            for (long i : intArray) {
-                RESULT *= i;
-            }
-            time += t.check();
+    private static void multiply(long[] intArray){
+        for (long i : intArray) {
+            RESULT *= i;
         }
-        System.out.println(countOneOperationTime(intArraySize, loops, time)+" ns\n");
-        return RESULT;
     }
 
-    private static long measureDivideLong(int loops, int intArraySize){
-        System.out.println("Divide Start");
+    private static void divide(long[] intArray){
+        for (long i : intArray) {
+            RESULT += 400000000L/i;
+        }
+    }
+
+    private static double measure(int loops, int arraySize, MathInterface testable){
         double time = 0.0;
         for (int loop = 0; loop < loops; loop++) {
-            long[] intArray = generateRandomLongArray(intArraySize);
+            long[] doubleArray = generateRandomLongArray(arraySize);
             Timer t = new Timer();
-            for (long i : intArray) {
-                RESULT += 700000000/i;
-            }
+            testable.operate(doubleArray);
             time += t.check();
         }
-        System.out.println(countOneOperationTime(intArraySize, loops, time)+" ns\n");
-        return RESULT;
+        System.out.println(countOneOperationTime(arraySize, loops, time)+" ns");
+        return countOneOperationTime(arraySize, loops, time);
     }
-     private static long warmupAndMeasureAdd(int warmupLoops, int testLoops, int arrySize){
-        long a = measureAddLong(warmupLoops, arrySize);
-        long b = measureAddLong(testLoops, arrySize);
-        return a + b;
-     }
 
-    private static long warmupAndMeasureSubstarct(int warmupLoops, int testLoops, int arrySize){
-        long a = measureSubstractLong(warmupLoops, arrySize);
-        long b = measureSubstractLong(testLoops, arrySize);
+    private interface MathInterface {
+        void operate(long[] doubleArray);
+    }
+
+    private static double warmupAndMeasure(int mode, int warmupLoops, int testLoops, int arrySize){
+        double a = 0;
+        double b = 0;
+        switch (mode){
+            case ADD:
+                System.out.println("\nADD");
+                a = measure(warmupLoops, arrySize, LongTest::add);
+                b = measure(testLoops, arrySize, LongTest::add);
+                break;
+            case SUBSTRACT:
+                System.out.println("\nSUBSTRACT");
+                a = measure(warmupLoops, arrySize, LongTest::substract);
+                b = measure(testLoops, arrySize, LongTest::substract);
+                break;
+            case MULTIPLY:
+                System.out.println("\nMULTIPLY");
+                a = measure(warmupLoops, arrySize, LongTest::multiply);
+                b = measure(testLoops, arrySize, LongTest::multiply);
+                break;
+            case DIVIDE:
+                System.out.println("\nDIVIDE");
+                a = measure(warmupLoops, arrySize, LongTest::divide);
+                b = measure(testLoops, arrySize, LongTest::divide);
+                break;
+        }
         return a + b;
     }
 
-    private static long warmupAndMeasureMultiply(int warmupLoops, int testLoops, int arrySize){
-        long a = measureMultiplyLong(warmupLoops, arrySize);
-        long b = measureMultiplyLong(testLoops, arrySize);
-        return a + b;
-    }
-
-    private static long warmupAndMeasureDivide(int warmupLoops, int testLoops, int arrySize){
-        long a = measureDivideLong(warmupLoops, arrySize);
-        long b = measureDivideLong(testLoops, arrySize);
-        return a + b;
-    }
-
-    public static long measureAll(int warmupLoops, int loops, int size){
-        System.out.println("\nLONG:\n");
-        long a = warmupAndMeasureAdd(warmupLoops, loops, size);
-        long b = warmupAndMeasureSubstarct(warmupLoops, loops, size);
-        long c = warmupAndMeasureMultiply(warmupLoops, loops, size);
-        long d = warmupAndMeasureDivide(warmupLoops, loops, size);
+    public static double measureAll(int warmupLoops, int loops, int size){
+        System.out.println("\nINT");
+        double a = warmupAndMeasure(ADD, warmupLoops, loops, size);
+        double b = warmupAndMeasure(SUBSTRACT, warmupLoops, loops, size);
+        double c = warmupAndMeasure(MULTIPLY, warmupLoops, loops, size);
+        double d = warmupAndMeasure(DIVIDE, warmupLoops, loops, size);
         return a+b+c+d;
     }
 }
