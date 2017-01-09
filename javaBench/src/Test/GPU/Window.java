@@ -1,8 +1,7 @@
 package Test.GPU;
 
 import java.awt.DisplayMode;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 import javax.swing.JFrame;
@@ -17,7 +16,7 @@ public class Window implements GLEventListener {
     public static DisplayMode dm, dm_old;
     private GLU glu = new GLU();
     private float rquad = 0.0f;
-    List<Cube> cubes = new ArrayList<>();
+    static Set<Cube> cubes = new HashSet<>();
     private static final float point = 1.0f;
     int i = 0;
     float xplus = 0f;
@@ -37,7 +36,39 @@ public class Window implements GLEventListener {
                 {{-point + diffx, point + diffy, point + diffz}, {-point + diffx, point + diffy, -point + diffz}, {-point + diffx, -point + diffy, -point + diffz}, {-point + diffx, -point + diffy, point + diffz}},
                 {{point + diffx, point + diffy, -point + diffz}, {point + diffx, point + diffy, point + diffz}, {point + diffx, -point + diffy, point + diffz},{point + diffx, -point + diffy, -point + diffz} }};
         float[][] c = {{1f, 0f, 0f}, {0f, 1f, 0f}, {1f, 1f, 0f}, {0f, 0f, 1f}, {1f, 0f, 1f}, {0f, 1f, 1f}};
-        cubes.add(new Cube(f, c));
+        synchronized (cubes) {
+            cubes.add(new Cube(f, c));
+        }
+    }
+
+    public void addCubes(){
+        new Thread(() -> {
+            float max = 2.5f;
+            while (true) {
+                for (float i = -max; i <= max; i += 2.5f) {
+                    for (float j = -max; j <= max; j += 2.5f) {
+                        try {
+                            addCube(max, i, j);
+//                            Thread.sleep(1);
+                            addCube(i, max, j);
+//                            Thread.sleep(1);
+                            addCube(i, j, max);
+//                            Thread.sleep(1);
+                            addCube(-max, i, j);
+//                            Thread.sleep(1);
+                            addCube(i, -max, j);
+//                            Thread.sleep(1);
+                            addCube(i, j, -max);
+                            Thread.sleep(1);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                max += 2.5f;
+            }
+        }).start();
+
     }
 
     @Override
@@ -51,42 +82,51 @@ public class Window implements GLEventListener {
         // Rotate The Cube On X, Y & Z
         gl.glRotatef(rquad, 1.0f, 1.0f, 1.0f);
 
-        for (Cube cube : cubes){
-            gl.glBegin(GL2.GL_QUADS); // Start Drawing The Cube
-            Wall[] walls = cube.getWalls();
-            for(Wall wall:walls){
-                float[] color = wall.getColor();
-                float[] rightTop = wall.getRightTop();
-                float[] leftTop = wall.getLeftTop();
-                float[] rightBottom = wall.getRightBottom();
-                float[] leftBottom = wall.getLeftBottom();
-                gl.glColor3f(color[0],color[1],color[2]);
-                gl.glVertex3f(rightTop[0],rightTop[1],rightTop[2]);
-                gl.glVertex3f(leftTop[0],leftTop[1],leftTop[2]);
-                gl.glVertex3f(rightBottom[0],rightBottom[1],rightBottom[2]);
-                gl.glVertex3f(leftBottom[0],leftBottom[1],leftBottom[2]);
-            }
-            gl.glEnd(); // Done Drawing The Quad
-            gl.glFlush();
-        }
+        gl.glBegin(GL2.GL_QUADS); // Start Drawing The Cube
+        synchronized(cubes) {
+            for(Cube cube : cubes) {
+                Wall[] walls = cube.getWalls();
+                for (Wall wall : walls) {
+                    float[] color = wall.getColor();
+                    float[] rightTop = wall.getRightTop();
+                    float[] leftTop = wall.getLeftTop();
+                    float[] rightBottom = wall.getRightBottom();
+                    float[] leftBottom = wall.getLeftBottom();
+                    gl.glColor3f(color[0], color[1], color[2]);
+                    gl.glVertex3f(rightTop[0], rightTop[1], rightTop[2]);
+                    gl.glVertex3f(leftTop[0], leftTop[1], leftTop[2]);
+                    gl.glVertex3f(rightBottom[0], rightBottom[1], rightBottom[2]);
+                    gl.glVertex3f(leftBottom[0], leftBottom[1], leftBottom[2]);
+                }
 
-        if (i==t){
-            addCube(xplus+=2.5f, 0f, 0f);
+            }
         }
-        else if(i==2*t)
-            addCube(0.0f, yplus+=2.5f, 0f);
-        else if(i==3*t)
-            addCube(0.0f, 0.0f, zplus+=2.5f);
-        else if(i==4*t)
-            addCube(xminus-=2.5f, 0.0f, 0f);
-        else if(i==5*t)
-            addCube(0.0f, yminus-=2.5f, 0f);
-        else if(i==6*t) {
-            addCube(0.0f, 0.0f, zminus -= 2.5f);
-            i=0;
-        }
-        i ++;
-        z +=0.5f;
+        gl.glEnd(); // Done Drawing The Quad
+        gl.glFlush();
+
+
+//        if (i==t)
+//            addCube(xplus+=2.5f, 0f, 0f);
+//        else if(i==2*t)
+//            addCube(0.0f, yplus+=2.5f, 0f);
+//        else if(i==3*t)
+//            addCube(0.0f, 0.0f, zplus+=2.5f);
+//        else if(i==4*t)
+//            addCube(0.0f, yplus+=2.5f, 0);
+//        else if(i==5*t)
+//            addCube(xplus+=2.5f, yplus+=2.5f, 0);
+//        else if(i==6*t)
+//            addCube(xplus+=2.5f, 0, zplus+=2.5f);
+//        else if(i==8*t)
+//            addCube(xminus-=2.5f, 0.0f, 0f);
+//        else if(i==9*t)
+//            addCube(0.0f, yminus-=2.5f, 0f);
+//        else if(i==10*t) {
+//            addCube(0.0f, 0.0f, zminus -= 2.5f);
+//            i=0;
+//        }
+//        i ++;
+        z +=0.15f;
 //        //giving different colors to different sides
 //        gl.glBegin(GL2.GL_QUADS); // Start Drawing The Cube
 //        gl.glColor3f(1f,0f,0f); //red color
@@ -125,7 +165,7 @@ public class Window implements GLEventListener {
 //        gl.glVertex3f( 1.0f, -1.0f, 1.0f ); // Bottom Left Of The Quad
 //        gl.glVertex3f( 1.0f, -1.0f, -1.0f ); // Bottom Right Of The Quad
 
-        rquad -= 0.15f;
+        rquad -= 0.05f;
 
     }
 
@@ -174,15 +214,16 @@ public class Window implements GLEventListener {
 
         Window cube = new Window();
         cube.addCube(0f, 0f, 0f);
+        cube.addCubes();
 
         glcanvas.addGLEventListener(cube);
-        glcanvas.setSize(400, 400);
+        glcanvas.setSize(700, 700);
 
         final JFrame frame = new JFrame(" Multicolored cube");
         frame.getContentPane().add(glcanvas);
         frame.setSize(frame.getContentPane().getPreferredSize());
         frame.setVisible(true);
-        final FPSAnimator animator = new FPSAnimator(glcanvas, 300, true);
+        final FPSAnimator animator = new FPSAnimator(glcanvas, 600, true);
 
 
         animator.start();
