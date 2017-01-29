@@ -1,6 +1,6 @@
 package Test.RAM;
 
-public class TestMemoryAccessPatterns
+public class TestMemoryAccessPatterns implements Runnable
 {
     private static final int LONG_SIZE = 8;
     private static final int PAGE_SIZE = 2 * 1024 * 1024;
@@ -54,30 +54,20 @@ public class TestMemoryAccessPatterns
         public abstract int next(int pageOffset, int wordOffset, int pos);
     }
 
-    public static void main(final String[] args)
+    public void run()
     {
-        final StrideType strideType;
-        switch (Integer.parseInt(args[0]))
+        System.out.println(ARRAY_SIZE);
+        for (int i = 0; i < 2; i++)
         {
-            case 1:
-                strideType = StrideType.LINEAR_WALK;
-                break;
-
-            case 2:
-                strideType = StrideType.RANDOM_PAGE_WALK;
-                break;
-
-            case 3:
-                strideType = StrideType.RANDOM_HEAP_WALK;
-                break;
-
-            default:
-                throw new IllegalArgumentException("Unknown StrideType");
+            perfTest(i, StrideType.LINEAR_WALK);
         }
-
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 2; i++)
         {
-            perfTest(i, strideType);
+            perfTest(i, StrideType.RANDOM_HEAP_WALK);
+        }
+        for (int i = 0; i < 2; i++)
+        {
+            perfTest(i, StrideType.RANDOM_PAGE_WALK);
         }
     }
 

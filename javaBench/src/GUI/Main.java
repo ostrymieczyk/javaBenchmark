@@ -1,8 +1,5 @@
 package GUI;
 
-import Controller.DeviceInfoController;
-import Controller.StartBtnController;
-import Controller.TestTabController;
 import Model.Person;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -43,9 +40,6 @@ public class Main extends Application {
         showInfoTab();
     }
 
-    /**
-     * Initializes the root layout.
-     */
     public void initRootLayout() {
         try {
             // Load root layout from fxml file.
@@ -71,20 +65,7 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("TestTab.fxml"));
             AnchorPane testTab = (AnchorPane) loader.load();
-
-            // Set person overview into the center of root layout.
             rootLayout.getTabs().get(0).setContent(testTab);
-
-//            TestTabController controller = loader.getController();
-//            controller.printWelcome();
-//            controller.setStartBtn();
-//            StartBtnController start = loader.getController();
-//            start.setHandler();
-
-            // Give the controller access to the main app.
-//            PersonOverviewController controller = loader.getController();
-//            controller.setMainApp(this);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -96,7 +77,6 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("ScoreTab.fxml"));
             AnchorPane scoreTab = (AnchorPane) loader.load();
-            // Set person overview into the center of root layout.
             rootLayout.getTabs().get(1).setContent(scoreTab);
 
         } catch (IOException e) {
@@ -106,54 +86,21 @@ public class Main extends Application {
 
     public void showInfoTab(){
         try {
-            // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("InfoTab.fxml"));
             AnchorPane infoTab = (AnchorPane) loader.load();
-            // Set person overview into the center of root layout.
             rootLayout.getTabs().get(2).setContent(infoTab);
-//            DeviceInfoController controller = new DeviceInfoController();
-//            controller.SystemInfo();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    /**
-     * Returns the main stage.
-     * @return
-     */
     public Stage getPrimaryStage() {
         return primaryStage;
     }
-    
-    private ObservableList<Person> personData = FXCollections.observableArrayList();
 
-    /**
-     * Constructor
-     */
-    public Main() {
-        // Add some sample data
-//        personData.add(new Person("Hans", "Muster"));
-//        personData.add(new Person("Ruth", "Mueller"));
-//        personData.add(new Person("Heinz", "Kurz"));
-//        personData.add(new Person("Cornelia", "Meier"));
-//        personData.add(new Person("Werner", "Meyer"));
-//        personData.add(new Person("Lydia", "Kunz"));
-//        personData.add(new Person("Anna", "Best"));
-//        personData.add(new Person("Stefan", "Meier"));
-//        personData.add(new Person("Martin", "Mueller"));
-    }
-
-    /**
-     * Returns the data as an observable list of Persons. 
-     * @return
-     */
-    public ObservableList<Person> getPersonData() {
-        return personData;
-    }
-
+    public Main() {    }
 
     public static void main(String[] args) {
         launch(args);

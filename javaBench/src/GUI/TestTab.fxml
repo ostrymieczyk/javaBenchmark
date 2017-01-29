@@ -30,7 +30,7 @@
             </HBox>
          </top>
          <center>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ELO!!!!" textAlignment="CENTER" wrappingWidth="255.13671875">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Java Benchmark" textAlignment="CENTER" wrappingWidth="255.13671875">
                <font>
                   <Font name="Bookman Old Style" size="72.0" />
                </font>
