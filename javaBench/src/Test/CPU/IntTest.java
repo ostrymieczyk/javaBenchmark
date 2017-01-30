@@ -65,29 +65,29 @@ public class IntTest {
         void operate(int[] intArray);
     }
 
-    private static double warmupAndMeasure(int mode, int warmupLoops, int testLoops, int arrySize){
+    private static double warmupAndMeasure(int mode, int warmupLoops, int testLoops, int arraySize){
         double a = 0;
         double b = 0;
         switch (mode){
             case ADD:
                 System.out.println("\nADD");
-                a = measure(warmupLoops, arrySize, IntTest::add);
-                b = measure(testLoops, arrySize, IntTest::add);
+                a = measure(warmupLoops, arraySize, IntTest::add);
+                b = measure(testLoops, arraySize, IntTest::add);
                 break;
             case SUBSTRACT:
                 System.out.println("\nSUBSTRACT");
-                a = measure(warmupLoops, arrySize, IntTest::substract);
-                b = measure(testLoops, arrySize, IntTest::substract);
+                a = measure(warmupLoops, arraySize, IntTest::substract);
+                b = measure(testLoops, arraySize, IntTest::substract);
                 break;
             case MULTIPLY:
                 System.out.println("\nMULTIPLY");
-                a = measure(warmupLoops, arrySize, IntTest::multiply);
-                b = measure(testLoops, arrySize, IntTest::multiply);
+                a = measure(warmupLoops, arraySize, IntTest::multiply);
+                b = measure(testLoops, arraySize, IntTest::multiply);
                 break;
             case DIVIDE:
                 System.out.println("\nDIVIDE");
-                a = measure(warmupLoops, arrySize, IntTest::divide);
-                b = measure(testLoops, arrySize, IntTest::divide);
+                a = measure(warmupLoops, arraySize, IntTest::divide);
+                b = measure(testLoops, arraySize, IntTest::divide);
                 break;
         }
         return a + b;

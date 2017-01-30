@@ -55,9 +55,9 @@ public class LongTest {
     private static double measure(int loops, int arraySize, MathInterface testable){
         double time = 0.0;
         for (int loop = 0; loop < loops; loop++) {
-            long[] doubleArray = generateRandomLongArray(arraySize);
+            long[] longArray = generateRandomLongArray(arraySize);
             Timer t = new Timer();
-            testable.operate(doubleArray);
+            testable.operate(longArray);
             time += t.check();
         }
         System.out.println(countOneOperationTime(arraySize, loops, time)+" ns");
@@ -97,7 +97,7 @@ public class LongTest {
     }
 
     public static double measureAll(int warmupLoops, int loops, int size){
-        System.out.println("\nINT");
+        System.out.println("\nLONG");
         double a = warmupAndMeasure(ADD, warmupLoops, loops, size);
         double b = warmupAndMeasure(SUBSTRACT, warmupLoops, loops, size);
         double c = warmupAndMeasure(MULTIPLY, warmupLoops, loops, size);

@@ -97,7 +97,7 @@ public class DoubleTest {
     }
 
     public static double measureAll(int warmupLoops, int loops, int size){
-        System.out.println("\nINT");
+        System.out.println("\nDOUBLE");
         double a = warmupAndMeasure(ADD, warmupLoops, loops, size);
         double b = warmupAndMeasure(SUBSTRACT, warmupLoops, loops, size);
         double c = warmupAndMeasure(MULTIPLY, warmupLoops, loops, size);
