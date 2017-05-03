@@ -1,10 +1,8 @@
 package GUI;
 
-import Model.Person;
+
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -23,7 +21,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("AddressApp");
+        this.primaryStage.setTitle("Java Benchmark");
 
         this.primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
@@ -94,10 +92,6 @@ public class Main extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public Stage getPrimaryStage() {
-        return primaryStage;
     }
 
     public Main() {    }
