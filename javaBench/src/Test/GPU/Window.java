@@ -1,6 +1,7 @@
 package Test.GPU;
 
-import java.awt.DisplayMode;
+import java.awt.*;
+import java.awt.event.WindowEvent;
 import java.util.*;
 
 
@@ -41,23 +42,39 @@ public class Window implements GLEventListener {
         }
     }
 
-    public void addCubes(){
-        new Thread(() -> {
+    public void addCubes() throws InterruptedException {
+
+        final GLProfile profile = GLProfile.get(GLProfile.GL2);
+        GLCapabilities capabilities = new GLCapabilities(profile);
+
+        // The canvas
+        final GLCanvas glcanvas = new GLCanvas(capabilities);
+        glcanvas.getDefaultCloseOperation();
+
+        glcanvas.addGLEventListener(this);
+        glcanvas.setSize(700, 700);
+
+        final JFrame frame = new JFrame(" Multicolored cube");
+        frame.getContentPane().add(glcanvas);
+        frame.setSize(frame.getContentPane().getPreferredSize());
+        frame.setVisible(true);
+        final FPSAnimator animator = new FPSAnimator(glcanvas, 600, true);
+
+
+        animator.start();
+
+        Thread cubesThread = new Thread(() -> {
             float max = 2.5f;
-            while (true) {
+            long end = System.currentTimeMillis() + 30000;
+            while (System.currentTimeMillis() < end) {
                 for (float i = -max; i <= max; i += 2.5f) {
                     for (float j = -max; j <= max; j += 2.5f) {
                         try {
                             addCube(max, i, j);
-//                            Thread.sleep(1);
                             addCube(i, max, j);
-//                            Thread.sleep(1);
                             addCube(i, j, max);
-//                            Thread.sleep(1);
                             addCube(-max, i, j);
-//                            Thread.sleep(1);
                             addCube(i, -max, j);
-//                            Thread.sleep(1);
                             addCube(i, j, -max);
                             Thread.sleep(1);
                         } catch (InterruptedException e) {
@@ -67,8 +84,11 @@ public class Window implements GLEventListener {
                 }
                 max += 2.5f;
             }
-        }).start();
-
+        });
+        cubesThread.start();
+        cubesThread.join();
+        glcanvas.destroy();
+        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
     }
 
     @Override
@@ -204,29 +224,33 @@ public class Window implements GLEventListener {
         gl.glLoadIdentity();
     }
 
+    public Window(){
+
+    }
+
     public static void main( String[] args ) {
-
-        final GLProfile profile = GLProfile.get(GLProfile.GL2);
-        GLCapabilities capabilities = new GLCapabilities(profile);
-
-        // The canvas
-        final GLCanvas glcanvas = new GLCanvas(capabilities);
-
-        Window cube = new Window();
-        cube.addCube(0f, 0f, 0f);
-        cube.addCubes();
-
-        glcanvas.addGLEventListener(cube);
-        glcanvas.setSize(700, 700);
-
-        final JFrame frame = new JFrame(" Multicolored cube");
-        frame.getContentPane().add(glcanvas);
-        frame.setSize(frame.getContentPane().getPreferredSize());
-        frame.setVisible(true);
-        final FPSAnimator animator = new FPSAnimator(glcanvas, 600, true);
-
-
-        animator.start();
+//
+//        final GLProfile profile = GLProfile.get(GLProfile.GL2);
+//        GLCapabilities capabilities = new GLCapabilities(profile);
+//
+//        // The canvas
+//        final GLCanvas glcanvas = new GLCanvas(capabilities);
+//
+//        Window cube = new Window();
+//        cube.addCube(0f, 0f, 0f);
+//        cube.addCubes();
+//
+//        glcanvas.addGLEventListener(cube);
+//        glcanvas.setSize(700, 700);
+//
+//        final JFrame frame = new JFrame(" Multicolored cube");
+//        frame.getContentPane().add(glcanvas);
+//        frame.setSize(frame.getContentPane().getPreferredSize());
+//        frame.setVisible(true);
+//        final FPSAnimator animator = new FPSAnimator(glcanvas, 600, true);
+//
+//
+//        animator.start();
 //        try {
 //            Thread.sleep(6000);
 //        } catch (InterruptedException e) {

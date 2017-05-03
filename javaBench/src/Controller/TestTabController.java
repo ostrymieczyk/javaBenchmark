@@ -1,18 +1,11 @@
 package Controller;
 
 import Test.CPU.*;
+import Test.GPU.Window;
 import Test.HardDrive.MeasureIOPerformance;
 import Test.RAM.TestMemoryAccessPatterns;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
-
-import java.net.URL;
-import java.util.ResourceBundle;
 
 /**
  * Created by robert.ostaszewski on 28.12.2016.
@@ -27,6 +20,13 @@ public class TestTabController{
             @Override
             public void run() {
                 super.run();
+                Window cube = new Window();
+                cube.addCube(0f, 0f, 0f);
+                try {
+                    cube.addCubes();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 CompressTest.warmupAndTest(5, 10);
                 DataEncryptior.warmupAndTest(20, 140);
 
