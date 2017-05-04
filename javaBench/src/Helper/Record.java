@@ -3,13 +3,15 @@ package Helper;
 import javafx.beans.property.SimpleStringProperty;
 import org.apache.commons.csv.CSVRecord;
 
+import java.util.List;
+
 /**
  * Created by robert.ostaszewski on 02.05.2017.
  */
 public class Record {
 
-    private final SimpleStringProperty id;
-    private final SimpleStringProperty cpuName;
+    private SimpleStringProperty id;
+    private SimpleStringProperty cpuName;
     private final SimpleStringProperty cpuScore;
     private final SimpleStringProperty gpuName;
     private final SimpleStringProperty gpuScore;
@@ -21,18 +23,17 @@ public class Record {
 
     public Record(CSVRecord csvRecord){
 
-        System.out.println(csvRecord.get("ram score"));
-        id = new SimpleStringProperty(csvRecord.get("id"));
-        cpuName = new SimpleStringProperty(csvRecord.get("cpu name"));
-        cpuScore = new SimpleStringProperty(csvRecord.get("cpu score"));
-        gpuName = new SimpleStringProperty(csvRecord.get("gpu name"));
+        id = new SimpleStringProperty(csvRecord.get(0));
+        cpuName = new SimpleStringProperty(csvRecord.get(1));
+        cpuScore = new SimpleStringProperty(csvRecord.get(2));
+        gpuName = new SimpleStringProperty(csvRecord.get(3));
+        gpuScore = new SimpleStringProperty(csvRecord.get(4));
+        diskName = new SimpleStringProperty(csvRecord.get(5));
+        diskScore = new SimpleStringProperty(csvRecord.get(6));
+        ramName = new SimpleStringProperty(csvRecord.get(7));
+        ramScore = new SimpleStringProperty(csvRecord.get(8));
+        totalScore = new SimpleStringProperty(csvRecord.get(9));;
 
-        gpuScore = new SimpleStringProperty(csvRecord.get("gpu score"));
-        diskName = new SimpleStringProperty(csvRecord.get("disk name"));
-        diskScore = new SimpleStringProperty(csvRecord.get("disk score"));
-        ramName = new SimpleStringProperty(csvRecord.get("ram name"));
-        ramScore = new SimpleStringProperty(csvRecord.get("ram score"));
-        totalScore = new SimpleStringProperty(csvRecord.get("total score"));;
     }
 
     public String getId() {

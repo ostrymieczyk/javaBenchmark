@@ -1,5 +1,7 @@
 package Controller;
 
+import Helper.HardwareDetails;
+import Helper.WindowsHardwareDetails;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.text.Text;
@@ -16,17 +18,13 @@ public class DeviceInfoController implements Initializable{
     @FXML
     private TextFlow textFlow;
 
+    private HardwareDetails hardwareDetails = new WindowsHardwareDetails();
+
     public String SystemInfo() {
-        String info = "# OS: "+ System.getProperty("os.name") +", " + System.getProperty("os.version") + ", " + System.getProperty("os.arch") + "\n " +  "# JVM: " + System.getProperty("java.vendor") + ", " + System.getProperty("java.version");
-// The processor identifier works only on MS Windows:
-        System.out.printf("# CPU: %s; %d \"procs\"%n",
-                System.getenv("PROCESSOR_IDENTIFIER"),
-                Runtime.getRuntime().availableProcessors());
-        java.util.Date now = new java.util.Date();
-//        System.out.printf("# Date: %s%n",
-//                new java.text.SimpleDateFormat("yyyy-MM-dd’T’HH:mm:ssZ").format(now));
-//        String info = " elo ";
-//        textFlow.getChildren().add(new Text(info));
+        String info = "# CPU: " + hardwareDetails.getFormatedCpu() + "\n" +
+                    "# GPU: " + hardwareDetails.getFormatedGpu() + "\n" +
+                    "# Disk: " + hardwareDetails.getFormatedDisk() + "\n" +
+                    "# Ram: " + hardwareDetails.getFormatedRam() + "\n";
 
         return info ;
     }

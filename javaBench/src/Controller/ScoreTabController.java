@@ -15,15 +15,20 @@ import javafx.scene.text.TextFlow;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.codehaus.plexus.util.StringUtils;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 
 /**
  * Created by robert.ostaszewski on 02.05.2017.
@@ -48,28 +53,40 @@ public class ScoreTabController implements Initializable {
     private TextFlow textFlow;
 
     private List<Record> recordList = new ArrayList<>();
+    Path defaultPath = Paths.get("./score.csv");
+
+    public List<String> getColumnNames(){
+        List<String> columnNames = new ArrayList<>();
+        for(TableColumn tableColumn : tableView.getColumns()){
+            columnNames.add(tableColumn.getText());
+        }
+        return columnNames;
+    }
 
     public void loadCSV(){
 
-        Reader in = null;
-        try {
-            in = new FileReader("C:\\Users\\Robert Ostaszewski\\IdeaProjects\\javaBenchmark\\javaBench\\src\\GUI\\score.csv");
+        Path path = Paths.get("C:\\Users\\robert.ostaszwski\\Desktop\\score.csv");
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        if(Files.notExists(path)){
+            path = defaultPath;
+            if (Files.notExists(defaultPath)) {
+                try {
+                    Files.write( path,
+                            String.join(",", getColumnNames()).getBytes() );
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        CSVParser records = null;
-        try {
-            records = CSVFormat.EXCEL.withFirstRecordAsHeader().parse(in);
 
-
+        try(Reader in = Files.newBufferedReader(path);
+            CSVParser records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in))
+        {
+            for(CSVRecord csvRecord : records){
+                recordList.add(new Record(csvRecord));
+            }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-
-        ObservableList<CSVRecord> data = FXCollections.observableArrayList();
-        for(CSVRecord csvRecord : records){
-            recordList.add(new Record(csvRecord));
         }
 
     }
