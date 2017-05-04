@@ -3,11 +3,11 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.TestTabController">
    <children>
@@ -15,8 +15,14 @@
          <bottom>
             <Button fx:id="StartBtn" mnemonicParsing="false" onAction="#setStartBtn" text="Start" BorderPane.alignment="BOTTOM_RIGHT">
                <BorderPane.margin>
-                  <Insets bottom="10.0" right="10.0" />
+                  <Insets bottom="10.0" right="30.0" top="10.0" />
                </BorderPane.margin>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
+               </padding>
             </Button>
          </bottom>
          <top>
@@ -30,11 +36,21 @@
             </HBox>
          </top>
          <center>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Java Benchmark" textAlignment="CENTER" wrappingWidth="255.13671875">
-               <font>
-                  <Font name="Bookman Old Style" size="72.0" />
-               </font>
-            </Text>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #bcbcbc; -fx-background-color: #dbdbdb;" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="202.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label text="Progress">
+                           <padding>
+                              <Insets right="30.0" />
+                           </padding>
+                        </Label>
+                        <ProgressBar fx:id="progressBar" prefHeight="18.0" prefWidth="354.0" progress="0.0" />
+                     </children>
+                  </HBox>
+                  <Label fx:id="workingOn" alignment="CENTER" contentDisplay="CENTER" layoutX="254.0" layoutY="195.0" prefHeight="17.0" prefWidth="75.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" />
+               </children>
+            </AnchorPane>
          </center>
       </BorderPane>
    </children>

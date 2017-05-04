@@ -5,15 +5,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
-import javax.swing.text.TabableView;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -33,23 +35,17 @@ public class ScoreTabController implements Initializable {
     @FXML
     private TableColumn<Record, String> id;
     @FXML
-    private TableColumn<Record, String> cpuModel;
-    @FXML
     private TableColumn<Record, String> cpuScore;
-    @FXML
-    private TableColumn<Record, String> gpuModel;
     @FXML
     private TableColumn<Record, String> gpuScore;
     @FXML
-    private TableColumn<Record, String> diskModel;
-    @FXML
     private TableColumn<Record, String> diskScore;
-    @FXML
-    private TableColumn<Record, String> ramModel;
     @FXML
     private TableColumn<Record, String> ramScore;
     @FXML
     private TableColumn<Record, String> totalScore;
+    @FXML
+    private TextFlow textFlow;
 
     private List<Record> recordList = new ArrayList<>();
 
@@ -57,7 +53,7 @@ public class ScoreTabController implements Initializable {
 
         Reader in = null;
         try {
-            in = new FileReader("C:\\Users\\robert.ostaszewski\\Desktop\\score.csv");
+            in = new FileReader("C:\\Users\\Robert Ostaszewski\\IdeaProjects\\javaBenchmark\\javaBench\\src\\GUI\\score.csv");
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -76,24 +72,43 @@ public class ScoreTabController implements Initializable {
             recordList.add(new Record(csvRecord));
         }
 
-
-
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        for (TableColumn tableColumn : tableView.getColumns()){
+            tableColumn.setStyle("-fx-alignment: CENTER");
+        }
         id.setCellValueFactory(new PropertyValueFactory<Record,String>("id"));
-        cpuModel.setCellValueFactory(new PropertyValueFactory<Record,String>("cpuName"));
         cpuScore.setCellValueFactory(new PropertyValueFactory<Record,String>("cpuScore"));
-        gpuModel.setCellValueFactory(new PropertyValueFactory<Record,String>("gpuName"));
         gpuScore.setCellValueFactory(new PropertyValueFactory<Record,String>("gpuScore"));
-        diskModel.setCellValueFactory(new PropertyValueFactory<Record,String>("diskName"));
         diskScore.setCellValueFactory(new PropertyValueFactory<Record,String>("diskScore"));
-        ramModel.setCellValueFactory(new PropertyValueFactory<Record,String>("ramName"));
         ramScore.setCellValueFactory(new PropertyValueFactory<Record,String>("ramScore"));
         totalScore.setCellValueFactory(new PropertyValueFactory<Record,String>("totalScore"));
         loadCSV();
         tableView.getItems().setAll(recordList);
     }
+
+    @FXML
+    public void clickItem(MouseEvent event)
+    {
+        SelectionModel selectionModel = tableView.getSelectionModel();
+        if(!selectionModel.isEmpty()) {
+            Record record = (Record) selectionModel.getSelectedItem();
+            String cpuModel = record.getCpuName();
+            String gpuModel = record.getGpuName();
+            String ramModel = record.getRamName();
+            String diskModel = record.getDiskName();
+
+            Text toShow = new Text("CPU: " + cpuModel + "\n" +
+                    "GPU: " + gpuModel + "\n" +
+                    "Disk: " + diskModel + "\n" +
+                    "RAM: " + ramModel);
+
+            textFlow.getChildren().clear();
+            textFlow.getChildren().add(toShow);
+        }
+    }
+
 
 }

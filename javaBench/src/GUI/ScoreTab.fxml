@@ -5,6 +5,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ScoreTabController">
    <children>
@@ -15,16 +16,12 @@
                   <Insets />
                </BorderPane.margin>
                <children>
-                  <TableView fx:id="tableView" prefHeight="355.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="tableView" onMouseClicked="#clickItem" prefHeight="355.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
                       <TableColumn fx:id="id" prefWidth="75.0" text="id" />
-                      <TableColumn fx:id="cpuModel" prefWidth="75.0" text="CPU model" />
                         <TableColumn fx:id="cpuScore" prefWidth="75.0" text="CPU score" />
-                        <TableColumn fx:id="gpuModel" prefWidth="75.0" text="GPU model" />
                         <TableColumn fx:id="gpuScore" prefWidth="75.0" text="GPU score" />
-                        <TableColumn fx:id="diskModel" prefWidth="75.0" text="Disk model" />
                         <TableColumn fx:id="diskScore" prefWidth="75.0" text="Disk score" />
-                        <TableColumn fx:id="ramModel" prefWidth="75.0" text="RAM model" />
                         <TableColumn fx:id="ramScore" prefWidth="75.0" text="RAM score" />
                         <TableColumn fx:id="totalScore" prefWidth="75.0" text="Total score" />
                     </columns>
@@ -35,6 +32,9 @@
                </children>
             </AnchorPane>
          </center>
+         <bottom>
+            <TextFlow fx:id="textFlow" prefHeight="99.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+         </bottom>
       </BorderPane>
    </children>
 </AnchorPane>
