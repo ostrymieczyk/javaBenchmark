@@ -1,7 +1,7 @@
 package Controller;
 
-import Helper.HardwareDetails;
-import Helper.WindowsHardwareDetails;
+import GUI.Main;
+import Helper.HardwareDetailsManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.text.Text;
@@ -18,13 +18,13 @@ public class DeviceInfoController implements Initializable{
     @FXML
     private TextFlow textFlow;
 
-    private HardwareDetails hardwareDetails = new WindowsHardwareDetails();
+    private HardwareDetailsManager hardwareDetailsManager = Main.getHardwareDetailsManager();
 
     public String SystemInfo() {
-        String info = "# CPU: " + hardwareDetails.getFormatedCpu() + "\n" +
-                    "# GPU: " + hardwareDetails.getFormatedGpu() + "\n" +
-                    "# Disk: " + hardwareDetails.getFormatedDisk() + "\n" +
-                    "# Ram: " + hardwareDetails.getFormatedRam() + "\n";
+        String info = "# CPU: " + hardwareDetailsManager.getFormatedCpuDetails() + "\n" +
+                    "# GPU: " + hardwareDetailsManager.getFormatedGpuDetails() + "\n" +
+                    "# Disk: " + hardwareDetailsManager.getFormatedDiskDetails() + "\n" +
+                    "# Ram: " + hardwareDetailsManager.getFormatedRamDetails() + "\n";
 
         return info ;
     }

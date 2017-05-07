@@ -1,19 +1,20 @@
 package Helper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by robert.ostaszewski on 04.05.2017.
  */
-public class WindowsHardwareDetails extends HardwareDetails {
+public class WindowsHardwareDetailsManager extends HardwareDetailsManager {
 
-    public WindowsHardwareDetails(){
+    public WindowsHardwareDetailsManager(){
         super();
     }
 
     @Override
-    public List<String> getCpu() {
+    public List<String> getCpuDetails() {
         List<String> commandOutputLines = getCommandOutput(new String[]{"cmd.exe", "/c", "wmic cpu get name"});
         List<String> foundedCPUs = new ArrayList<>();
         for(String line : commandOutputLines){
@@ -25,12 +26,12 @@ public class WindowsHardwareDetails extends HardwareDetails {
     }
 
     @Override
-    public String getFormatedCpu() {
-        return String.join(", ", getCpu());
+    public String getFormatedCpuDetails() {
+        return String.join("; ", getCpuDetails());
     }
 
     @Override
-    public List<String> getGpu() {
+    public List<String> getGpuDetails() {
         List<String> commandOutputLines = getCommandOutput(new String[]{"cmd.exe", "/c", "wmic path win32_VideoController get name"});
         List<String> foundedGPUs = new ArrayList<>();
         for(String line : commandOutputLines){
@@ -42,13 +43,13 @@ public class WindowsHardwareDetails extends HardwareDetails {
     }
 
     @Override
-    public String getFormatedGpu() {
-        return String.join(", ", getGpu());
+    public String getFormatedGpuDetails() {
+        return String.join("; ", getGpuDetails());
     }
 
     @Override
-    public List<String> getDisk() {
-        List<String> commandOutputLines = getCommandOutput(new String[]{"cmd.exe", "/c", "wmic diskdrive get model"});
+    public List<String> getDiskDetails() {
+        List<String> commandOutputLines = getCommandOutput(new String[]{"cmd.exe", "/c", "wmic diskdrive get model, size"});
         List<String> foundedDisks = new ArrayList<>();
         for(String line : commandOutputLines){
             if(!line.contains("Model") && !line.isEmpty()){
@@ -59,12 +60,21 @@ public class WindowsHardwareDetails extends HardwareDetails {
     }
 
     @Override
-    public String getFormatedDisk() {
-        return String.join(", ", getDisk());
+    public String getFormatedDiskDetails() {
+        List<String> formatedLines = new ArrayList();
+        for (String diskDetails : getDiskDetails()){
+            List<String> details = Arrays.asList(diskDetails.split("\\s+"));
+            if(details.size() >=2) {
+                long size = Long.parseLong(details.get(details.size()-1));
+                String manufacturer = String.join(" ", details.subList(0, details.size()-1));
+                formatedLines.add(manufacturer + " " + size/(1024*1024*1024)+ "GB");
+            }
+        }
+        return String.join("; ", formatedLines);
     }
 
     @Override
-    public List<String> getRam() {
+    public List<String> getRamDetails() {
         List<String> commandOutputLines = getCommandOutput(new String[]{"cmd.exe", "/c", "wmic memorychip get manufacturer, capacity"});
         List<String> foundedDisks = new ArrayList<>();
         for(String line : commandOutputLines){
@@ -76,17 +86,16 @@ public class WindowsHardwareDetails extends HardwareDetails {
     }
 
     @Override
-    public String getFormatedRam() {
+    public String getFormatedRamDetails() {
         List<String> formatedLines = new ArrayList();
-        for (String ramDetails : getRam()){
-            String[] details = ramDetails.split("\\s+");
-            System.out.println(details[0]);
-            if(ramDetails.length() >=2) {
-                long size = Long.parseLong(details[0]);
-                String manufacturer = details[1];
-                formatedLines.add(manufacturer + " " + size/1073741824 + "GB");
+        for (String ramDetails : getRamDetails()){
+            List<String> details = Arrays.asList(ramDetails.split("\\s+"));
+            if(details.size() >=2) {
+                long size = Long.parseLong(details.get(0));
+                String manufacturer = String.join(" ", details.subList(1, details.size()));
+                formatedLines.add(manufacturer + " " + size/(1024*1024*1024) + "GB");
             }
         }
-        return String.join(", ", formatedLines);
+        return String.join("; ", formatedLines);
     }
 }

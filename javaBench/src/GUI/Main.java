@@ -1,12 +1,17 @@
 package GUI;
 
 
+import Helper.HardwareDetailsManager;
+import Helper.WindowsHardwareDetailsManager;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -18,17 +23,16 @@ public class Main extends Application {
     private Stage primaryStage;
     private TabPane rootLayout;
 
+    private static HardwareDetailsManager hardwareDetailsManager;
+
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Java Benchmark");
 
-        this.primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent t) {
-                Platform.exit();
-                System.exit(0);
-            }
+        this.primaryStage.setOnCloseRequest(t -> {
+            Platform.exit();
+            System.exit(0);
         });
 
         initRootLayout();
@@ -74,8 +78,11 @@ public class Main extends Application {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("ScoreTab.fxml"));
-            AnchorPane scoreTab = (AnchorPane) loader.load();
+            AnchorPane scoreTab = loader.load();
             rootLayout.getTabs().get(1).setContent(scoreTab);
+            rootLayout.getTabs().get(1).setOnSelectionChanged(event -> {
+                scoreTab.fireEvent(event);
+            });
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -94,9 +101,15 @@ public class Main extends Application {
         }
     }
 
+    public Main(){
+        hardwareDetailsManager = new WindowsHardwareDetailsManager();
+    }
+
     public static void main(String[] args) {
-
-
         launch(args);
+    }
+
+    public static HardwareDetailsManager getHardwareDetailsManager() {
+        return hardwareDetailsManager;
     }
 }

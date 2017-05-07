@@ -29,6 +29,10 @@ public class Window implements GLEventListener {
     int t = 1;
     float z = 10.0f;
 
+    GLCanvas glcanvas;
+
+    JFrame frame;
+
     public void addCube(float diffx, float diffy, float diffz){
         float[][][] f = {{{point + diffx, point + diffy, -point + diffz}, {-point + diffx, point + diffy, -point + diffz}, {-point + diffx, point + diffy, point + diffz}, {point + diffx, point + diffy, point + diffz}},
                 {{point + diffx, -point + diffy, point + diffz}, {-point + diffx, -point + diffy, point + diffz}, {-point + diffx, -point + diffy, -point + diffz}, {point + diffx, -point + diffy, -point+diffz}},
@@ -42,7 +46,7 @@ public class Window implements GLEventListener {
         }
     }
 
-    public void addCubes() throws InterruptedException {
+    public void addCubes()throws InterruptedException{
 
         final GLProfile profile = GLProfile.get(GLProfile.GL2);
         GLCapabilities capabilities = new GLCapabilities(profile);
@@ -66,7 +70,7 @@ public class Window implements GLEventListener {
         Thread cubesThread = new Thread(() -> {
             float max = 2.5f;
             long end = System.currentTimeMillis() + 30000;
-            while (System.currentTimeMillis() < end) {
+            while (System.currentTimeMillis() < end ) {
                 for (float i = -max; i <= max; i += 2.5f) {
                     for (float j = -max; j <= max; j += 2.5f) {
                         try {
@@ -86,11 +90,24 @@ public class Window implements GLEventListener {
             }
         });
         cubesThread.start();
-        cubesThread.join();
+        try {
+            cubesThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(freme/30);
         glcanvas.destroy();
         frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
     }
 
+    public void closeWindow(){
+        if(glcanvas != null && frame != null) {
+            glcanvas.destroy();
+            frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+        }
+    }
+
+    int freme = 0;
     @Override
     public void display( GLAutoDrawable drawable ) {
 
@@ -124,6 +141,7 @@ public class Window implements GLEventListener {
         gl.glEnd(); // Done Drawing The Quad
         gl.glFlush();
 
+        freme++;
 
 //        if (i==t)
 //            addCube(xplus+=2.5f, 0f, 0f);
@@ -191,7 +209,7 @@ public class Window implements GLEventListener {
 
     @Override
     public void dispose( GLAutoDrawable drawable ) {
-        // TODO Auto-generated method stub
+
     }
 
     @Override
@@ -204,12 +222,12 @@ public class Window implements GLEventListener {
         gl.glEnable( GL2.GL_DEPTH_TEST );
         gl.glDepthFunc( GL2.GL_LEQUAL );
         gl.glHint( GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST );
+
     }
 
     @Override
     public void reshape( GLAutoDrawable drawable, int x, int y, int width, int height ) {
 
-        // TODO Auto-generated method stub
         final GL2 gl = drawable.getGL().getGL2();
         if( height <= 0 )
             height = 1;
@@ -222,6 +240,10 @@ public class Window implements GLEventListener {
         glu.gluPerspective( 45.0f, h, 1.0, 2000.0 );
         gl.glMatrixMode( GL2.GL_MODELVIEW );
         gl.glLoadIdentity();
+    }
+
+    public void clearCubes(){
+        cubes.clear();
     }
 
     public Window(){

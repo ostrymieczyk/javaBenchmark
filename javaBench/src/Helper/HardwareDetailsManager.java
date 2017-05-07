@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by robert.ostaszewski on 04.05.2017.
  */
-public abstract class HardwareDetails {
+public abstract class HardwareDetailsManager {
 
     protected List<String> getCommandOutput(String[] command){
         List<String> commandOutput = new ArrayList<>();
@@ -36,20 +36,20 @@ public abstract class HardwareDetails {
         return commandOutput;
     }
 
-    public abstract List<String> getCpu();
+    public abstract List<String> getCpuDetails();
 
-    public abstract String getFormatedCpu();
+    public abstract String getFormatedCpuDetails();
 
-    public abstract List<String> getGpu();
+    public abstract List<String> getGpuDetails();
 
-    public abstract String getFormatedGpu();
+    public abstract String getFormatedGpuDetails();
 
-    public abstract List<String> getDisk();
+    public abstract List<String> getDiskDetails();
 
-    public abstract String getFormatedDisk();
+    public abstract String getFormatedDiskDetails();
 
-    public abstract List<String> getRam();
+    public abstract List<String> getRamDetails();
 
-    public abstract String getFormatedRam();
+    public abstract String getFormatedRamDetails();
 
 }

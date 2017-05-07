@@ -1,34 +1,32 @@
 package Controller;
 
+import Helper.CsvHeaders;
 import Helper.Record;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.SelectionModel;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.codehaus.plexus.util.StringUtils;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.Reader;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import java.util.stream.Collectors;
 
 /**
  * Created by robert.ostaszewski on 02.05.2017.
@@ -51,19 +49,13 @@ public class ScoreTabController implements Initializable {
     private TableColumn<Record, String> totalScore;
     @FXML
     private TextFlow textFlow;
+    @FXML
+    private AnchorPane anchorPane;
 
-    private List<Record> recordList = new ArrayList<>();
-    Path defaultPath = Paths.get("./score.csv");
+    private static List<Record> recordList = new ArrayList<>();
+    static Path defaultPath = Paths.get("./score.csv");
 
-    public List<String> getColumnNames(){
-        List<String> columnNames = new ArrayList<>();
-        for(TableColumn tableColumn : tableView.getColumns()){
-            columnNames.add(tableColumn.getText());
-        }
-        return columnNames;
-    }
-
-    public void loadCSV(){
+    public static void loadCSV(){
 
         Path path = Paths.get("C:\\Users\\robert.ostaszwski\\Desktop\\score.csv");
 
@@ -72,7 +64,17 @@ public class ScoreTabController implements Initializable {
             if (Files.notExists(defaultPath)) {
                 try {
                     Files.write( path,
-                            String.join(",", getColumnNames()).getBytes() );
+                        Arrays.stream(CsvHeaders.class.getDeclaredFields())
+                            .map(field -> {
+                                try {
+                                    return field.get(field).toString();
+                                } catch (IllegalAccessException e) {
+                                    e.printStackTrace();
+                                    return null;
+                                }
+                            })
+                            .collect(Collectors.joining(","))
+                            .getBytes() );
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -88,14 +90,11 @@ public class ScoreTabController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        for (TableColumn tableColumn : tableView.getColumns()){
-            tableColumn.setStyle("-fx-alignment: CENTER");
-        }
+        tableView.getColumns().stream().forEach(column -> column.setStyle("-fx-alignment: CENTER"));
         id.setCellValueFactory(new PropertyValueFactory<Record,String>("id"));
         cpuScore.setCellValueFactory(new PropertyValueFactory<Record,String>("cpuScore"));
         gpuScore.setCellValueFactory(new PropertyValueFactory<Record,String>("gpuScore"));
@@ -104,6 +103,14 @@ public class ScoreTabController implements Initializable {
         totalScore.setCellValueFactory(new PropertyValueFactory<Record,String>("totalScore"));
         loadCSV();
         tableView.getItems().setAll(recordList);
+        anchorPane.addEventHandler(Tab.SELECTION_CHANGED_EVENT, event ->
+        {
+            System.out.println("no elo");
+            recordList.clear();
+            loadCSV();
+            tableView.getItems().setAll(recordList);
+        }
+        );
     }
 
     @FXML

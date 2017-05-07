@@ -23,16 +23,16 @@ public class Record {
 
     public Record(CSVRecord csvRecord){
 
-        id = new SimpleStringProperty(csvRecord.get(0));
-        cpuName = new SimpleStringProperty(csvRecord.get(1));
-        cpuScore = new SimpleStringProperty(csvRecord.get(2));
-        gpuName = new SimpleStringProperty(csvRecord.get(3));
-        gpuScore = new SimpleStringProperty(csvRecord.get(4));
-        diskName = new SimpleStringProperty(csvRecord.get(5));
-        diskScore = new SimpleStringProperty(csvRecord.get(6));
-        ramName = new SimpleStringProperty(csvRecord.get(7));
-        ramScore = new SimpleStringProperty(csvRecord.get(8));
-        totalScore = new SimpleStringProperty(csvRecord.get(9));;
+        id = new SimpleStringProperty(csvRecord.get(CsvHeaders.ID));
+        cpuName = new SimpleStringProperty(csvRecord.get(CsvHeaders.CPU_NAME));
+        cpuScore = new SimpleStringProperty(csvRecord.get(CsvHeaders.CPU_SCORE));
+        gpuName = new SimpleStringProperty(csvRecord.get(CsvHeaders.GPU_NAME));
+        gpuScore = new SimpleStringProperty(csvRecord.get(CsvHeaders.GPU_SCORE));
+        diskName = new SimpleStringProperty(csvRecord.get(CsvHeaders.DISK_NAME));
+        diskScore = new SimpleStringProperty(csvRecord.get(CsvHeaders.DISK_SCORE));
+        ramName = new SimpleStringProperty(csvRecord.get(CsvHeaders.RAM_NAME));
+        ramScore = new SimpleStringProperty(csvRecord.get(CsvHeaders.RAM_SCORE));
+        totalScore = new SimpleStringProperty(csvRecord.get(CsvHeaders.TOTAL_SCORE));
 
     }
 
