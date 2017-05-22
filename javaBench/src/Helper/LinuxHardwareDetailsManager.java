@@ -89,4 +89,14 @@ public class LinuxHardwareDetailsManager extends HardwareDetailsManager {
         });
         return String.join("; ", output);
     }
+
+    @Override
+    public List<String> getName() {
+        return null;
+    }
+
+    @Override
+    public String getFormatedName() {
+        return null;
+    }
 }
