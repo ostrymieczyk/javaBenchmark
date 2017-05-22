@@ -3,8 +3,6 @@ package Helper;
 import javafx.beans.property.SimpleStringProperty;
 import org.apache.commons.csv.CSVRecord;
 
-import java.util.List;
-
 /**
  * Created by robert.ostaszewski on 02.05.2017.
  */
@@ -37,7 +35,6 @@ public class Record {
     }
 
     public String getId() {
-        System.out.println(id.get());
         return id.get();
     }
 

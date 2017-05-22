@@ -1,16 +1,15 @@
 package Test.GPU;
 
-import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.util.*;
-
-
-import javax.swing.JFrame;
-
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.FPSAnimator;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Window implements GLEventListener {
 

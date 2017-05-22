@@ -2,19 +2,15 @@ package GUI;
 
 
 import Helper.HardwareDetailsManager;
+import Helper.LinuxHardwareDetailsManager;
 import Helper.WindowsHardwareDetailsManager;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 
@@ -81,7 +77,9 @@ public class Main extends Application {
             AnchorPane scoreTab = loader.load();
             rootLayout.getTabs().get(1).setContent(scoreTab);
             rootLayout.getTabs().get(1).setOnSelectionChanged(event -> {
-                scoreTab.fireEvent(event);
+                if (rootLayout.getTabs().get(1).isSelected()) {
+                    scoreTab.fireEvent(event);
+                }
             });
 
         } catch (IOException e) {
@@ -102,7 +100,13 @@ public class Main extends Application {
     }
 
     public Main(){
-        hardwareDetailsManager = new WindowsHardwareDetailsManager();
+        if(System.getProperty("os.name")
+                .toLowerCase().startsWith("windows")){
+            hardwareDetailsManager = new WindowsHardwareDetailsManager();
+        }
+        else {
+            hardwareDetailsManager = new LinuxHardwareDetailsManager();
+        }
     }
 
     public static void main(String[] args) {

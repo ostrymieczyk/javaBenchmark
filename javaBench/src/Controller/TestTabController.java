@@ -4,9 +4,8 @@ import GUI.Main;
 import Helper.HardwareDetailsManager;
 import Test.CPU.*;
 import Test.GPU.Window;
+import Test.HardDrive.MeasureIOPerformance;
 import javafx.application.Platform;
-import javafx.event.Event;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -17,7 +16,6 @@ import javafx.scene.control.ProgressBar;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ResourceBundle;
 
@@ -98,6 +96,9 @@ public class TestTabController implements Initializable{
                 cube.closeWindow();
                 cube.clearCubes();
             }
+            if(disk.isSelected()){
+                new MeasureIOPerformance().measure(1,3);
+            }
             enableControlls();
             changeButtonsStatus();
             if(cpu.isSelected() || ram.isSelected() || gpu.isSelected() || disk.isSelected()) {
@@ -106,7 +107,7 @@ public class TestTabController implements Initializable{
                 setText("Aborted");
             }
             try {
-                Files.write( Paths.get("./score.csv"),
+                Files.write( ScoreTabController.defaultPath,
                                 String.join(",", "\n",hardwareDetailsManager.getFormatedCpuDetails(), "0", hardwareDetailsManager.getFormatedGpuDetails(),"","","","","","")
                                 .getBytes(), StandardOpenOption.APPEND);
             } catch (IOException e) {
@@ -167,7 +168,7 @@ public class TestTabController implements Initializable{
 
     @FXML
     private void closeThread() throws InterruptedException {
-        setText("Cancelling..");;
+        setText("Cancelling...");;
         cancelButton.setDisable(true);
         cpu.setSelected(false);
         gpu.setSelected(false);

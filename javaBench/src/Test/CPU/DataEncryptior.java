@@ -1,13 +1,10 @@
 package Test.CPU;
 
+import Helper.Timer;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import Helper.Timer;
-
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.Random;
 
 /**

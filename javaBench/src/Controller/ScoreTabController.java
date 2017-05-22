@@ -2,11 +2,12 @@ package Controller;
 
 import Helper.CsvHeaders;
 import Helper.Record;
-import javafx.event.Event;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.SelectionModel;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -52,36 +53,31 @@ public class ScoreTabController implements Initializable {
     @FXML
     private AnchorPane anchorPane;
 
-    private static List<Record> recordList = new ArrayList<>();
-    static Path defaultPath = Paths.get("./score.csv");
+    private List<Record> recordList = new ArrayList<>();
+    public static Path defaultPath = Paths.get("./score.csv");
 
-    public static void loadCSV(){
+    public void loadCSV(){
 
-        Path path = Paths.get("C:\\Users\\robert.ostaszwski\\Desktop\\score.csv");
-
-        if(Files.notExists(path)){
-            path = defaultPath;
-            if (Files.notExists(defaultPath)) {
-                try {
-                    Files.write( path,
-                        Arrays.stream(CsvHeaders.class.getDeclaredFields())
-                            .map(field -> {
-                                try {
-                                    return field.get(field).toString();
-                                } catch (IllegalAccessException e) {
-                                    e.printStackTrace();
-                                    return null;
-                                }
-                            })
-                            .collect(Collectors.joining(","))
-                            .getBytes() );
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        if (Files.notExists(defaultPath)) {
+            try {
+                Files.write( defaultPath,
+                    Arrays.stream(CsvHeaders.class.getDeclaredFields())
+                        .map(field -> {
+                            try {
+                                return field.get(field).toString();
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                                return null;
+                            }
+                        })
+                        .collect(Collectors.joining(","))
+                        .getBytes() );
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 
-        try(Reader in = Files.newBufferedReader(path);
+        try(Reader in = Files.newBufferedReader(defaultPath);
             CSVParser records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in))
         {
             for(CSVRecord csvRecord : records){
@@ -104,12 +100,11 @@ public class ScoreTabController implements Initializable {
         loadCSV();
         tableView.getItems().setAll(recordList);
         anchorPane.addEventHandler(Tab.SELECTION_CHANGED_EVENT, event ->
-        {
-            System.out.println("no elo");
-            recordList.clear();
-            loadCSV();
-            tableView.getItems().setAll(recordList);
-        }
+            {
+                recordList.clear();
+                loadCSV();
+                tableView.getItems().setAll(recordList);
+            }
         );
     }
 

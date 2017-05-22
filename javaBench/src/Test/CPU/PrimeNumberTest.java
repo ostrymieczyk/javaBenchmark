@@ -1,7 +1,6 @@
 package Test.CPU;
 
 import Helper.Timer;
-import com.sun.org.apache.regexp.internal.RE;
 
 import java.util.Random;
 
