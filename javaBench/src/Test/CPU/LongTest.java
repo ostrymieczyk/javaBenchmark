@@ -1,5 +1,6 @@
 package Test.CPU;
 
+import Helper.ResultController;
 import Helper.Timer;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -7,6 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class LongTest {
 
     private static long RESULT = 50;
+    private static long TOTAL_TIME = 0;
 
     public static final int ADD = 0;
     public static final int SUBTRACT = 1;
@@ -54,8 +56,8 @@ public class LongTest {
         }
     }
 
-    private static double measure(int loops, int arraySize, MathInterface testable){
-        double time = 0.0;
+    private static long measure(int loops, int arraySize, MathInterface testable){
+        long time = 0;
         for (int loop = 0; loop < loops; loop++) {
             long[] longArray = generateRandomLongArray(arraySize);
             Timer t = new Timer();
@@ -63,47 +65,48 @@ public class LongTest {
             time += t.check();
         }
         System.out.println(countOneOperationTime(arraySize, loops, time)+" ns");
-        return countOneOperationTime(arraySize, loops, time);
+        return time;
     }
 
     private interface MathInterface {
         void operate(long[] longs);
     }
 
-    private static double warmupAndMeasure(int mode, int warmupLoops, int testLoops, int arrySize){
-        double a = 0;
-        double b = 0;
+    private static long warmupAndMeasure(int mode, int warmupLoops, int testLoops, int arrySize){
+        long a = 0;
         switch (mode){
             case ADD:
                 System.out.println("\nADD");
                 a = measure(warmupLoops, arrySize, LongTest::add);
-                b = measure(testLoops, arrySize, LongTest::add);
+                TOTAL_TIME += measure(testLoops, arrySize, LongTest::add);
                 break;
             case SUBTRACT:
                 System.out.println("\nSUBTRACT");
                 a = measure(warmupLoops, arrySize, LongTest::substract);
-                b = measure(testLoops, arrySize, LongTest::substract);
+                TOTAL_TIME += measure(testLoops, arrySize, LongTest::substract);
                 break;
             case MULTIPLY:
                 System.out.println("\nMULTIPLY");
                 a = measure(warmupLoops, arrySize, LongTest::multiply);
-                b = measure(testLoops, arrySize, LongTest::multiply);
+                TOTAL_TIME += measure(testLoops, arrySize, LongTest::multiply);
                 break;
             case DIVIDE:
                 System.out.println("\nDIVIDE");
                 a = measure(warmupLoops, arrySize, LongTest::divide);
-                b = measure(testLoops, arrySize, LongTest::divide);
+                TOTAL_TIME += measure(testLoops, arrySize, LongTest::divide);
                 break;
         }
-        return a + b;
+        return a;
     }
 
     public static double measureAll(int warmupLoops, int loops, int size){
         System.out.println("\nLONG");
-        double a = warmupAndMeasure(ADD, warmupLoops, loops, size);
-        double b = warmupAndMeasure(SUBTRACT, warmupLoops, loops, size);
-        double c = warmupAndMeasure(MULTIPLY, warmupLoops, loops, size);
-        double d = warmupAndMeasure(DIVIDE, warmupLoops, loops, size);
+        TOTAL_TIME = 0;
+        long a = warmupAndMeasure(ADD, warmupLoops, loops, size);
+        long b = warmupAndMeasure(SUBTRACT, warmupLoops, loops, size);
+        long c = warmupAndMeasure(MULTIPLY, warmupLoops, loops, size);
+        long d = warmupAndMeasure(DIVIDE, warmupLoops, loops, size);
+        ResultController.setLongReslut(TOTAL_TIME);
         return a+b+c+d;
     }
 }

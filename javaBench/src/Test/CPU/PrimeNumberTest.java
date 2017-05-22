@@ -1,10 +1,8 @@
 package Test.CPU;
 
+import Helper.ResultController;
 import Helper.Timer;
-import com.sun.org.apache.regexp.internal.RE;
 
-import java.util.Random;
-import java.util.RandomAccess;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -13,6 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class PrimeNumberTest {
 
     private static int RESULT = 0;
+    private static long TOTAL_TIME = 0;
 
     private static int[] generateNumbers(int size){
         return ThreadLocalRandom.current().ints(size,0, 10000).toArray();
@@ -26,9 +25,9 @@ public class PrimeNumberTest {
         return true;
     }
 
-    private static int primeNumberTest(int loop){
+    private static long primeNumberTest(int loop){
         System.out.println("\nprimeNumberTest\n");
-        double time = 0.0;
+        long time = 0;
         for(int i=0; i<loop; i++) {
             int[] array = generateNumbers(100_000);
             Timer t = new Timer();
@@ -40,13 +39,15 @@ public class PrimeNumberTest {
         }
         System.out.println(time/(1e9*loop)+" ns\n");
 
-        return RESULT;
+        return time;
     }
 
-    public static int warmupAndTest(int warmupLoops, int testLoops){
-        int a = primeNumberTest(warmupLoops);
-        int b = primeNumberTest(testLoops);
-        return a+b;
+    public static double warmupAndTest(int warmupLoops, int testLoops){
+        TOTAL_TIME = 0;
+        double a = primeNumberTest(warmupLoops);
+        TOTAL_TIME += primeNumberTest(testLoops);
+        ResultController.setPrimeNumberReslut(TOTAL_TIME);
+        return a;
     }
 
 }

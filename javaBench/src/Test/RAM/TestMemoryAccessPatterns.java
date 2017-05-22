@@ -1,5 +1,8 @@
 package Test.RAM;
 
+import Helper.ResultController;
+import Helper.Timer;
+
 public class TestMemoryAccessPatterns implements Runnable
 {
     private static final int LONG_SIZE = 8;
@@ -16,6 +19,8 @@ public class TestMemoryAccessPatterns implements Runnable
     private static final int PRIME_INC = 514229;
 
     private static final long[] memory = new long[ARRAY_SIZE];
+
+    static long TOTAL_TIME = 0;
 
     static
     {
@@ -59,21 +64,25 @@ public class TestMemoryAccessPatterns implements Runnable
         System.out.println(ARRAY_SIZE);
         for (int i = 0; i < 2; i++)
         {
-            perfTest(i, StrideType.LINEAR_WALK);
+            TOTAL_TIME += perfTest(StrideType.LINEAR_WALK);
         }
+        ResultController.setRamLinearWalkReslut(TOTAL_TIME);
+        TOTAL_TIME = 0;
         for (int i = 0; i < 2; i++)
         {
-            perfTest(i, StrideType.RANDOM_HEAP_WALK);
-        }
+            TOTAL_TIME += perfTest(StrideType.RANDOM_HEAP_WALK);
+        }ResultController.setRamRandomPageWalkReslut(TOTAL_TIME);
+        TOTAL_TIME = 0;
         for (int i = 0; i < 2; i++)
         {
-            perfTest(i, StrideType.RANDOM_PAGE_WALK);
-        }
+            TOTAL_TIME += perfTest(StrideType.RANDOM_PAGE_WALK);
+        }ResultController.setRamRandomHeapWalkReslut(TOTAL_TIME);
+        TOTAL_TIME = 0;
     }
 
-    private static void perfTest(final int runNumber, final StrideType strideType)
+    private static long perfTest(final StrideType strideType)
     {
-        final long start = System.nanoTime();
+        Timer t = new Timer();
 
         int pos = -1;
         long result = 0;
@@ -88,17 +97,14 @@ public class TestMemoryAccessPatterns implements Runnable
             }
         }
 
-        final long duration = System.nanoTime() - start;
-        final double nsOp = duration / (double)ARRAY_SIZE;
+        final long duration = t.check();
 
         if (208574349312L != result)
         {
             throw new IllegalStateException();
         }
 
-        System.out.format("%d - %.2fns %s\n",
-                Integer.valueOf(runNumber),
-                Double.valueOf(nsOp),
-                strideType);
+
+        return duration;
     }
 }

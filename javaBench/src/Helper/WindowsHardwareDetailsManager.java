@@ -27,7 +27,7 @@ public class WindowsHardwareDetailsManager extends HardwareDetailsManager {
 
     @Override
     public String getFormatedCpuDetails() {
-        return String.join("; ", getCpuDetails());
+        return String.join("; ", getCpuDetails()).replaceAll(",", ";");
     }
 
     @Override

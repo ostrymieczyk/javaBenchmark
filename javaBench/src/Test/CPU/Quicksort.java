@@ -1,5 +1,6 @@
 package Test.CPU;
 
+import Helper.ResultController;
 import Helper.Timer;
 
 import java.util.Random;
@@ -10,6 +11,7 @@ import java.util.Random;
 public class Quicksort {
 
     private static int RESULT = 0;
+    private static long TOTAL_TIME = 0;
 
     private static int partition(int array[], int left, int right)
     {
@@ -51,9 +53,9 @@ public class Quicksort {
         return array;
     }
 
-    private static int quicksortTest(int loop){
+    private static long quicksortTest(int loop){
         System.out.println("\nquicksortTest\n");
-        double time = 0.0;
+        long time = 0;
         for (int i = 0; i<loop; i++){
             int[] toSort = generateArray(2_500_000), sorted;
             Timer t = new Timer();
@@ -62,13 +64,15 @@ public class Quicksort {
             RESULT += sorted.hashCode();
         }
         System.out.println(time/(1e6*loop)+" ms\n");
-        return RESULT;
+        return time;
     }
 
-    public static int warmupAndTest(int warmupLoops, int testLoops){
-        int a = quicksortTest(warmupLoops);
-        int b = quicksortTest(testLoops);
-        return a + b;
+    public static double warmupAndTest(int warmupLoops, int testLoops){
+        TOTAL_TIME = 0;
+        double a = quicksortTest(warmupLoops);
+        TOTAL_TIME += quicksortTest(testLoops);
+        ResultController.setQuicksortReslut(TOTAL_TIME);
+        return a;
     }
 }
 

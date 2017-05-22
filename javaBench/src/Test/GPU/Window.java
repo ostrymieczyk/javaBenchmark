@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
+import Helper.ResultController;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
@@ -22,9 +23,7 @@ public class Window implements GLEventListener {
     private static final float point = 1.0f;
     Float out = 20f, rotate = 0f;
 
-    GLCanvas glcanvas;
-
-    JFrame frame;
+    static long FPS = 0;
 
     public void addCube(float diffx, float diffy, float diffz){
         Random rand = new Random();
@@ -90,51 +89,46 @@ public class Window implements GLEventListener {
         glWindow.setVisible(true);
 
         final Animator animator = new Animator(glWindow);
+        FPS = 0;
 
         animator.start();
 
-            float max = 2.5f;
-            long end = System.currentTimeMillis() + 30000;
-            flag:
-            while (true) {
-                for (float i = -max; i <= max; i += 2.5f) {
-                    for (float j = -max; j <= max; j += 2.5f)
-                    {
-                        addCube(max, i, j);
-                        addCube(i, max, j);
-                        addCube(i, j, max);
-                        addCube(-max, i, j);
-                        addCube(i, -max, j);
-                        addCube(i, j, -max);
-                        try {
-                            Thread.currentThread().sleep(10);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        if (System.currentTimeMillis() > end)
-                            break flag;
-                        synchronized (rotate) {
-                            rotate += 0.5f;
-                        }
+        float max = 2.5f;
+        long end = System.currentTimeMillis() + 30000;
+        flag:
+        while (true) {
+            for (float i = -max; i <= max; i += 2.5f) {
+                for (float j = -max; j <= max; j += 2.5f)
+                {
+                    addCube(max, i, j);
+                    addCube(i, max, j);
+                    addCube(i, j, max);
+                    addCube(-max, i, j);
+                    addCube(i, -max, j);
+                    addCube(i, j, -max);
+                    try {
+                        Thread.currentThread().sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (System.currentTimeMillis() > end)
+                        break flag;
+                    synchronized (rotate) {
+                        rotate += 0.5f;
                     }
                 }
-                synchronized (out) {
-                    out += 10.0f;
-                }
-                max += 2.5f;
             }
-        System.out.println(freme/30);
+            synchronized (out) {
+                out += 10.0f;
+            }
+            max += 2.5f;
+        }
+        ResultController.setGpuReslut(FPS);
+        FPS = 0;
+        animator.stop();
         glWindow.destroy();
     }
 
-    public void closeWindow(){
-        if(glcanvas != null && frame != null) {
-            glcanvas.destroy();
-            frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-        }
-    }
-
-    int freme = 0;
     @Override
     public void display( GLAutoDrawable drawable ) {
 
@@ -174,7 +168,7 @@ public class Window implements GLEventListener {
 
         gl.glEnd();
         gl.glFlush();
-        freme++;
+        FPS++;
 
     }
 

@@ -2,6 +2,7 @@ package Controller;
 
 import GUI.Main;
 import Helper.HardwareDetailsManager;
+import Helper.ResultController;
 import Test.CPU.*;
 import Test.GPU.Window;
 import Test.HardDrive.MeasureIOPerformance;
@@ -66,42 +67,43 @@ public class TestTabController implements Initializable{
                     e.printStackTrace();
                 }
             }
-//            if(cpu.isSelected()){
-//                increaseProgressAndChangeText("CPU: Int test...");
-//                IntTest.measureAll(100, 300, 2_500_000);
-//            }
-//            if(cpu.isSelected()) {
-//                increaseProgressAndChangeText("CPU: Long test...");
-//                LongTest.measureAll(50, 300, 1_250_000);
-//            }
-//            if(cpu.isSelected()) {
-//                increaseProgressAndChangeText("CPU: Double test...");
-//                DoubleTest.measureAll(25, 200, 1_250_000);
-//            }
-//            if(cpu.isSelected()) {
-//                increaseProgressAndChangeText("CPU: Quicksort test...");
-//                Quicksort.warmupAndTest(10, 40);
-//            }
-            if(cpu.isSelected()) {
-                increaseProgressAndChangeText("CPU: Prime Number test...");
-                PrimeNumberTest.warmupAndTest(5, 10);
-            }
-//            if(cpu.isSelected()) {
-//                increaseProgressAndChangeText("CPU: compress test...");
-//                CompressTest.warmupAndTest(5, 10);
-//            }
-//            if(cpu.isSelected()) {
-//                increaseProgressAndChangeText("CPU: encryption test...");
-//                DataEncryptior.warmupAndTest(20, 140);
-//            }
-
-            if(disk.isSelected()){
-                new MeasureIOPerformance().run();
-            }
             if (cube != null){
-                cube.closeWindow();
                 cube.clearCubes();
             }
+            if(cpu.isSelected()){
+                increaseProgressAndChangeText("CPU: Int test...");
+                IntTest.measureAll(50, 300, 1_250_000);
+            }
+            if(cpu.isSelected()) {
+                increaseProgressAndChangeText("CPU: Long test...");
+                LongTest.measureAll(50, 300, 1_250_000);
+            }
+            if(cpu.isSelected()) {
+                increaseProgressAndChangeText("CPU: Double test...");
+                DoubleTest.measureAll(50, 300, 1_250_000);
+            }
+            if(cpu.isSelected()) {
+                increaseProgressAndChangeText("CPU: Quicksort test...");
+                Quicksort.warmupAndTest(10, 60);
+            }
+            if(cpu.isSelected()) {
+                increaseProgressAndChangeText("CPU: Prime Number test...");
+                PrimeNumberTest.warmupAndTest(5, 30);
+            }
+            if(cpu.isSelected()) {
+                increaseProgressAndChangeText("CPU: compress test...");
+                CompressTest.warmupAndTest(5, 30);
+            }
+            if(cpu.isSelected()) {
+                increaseProgressAndChangeText("CPU: encryption test...");
+                DataEncryptior.warmupAndTest(30, 180);
+            }
+
+            if(disk.isSelected()){
+                increaseProgressAndChangeText("DISK: write, read speed test...");
+                new MeasureIOPerformance().run();
+            }
+
             enableControlls();
             changeButtonsStatus();
             if(cpu.isSelected() || ram.isSelected() || gpu.isSelected() || disk.isSelected()) {
@@ -116,13 +118,13 @@ public class TestTabController implements Initializable{
                                 .join(",",
                                         System.lineSeparator(),
                                         hardwareDetailsManager.getFormatedCpuDetails(),
-                                        "0",
+                                        getFormatedResult(ResultController.getCpuScore()),
                                         hardwareDetailsManager.getFormatedGpuDetails(),
-                                        "",
-                                        "",
-                                        "",
-                                        "",
-                                        "",
+                                        getFormatedResult(ResultController.getGpuScore()),
+                                        hardwareDetailsManager.getFormatedDiskDetails(),
+                                        getFormatedResult(ResultController.getDiskScore()),
+                                        hardwareDetailsManager.getFormatedRamDetails(),
+                                        getFormatedResult(ResultController.getRamScore()),
                                         "")
                                 .getBytes(),
                         StandardOpenOption.APPEND);
@@ -132,6 +134,10 @@ public class TestTabController implements Initializable{
             }
         });
         first.start();
+    }
+
+    private String getFormatedResult(Long l){
+        return (l != Long.MIN_VALUE) ? Long.toString(l) : "-";
     }
 
     private void diableControlls(){

@@ -1,5 +1,6 @@
 package Test.CPU;
 
+import Helper.ResultController;
 import Helper.Timer;
 import com.sauljohnson.huff.HuffmanCompressor;
 
@@ -11,6 +12,7 @@ import java.util.Random;
 public class CompressTest {
 
     private static int RESULT;
+    private static long TOTAL_TIME = 0;
 
     private static double getSpeed(byte[] data, double timeInNanoSecond) {
         return (data.length / 128) * 1e9 / timeInNanoSecond;
@@ -23,31 +25,29 @@ public class CompressTest {
         return b;
     }
 
-    private static double measureCompressTime(byte[] data){
+    private static long measureCompressTime(byte[] data){
         HuffmanCompressor compressor = new HuffmanCompressor();
         Timer t = new Timer();
         RESULT += compressor.compress(data).getData().length;
         return t.check();
     }
 
-    private static int compressTest(int loop) {
+    private static long compressTest(int loop) {
         System.out.println("\nCompressTest\n");
-        double speed = 0.0;
+        long time = 0;
         for (int i = 0; i<loop; i++) {
             byte[] data = getRandomByteArrayInSize(1024 * 1024);
-            speed += getSpeed(data, measureCompressTime(data));
+            time += measureCompressTime(data);
         }
-        speed /= loop;
-        System.out.println(speed + " kb/s\n");
-        return RESULT;
+        return time;
 
     }
 
-    public static int warmupAndTest(int warmupLoops, int testLoops){
-        int a = 0;
-        int b = 0;
-        a = compressTest(warmupLoops);
-        b = compressTest(testLoops);
-        return a+b;
+    public static double warmupAndTest(int warmupLoops, int testLoops){
+        TOTAL_TIME = 0;
+        double a = compressTest(warmupLoops);
+        TOTAL_TIME += compressTest(testLoops);
+        ResultController.setCompressReslut(TOTAL_TIME);
+        return a;
     }
 }

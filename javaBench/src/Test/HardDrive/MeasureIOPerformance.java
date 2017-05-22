@@ -1,5 +1,6 @@
 package Test.HardDrive;
 
+import Helper.ResultController;
 import Helper.Timer;
 
 import java.io.*;
@@ -15,10 +16,10 @@ public final class MeasureIOPerformance implements Runnable {
     static final int SIZE_GB = 1024 * 1024 * 1024;
     static final int BLOCK_SIZE = 2 * 1024 * 1024;
     static final int blocks = SIZE_GB / BLOCK_SIZE;
-    static double RESULT = 0;
+    static long TOTAL_TIME = 0;
 
-    static List<Double> writeResults = new ArrayList<>();
-    static List<Double> readResults = new ArrayList<>();
+    static List<Long> writeResults = new ArrayList<>();
+    static List<Long> readResults = new ArrayList<>();
 
     private static void measure(StreamRw rw, int i)
             throws IOException, InterruptedException {
@@ -30,17 +31,20 @@ public final class MeasureIOPerformance implements Runnable {
         Arrays.setAll(readFiles, n -> new File(
                 System.getProperty("user.dir") + "/" + "readTest" + (i+1)));
         rw.write(writeFile);
-        writeResults.add(RESULT);
-        RESULT = 0;
+        writeResults.add(TOTAL_TIME);
+        TOTAL_TIME = 0;
         rw.read(readFiles[i]);
-        readResults.add(RESULT);
-        RESULT = 0;
+        readResults.add(TOTAL_TIME);
+        TOTAL_TIME = 0;
         writeFile.delete();
     }
 
-    private void printMean(){
-        System.out.println(writeResults.stream().mapToDouble(i -> {return i;}).sum()/(3 * SIZE_GB));
-        System.out.println(readResults.stream().mapToDouble(i -> {return i;}).sum()/(3 * SIZE_GB));
+    private void addToResultController(){
+        long writeTime = 0, readTime = 0;
+        for(long time : writeResults) writeTime += time;
+        for(long time : readResults) readTime += time;
+        ResultController.setDiskReadReslut(readTime);
+        ResultController.setDiskWriteReslut(writeTime);
     }
 
     @Override
@@ -54,7 +58,7 @@ public final class MeasureIOPerformance implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        printMean();
+        addToResultController();
     }
 
     static class StreamRw {
@@ -66,7 +70,7 @@ public final class MeasureIOPerformance implements Runnable {
                 for (int i = 0; i < blocks; i++) {
                     Timer t = new Timer();
                     out.write(buffer);
-                    RESULT += t.check();
+                    TOTAL_TIME += t.check();
                 }
             } finally {
                 out.close();
@@ -81,7 +85,7 @@ public final class MeasureIOPerformance implements Runnable {
                 for (int i = 0; i < blocks; i++) {
                     Timer t = new Timer();
                     temp = in.read(buffer);
-                    RESULT += t.check();
+                    TOTAL_TIME += t.check();
                     checkum +=buffer.hashCode();
                     if(temp == -1)
                         break;
@@ -93,16 +97,4 @@ public final class MeasureIOPerformance implements Runnable {
         }
     }
 
-
-    public static void purgeCache() throws IOException, InterruptedException {
-        if (System.getProperty("os.name").startsWith("Mac")) {
-            new ProcessBuilder("sudo", "purge")
-                    //                    .inheritIO()
-                    .start().waitFor();
-        } else {
-            new ProcessBuilder("sudo", "su", "-c", "echo 3 > /proc/sys/vm/drop_caches")
-                    //                    .inheritIO()
-                    .start().waitFor();
-        }
-    }
 }
