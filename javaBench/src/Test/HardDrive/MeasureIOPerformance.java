@@ -1,6 +1,6 @@
 package Test.HardDrive;
 
-import Helper.ResultController;
+import Controller.ResultController;
 import Helper.Timer;
 
 import java.io.*;

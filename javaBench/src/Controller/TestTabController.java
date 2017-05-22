@@ -2,19 +2,20 @@ package Controller;
 
 import GUI.Main;
 import Helper.HardwareDetailsManager;
-import Helper.ResultController;
 import Test.CPU.*;
 import Test.GPU.Window;
 import Test.HardDrive.MeasureIOPerformance;
+import Test.RAM.TestMemoryAccessPatterns;
+import com.sun.org.apache.regexp.internal.RE;
 import javafx.application.Platform;
-import javafx.event.Event;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import java.io.IOException;
 import java.net.URL;
@@ -44,6 +45,8 @@ public class TestTabController implements Initializable{
     private CheckBox disk;
     @FXML
     private CheckBox ram;
+    @FXML
+    private TextFlow textFlow;
 
     private double progressPick = 0.0;
 
@@ -57,6 +60,7 @@ public class TestTabController implements Initializable{
             resetProgressBar();
             countNumOfTests();
             diableControlls();
+            ResultController.reset();
             if(gpu.isSelected()) {
                 increaseProgressAndChangeText("GPU test...");
                 cube = new Window();
@@ -104,6 +108,17 @@ public class TestTabController implements Initializable{
                 new MeasureIOPerformance().run();
             }
 
+            if(ram.isSelected()){
+                increaseProgressAndChangeText("RAM test...");
+                try {
+                    new TestMemoryAccessPatterns().run();
+                } catch (OutOfMemoryError e){
+                    setText("java.lang.OutOfMemoryError: Java heap space");
+                    throw new OutOfMemoryError(e.getMessage());
+                }
+
+            }
+
             enableControlls();
             changeButtonsStatus();
             if(cpu.isSelected() || ram.isSelected() || gpu.isSelected() || disk.isSelected()) {
@@ -116,7 +131,7 @@ public class TestTabController implements Initializable{
                         Paths.get("./score.csv"),
                         String
                                 .join(",",
-                                        System.lineSeparator(),
+                                        System.lineSeparator() + hardwareDetailsManager.getFormatedName(),
                                         hardwareDetailsManager.getFormatedCpuDetails(),
                                         getFormatedResult(ResultController.getCpuScore()),
                                         hardwareDetailsManager.getFormatedGpuDetails(),
@@ -125,13 +140,14 @@ public class TestTabController implements Initializable{
                                         getFormatedResult(ResultController.getDiskScore()),
                                         hardwareDetailsManager.getFormatedRamDetails(),
                                         getFormatedResult(ResultController.getRamScore()),
-                                        "")
+                                        getFormatedResult(ResultController.getTotalScore()))
                                 .getBytes(),
                         StandardOpenOption.APPEND);
             }
             catch (IOException e) {
                 e.printStackTrace();
             }
+            displayResults();
         });
         first.start();
     }
@@ -183,6 +199,22 @@ public class TestTabController implements Initializable{
         double progress = progressBar.getProgress() + progressPick;
         progressBar.setProgress(progress);
         setText(text);
+    }
+
+    private void displayResults(){
+        Platform.runLater(() -> {
+            Text toShow = new Text(
+                    "Name: " + hardwareDetailsManager.getFormatedName() + System.lineSeparator() +
+                    "Total score: " +getFormatedResult(ResultController.getTotalScore()) + System.lineSeparator() +
+                    "CPU: " + getFormatedResult(ResultController.getCpuScore()) + System.lineSeparator() +
+                    "GPU: " + getFormatedResult(ResultController.getGpuScore()) + System.lineSeparator() +
+                    "DISK: " + getFormatedResult(ResultController.getDiskScore()) + System.lineSeparator() +
+                    "RAM: " + getFormatedResult(ResultController.getRamScore()));
+
+
+            textFlow.getChildren().clear();
+            textFlow.getChildren().add(toShow);
+        });
     }
 
     private void setText(String text){

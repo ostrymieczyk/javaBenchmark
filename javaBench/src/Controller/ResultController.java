@@ -1,6 +1,8 @@
-package Helper;
+package Controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -102,6 +104,27 @@ public class ResultController {
         double sumOfTime = 0.0;
         for(double time : diskResults.values()) sumOfTime += time;
         return (sumOfTime > 0) ? (long) (-diskSlope/100 * sumOfTime + (diskReferenceScore - diskSlope/100*diskReferenceTime)) : Long.MIN_VALUE;
+    }
+
+    public static long getTotalScore(){
+        List<Long> results = new ArrayList<>();
+        long sum = 0;
+        results.add(getCpuScore());
+        results.add(getDiskScore());
+        results.add(getGpuScore());
+        results.add(getRamScore());
+        for(long result : results){
+            if (result != Long.MIN_VALUE)
+                sum += result;
+        }
+        return sum;
+    }
+
+    public static void reset(){
+        cpuResults.clear();
+        gpuResults = 0;
+        ramResults.clear();
+        diskResults.clear();
     }
 
 }

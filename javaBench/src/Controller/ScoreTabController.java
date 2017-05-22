@@ -105,7 +105,6 @@ public class ScoreTabController implements Initializable {
         tableView.getItems().setAll(recordList);
         anchorPane.addEventHandler(Tab.SELECTION_CHANGED_EVENT, event ->
         {
-            System.out.println("no elo");
             recordList.clear();
             loadCSV();
             tableView.getItems().setAll(recordList);

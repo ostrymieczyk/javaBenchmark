@@ -1,9 +1,9 @@
 package Test.RAM;
 
-import Helper.ResultController;
+import Controller.ResultController;
 import Helper.Timer;
 
-public class TestMemoryAccessPatterns implements Runnable
+public class TestMemoryAccessPatterns
 {
     private static final int LONG_SIZE = 8;
     private static final int PAGE_SIZE = 2 * 1024 * 1024;

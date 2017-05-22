@@ -1,6 +1,6 @@
 package Test.CPU;
 
-import Helper.ResultController;
+import Controller.ResultController;
 import Helper.Timer;
 import org.apache.commons.lang.RandomStringUtils;
 

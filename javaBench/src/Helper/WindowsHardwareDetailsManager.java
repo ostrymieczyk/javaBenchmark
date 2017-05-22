@@ -65,7 +65,12 @@ public class WindowsHardwareDetailsManager extends HardwareDetailsManager {
         for (String diskDetails : getDiskDetails()){
             List<String> details = Arrays.asList(diskDetails.split("\\s+"));
             if(details.size() >=2) {
-                long size = Long.parseLong(details.get(details.size()-1));
+                long size;
+                try {
+                    size = Long.parseLong(details.get(details.size()-1));
+                } catch (NumberFormatException e){
+                    size = 0;
+                }
                 String manufacturer = String.join(" ", details.subList(0, details.size()-1));
                 formatedLines.add(manufacturer + " " + size/(1024*1024*1024)+ "GB");
             }
@@ -97,5 +102,22 @@ public class WindowsHardwareDetailsManager extends HardwareDetailsManager {
             }
         }
         return String.join("; ", formatedLines);
+    }
+
+    @Override
+    public List<String> getName() {
+        List<String> commandOutputLines = getCommandOutput(new String[]{"cmd.exe", "/c", "wmic computersystem get name"});
+        List<String> foundedGPUs = new ArrayList<>();
+        for(String line : commandOutputLines){
+            if(!line.contains("Name") && !line.isEmpty()){
+                foundedGPUs.add(line.trim());
+            }
+        }
+        return foundedGPUs;
+    }
+
+    @Override
+    public String getFormatedName() {
+        return String.join("; ", getName());
     }
 }

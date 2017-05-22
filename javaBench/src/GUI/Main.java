@@ -46,10 +46,8 @@ public class Main extends Application {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("TabRoot.fxml"));
+            loader.setLocation(Main.class.getResource("/GUI/TabRoot.fxml"));
             rootLayout = (TabPane) loader.load();
-
-            // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
@@ -65,7 +63,7 @@ public class Main extends Application {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("TestTab.fxml"));
+            loader.setLocation(Main.class.getResource("/GUI/TestTab.fxml"));
             AnchorPane testTab = (AnchorPane) loader.load();
             rootLayout.getTabs().get(0).setContent(testTab);
         } catch (IOException e) {
@@ -77,7 +75,7 @@ public class Main extends Application {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("ScoreTab.fxml"));
+            loader.setLocation(Main.class.getResource("/GUI/ScoreTab.fxml"));
             AnchorPane scoreTab = loader.load();
             rootLayout.getTabs().get(1).setContent(scoreTab);
             rootLayout.getTabs().get(1).setOnSelectionChanged(event -> {
@@ -92,7 +90,7 @@ public class Main extends Application {
     public void showInfoTab(){
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("InfoTab.fxml"));
+            loader.setLocation(Main.class.getResource("/GUI/InfoTab.fxml"));
             AnchorPane infoTab = (AnchorPane) loader.load();
             rootLayout.getTabs().get(2).setContent(infoTab);
 
