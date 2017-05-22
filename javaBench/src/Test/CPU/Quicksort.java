@@ -1,5 +1,6 @@
 package Test.CPU;
 
+import Controller.ResultController;
 import Helper.Timer;
 
 import java.util.Random;
@@ -10,27 +11,28 @@ import java.util.Random;
 public class Quicksort {
 
     private static int RESULT = 0;
+    private static long TOTAL_TIME = 0;
 
-    private static int partition(int arr[], int left, int right)
+    private static int partition(int array[], int left, int right)
     {
-        int i = left, j = right;
+        int indexLeft = left, indexRight = right;
         int tmp;
-        int pivot = arr[(left + right) / 2];
+        int pivot = array[(left + right) / 2];
 
-        while (i <= j) {
-            while (arr[i] < pivot)
-                i++;
-            while (arr[j] > pivot)
-                j--;
-            if (i <= j) {
-                tmp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = tmp;
-                i++;
-                j--;
+        while (indexLeft <= indexRight) {
+            while (array[indexLeft] < pivot)
+                indexLeft++;
+            while (array[indexRight] > pivot)
+                indexRight--;
+            if (indexLeft <= indexRight) {
+                tmp = array[indexLeft];
+                array[indexLeft] = array[indexRight];
+                array[indexRight] = tmp;
+                indexLeft++;
+                indexRight--;
             }
         }
-        return i;
+        return indexLeft;
     }
 
     public static int[] quickSort(int arr[], int left, int right) {
@@ -51,9 +53,9 @@ public class Quicksort {
         return array;
     }
 
-    private static int quicksortTest(int loop){
+    private static long quicksortTest(int loop){
         System.out.println("\nquicksortTest\n");
-        double time = 0.0;
+        long time = 0;
         for (int i = 0; i<loop; i++){
             int[] toSort = generateArray(2_500_000), sorted;
             Timer t = new Timer();
@@ -62,13 +64,15 @@ public class Quicksort {
             RESULT += sorted.hashCode();
         }
         System.out.println(time/(1e6*loop)+" ms\n");
-        return RESULT;
+        return time;
     }
 
-    public static int warmupAndTest(int warmupLoops, int testLoops){
-        int a = quicksortTest(warmupLoops);
-        int b = quicksortTest(testLoops);
-        return a + b;
+    public static double warmupAndTest(int warmupLoops, int testLoops){
+        TOTAL_TIME = 0;
+        double a = quicksortTest(warmupLoops);
+        TOTAL_TIME += quicksortTest(testLoops);
+        ResultController.setQuicksortReslut(TOTAL_TIME);
+        return a;
     }
 }
 

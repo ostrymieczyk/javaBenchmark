@@ -7,7 +7,7 @@ public class Timer {
 		play(); 
 	}
 	
-	public double check() { 
+	public long check() {
 		return (System.nanoTime()-start+spent); 
 	}
 	

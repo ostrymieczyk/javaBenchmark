@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.TestTabController">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.TextFlow?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.TestTabController">
    <children>
-      <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane prefHeight="305.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <bottom>
             <ButtonBar BorderPane.alignment="BOTTOM_RIGHT">
                <BorderPane.margin>
@@ -35,8 +43,9 @@
             </HBox>
          </top>
          <center>
-            <AnchorPane style="-fx-border-color: #bcbcbc; -fx-background-color: #dbdbdb;" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #bcbcbc; -fx-background-color: #dbdbdb;" BorderPane.alignment="CENTER">
                <children>
+                  <TextFlow fx:id="textFlow" textAlignment="CENTER" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0" />
                   <HBox alignment="CENTER" prefHeight="202.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Label text="Progress">

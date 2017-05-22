@@ -52,4 +52,7 @@ public abstract class HardwareDetailsManager {
 
     public abstract String getFormatedRamDetails();
 
+    public abstract List<String> getName();
+
+    public abstract String getFormatedName();
 }
