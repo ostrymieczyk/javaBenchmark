@@ -1,14 +1,8 @@
 package Test.CPU;
 
 import Helper.Timer;
-import nayuki.huffmancoding.AdaptiveHuffmanCompress;
-import nayuki.huffmancoding.BitOutputStream;
+import com.sauljohnson.huff.HuffmanCompressor;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.Random;
 
 /**
@@ -16,26 +10,7 @@ import java.util.Random;
  */
 public class CompressTest {
 
-    private static int RESULT = 0;
-    private static InputStream is = null;
-    private static ByteArrayOutputStream out = null;
-    private static BitOutputStream bitOut;
-
-    private static void initializeOutputStreams(){
-        out = new ByteArrayOutputStream();
-        bitOut = new BitOutputStream(out);
-    }
-
-    private static void closeStreams() throws IOException {
-        bitOut.close();
-        is.close();
-        out.close();
-    }
-
-    private static void resetStreams() throws IOException {
-        out.reset();
-        is.reset();
-    }
+    private static int RESULT;
 
     private static double getSpeed(byte[] data, double timeInNanoSecond) {
         return (data.length / 128) * 1e9 / timeInNanoSecond;
@@ -48,33 +23,20 @@ public class CompressTest {
         return b;
     }
 
-    private static void initializeInputStreamWithGivenData(byte[] b){
-        is = new ByteArrayInputStream(b);
-    }
-
-    private static void getIntFromCompressedDataAndAddItToResult(byte[] outputData){
-        RESULT += outputData.hashCode();
-    }
-
-    private static double measureCompressTime() throws IOException {
+    private static double measureCompressTime(byte[] data){
+        HuffmanCompressor compressor = new HuffmanCompressor();
         Timer t = new Timer();
-        AdaptiveHuffmanCompress.compress(is, bitOut);
+        RESULT += compressor.compress(data).getData().length;
         return t.check();
     }
 
-    private static int compressTest(int loop) throws IOException {
+    private static int compressTest(int loop) {
         System.out.println("\nCompressTest\n");
-        initializeOutputStreams();
         double speed = 0.0;
         for (int i = 0; i<loop; i++) {
-            byte[] data = getRandomByteArrayInSize(10_000_000);
-            initializeInputStreamWithGivenData(data);
-            speed += getSpeed(data, measureCompressTime());
-            getIntFromCompressedDataAndAddItToResult(out.toByteArray());
-            resetStreams();
-            is.close();
+            byte[] data = getRandomByteArrayInSize(1024 * 1024);
+            speed += getSpeed(data, measureCompressTime(data));
         }
-        closeStreams();
         speed /= loop;
         System.out.println(speed + " kb/s\n");
         return RESULT;
@@ -84,12 +46,8 @@ public class CompressTest {
     public static int warmupAndTest(int warmupLoops, int testLoops){
         int a = 0;
         int b = 0;
-        try {
-            a = compressTest(warmupLoops);
-            b = compressTest(testLoops);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        a = compressTest(warmupLoops);
+        b = compressTest(testLoops);
         return a+b;
     }
 }

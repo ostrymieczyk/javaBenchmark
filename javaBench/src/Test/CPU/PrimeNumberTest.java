@@ -4,6 +4,8 @@ import Helper.Timer;
 import com.sun.org.apache.regexp.internal.RE;
 
 import java.util.Random;
+import java.util.RandomAccess;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by Robert on 22.11.2016.
@@ -13,12 +15,7 @@ public class PrimeNumberTest {
     private static int RESULT = 0;
 
     private static int[] generateNumbers(int size){
-        Random random = new Random();
-        int [] array = new int[size];
-        for(int i = 0; i<array.length; i++){
-            array[i] = i+100;
-        }
-        return array;
+        return ThreadLocalRandom.current().ints(size,0, 10000).toArray();
     }
 
     private static boolean isPrime(int n) {

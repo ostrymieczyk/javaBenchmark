@@ -11,26 +11,26 @@ public class Quicksort {
 
     private static int RESULT = 0;
 
-    private static int partition(int arr[], int left, int right)
+    private static int partition(int array[], int left, int right)
     {
-        int i = left, j = right;
+        int indexLeft = left, indexRight = right;
         int tmp;
-        int pivot = arr[(left + right) / 2];
+        int pivot = array[(left + right) / 2];
 
-        while (i <= j) {
-            while (arr[i] < pivot)
-                i++;
-            while (arr[j] > pivot)
-                j--;
-            if (i <= j) {
-                tmp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = tmp;
-                i++;
-                j--;
+        while (indexLeft <= indexRight) {
+            while (array[indexLeft] < pivot)
+                indexLeft++;
+            while (array[indexRight] > pivot)
+                indexRight--;
+            if (indexLeft <= indexRight) {
+                tmp = array[indexLeft];
+                array[indexLeft] = array[indexRight];
+                array[indexRight] = tmp;
+                indexLeft++;
+                indexRight--;
             }
         }
-        return i;
+        return indexLeft;
     }
 
     public static int[] quickSort(int arr[], int left, int right) {

@@ -1,62 +1,72 @@
 package Test.HardDrive;
 
+import Helper.Timer;
+
 import java.io.*;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by Robert on 18.12.2016.
  */
 public final class MeasureIOPerformance implements Runnable {
-    static final int SIZE_GB = Integer.getInteger("sizeGB", 1);
-    static File file = new File(System.getProperty("user.home") + "/Desktop/test.ss");
-    static final int BLOCK_SIZE = 4 * 1024;
-    static final int blocks = (int) (((long) SIZE_GB << 30) / BLOCK_SIZE);
+    static final int SIZE_GB = 1024 * 1024 * 1024;
+    static final int BLOCK_SIZE = 2 * 1024 * 1024;
+    static final int blocks = SIZE_GB / BLOCK_SIZE;
+    static double RESULT = 0;
 
-    private static void measure(StreamRw rw) throws IOException, InterruptedException {
-        file.deleteOnExit();
+    static List<Double> writeResults = new ArrayList<>();
+    static List<Double> readResults = new ArrayList<>();
 
-        System.out.println("Writing " + SIZE_GB + " GB " + " with " + rw);
-        long start = System.nanoTime();
-        //purgeCache();
-        rw.write(file);
-        long mid = System.nanoTime();
-        //purgeCache();
-        System.out.println("Reading " + SIZE_GB + " GB " + " with " + rw);
-        System.out.println(rw.read(file));
-        long end = System.nanoTime();
-        long size = file.length();
-        System.out.printf("Write speed %.3f GB/s, read Speed %.3f GB/s%n",
-                (double) size/(mid-start)*1e3, (double) size/(end-mid)*1e3);
-        file.delete();
+    private static void measure(StreamRw rw, int i)
+            throws IOException, InterruptedException {
+        File writeFile = new File(System.getProperty("user.dir") +
+                "/temp_file_to_delete_" +
+                ThreadLocalRandom.current().nextInt());
+        writeFile.deleteOnExit();
+        File[] readFiles = new File[3];
+        Arrays.setAll(readFiles, n -> new File(
+                System.getProperty("user.dir") + "/" + "readTest" + (i+1)));
+        rw.write(writeFile);
+        writeResults.add(RESULT);
+        RESULT = 0;
+        rw.read(readFiles[i]);
+        readResults.add(RESULT);
+        RESULT = 0;
+        writeFile.delete();
+    }
+
+    private void printMean(){
+        System.out.println(writeResults.stream().mapToDouble(i -> {return i;}).sum()/(3 * SIZE_GB));
+        System.out.println(readResults.stream().mapToDouble(i -> {return i;}).sum()/(3 * SIZE_GB));
     }
 
     @Override
     public void run() {
         try {
-            measure(new StreamRw());
-            for (int i = 0; i<5 ; i++){
-                measure(new StreamRw());
+            for (int i = 0; i<3 ; i++){
+                measure(new StreamRw(), i);
             }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        printMean();
     }
 
     static class StreamRw {
         final byte[] buffer = new byte[BLOCK_SIZE];
-        Random random = new Random();
-
-        @Override public String toString() {
-            return "Stream";
-        }
 
         public void write(File f) throws IOException {
             FileOutputStream out = new FileOutputStream(f);
             try {
                 for (int i = 0; i < blocks; i++) {
+                    Timer t = new Timer();
                     out.write(buffer);
+                    RESULT += t.check();
                 }
             } finally {
                 out.close();
@@ -66,11 +76,15 @@ public final class MeasureIOPerformance implements Runnable {
         public int read(File f) throws IOException {
             FileInputStream in = new FileInputStream(f);
             int checkum =  0;
+            int temp = 0;
             try{
-                int read;
-                while ((read = in.read(buffer)) != -1)
-                {
-                    checkum +=1;
+                for (int i = 0; i < blocks; i++) {
+                    Timer t = new Timer();
+                    temp = in.read(buffer);
+                    RESULT += t.check();
+                    checkum +=buffer.hashCode();
+                    if(temp == -1)
+                        break;
                 }
             } finally {
                in.close();

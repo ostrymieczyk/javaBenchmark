@@ -1,13 +1,12 @@
 package Test.CPU;
 
+import Helper.Timer;
+import org.apache.commons.lang.RandomStringUtils;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import Helper.Timer;
-
-import java.io.IOException;
-import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -20,10 +19,6 @@ public class DataEncryptior {
 
     public static byte[] encrypt(String key, String initVector, byte[] decryptedData) {
         return crypto(key, initVector, decryptedData, Cipher.ENCRYPT_MODE);
-    }
-
-    public static byte[] decrypt(String key, String initVector, byte[] encryptedData) {
-        return crypto(key, initVector, encryptedData, Cipher.DECRYPT_MODE);
     }
 
     private static byte[] crypto (String key, String initVector, byte[] data, int mode){
@@ -63,9 +58,12 @@ public class DataEncryptior {
     private static int encryptTest(int loop){
         System.out.println("\nencryptTest\n");
         double time = 0;
+        String chars = "ABCDEFGHIJKLMNOPRST1234567890";
         for (int i = 0; i<loop; i++){
-            byte[] b = getRandomByteArrayInSize(10_000_000);
-            time += measureEncryptTime("Bar12345Bar12345", "RandomInirVector", b);
+            byte[] b = getRandomByteArrayInSize(1024*1024*5);
+            String key = RandomStringUtils.random(16, chars);
+            String initVector = RandomStringUtils.random(16, chars);
+            time += measureEncryptTime(key, initVector, b);
             getIntFromCompressedDataAndAddItToResult();
         }
         System.out.println(time/(1e6*loop)+ " ms\n");

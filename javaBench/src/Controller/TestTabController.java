@@ -4,6 +4,7 @@ import GUI.Main;
 import Helper.HardwareDetailsManager;
 import Test.CPU.*;
 import Test.GPU.Window;
+import Test.HardDrive.MeasureIOPerformance;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -65,35 +66,38 @@ public class TestTabController implements Initializable{
                     e.printStackTrace();
                 }
             }
-            if(cpu.isSelected()) {
-                increaseProgressAndChangeText("CPU: compress test...");
-                CompressTest.warmupAndTest(5, 10);
-            }
-            if(cpu.isSelected()) {
-                increaseProgressAndChangeText("CPU: encryption test...");
-                DataEncryptior.warmupAndTest(20, 140);
-            }
-            if(cpu.isSelected()) {
-                increaseProgressAndChangeText("CPU: Long test...");
-                LongTest.measureAll(50, 300, 1_250_000);
-            }
-            if(cpu.isSelected()){
-                increaseProgressAndChangeText("CPU: Int test...");
-                IntTest.measureAll(100, 300, 2_500_000);
-            }
-            if(cpu.isSelected()) {
-                increaseProgressAndChangeText("CPU: Double test...");
-                DoubleTest.measureAll(25, 200, 1_250_000);
-            }
-            if(cpu.isSelected()) {
-                increaseProgressAndChangeText("CPU: Quicksort test...");
-                Quicksort.warmupAndTest(10, 40);
-            }
+//            if(cpu.isSelected()){
+//                increaseProgressAndChangeText("CPU: Int test...");
+//                IntTest.measureAll(100, 300, 2_500_000);
+//            }
+//            if(cpu.isSelected()) {
+//                increaseProgressAndChangeText("CPU: Long test...");
+//                LongTest.measureAll(50, 300, 1_250_000);
+//            }
+//            if(cpu.isSelected()) {
+//                increaseProgressAndChangeText("CPU: Double test...");
+//                DoubleTest.measureAll(25, 200, 1_250_000);
+//            }
+//            if(cpu.isSelected()) {
+//                increaseProgressAndChangeText("CPU: Quicksort test...");
+//                Quicksort.warmupAndTest(10, 40);
+//            }
             if(cpu.isSelected()) {
                 increaseProgressAndChangeText("CPU: Prime Number test...");
                 PrimeNumberTest.warmupAndTest(5, 10);
             }
+//            if(cpu.isSelected()) {
+//                increaseProgressAndChangeText("CPU: compress test...");
+//                CompressTest.warmupAndTest(5, 10);
+//            }
+//            if(cpu.isSelected()) {
+//                increaseProgressAndChangeText("CPU: encryption test...");
+//                DataEncryptior.warmupAndTest(20, 140);
+//            }
 
+            if(disk.isSelected()){
+                new MeasureIOPerformance().run();
+            }
             if (cube != null){
                 cube.closeWindow();
                 cube.clearCubes();
@@ -106,10 +110,24 @@ public class TestTabController implements Initializable{
                 setText("Aborted");
             }
             try {
-                Files.write( Paths.get("./score.csv"),
-                                String.join(",", "\n",hardwareDetailsManager.getFormatedCpuDetails(), "0", hardwareDetailsManager.getFormatedGpuDetails(),"","","","","","")
-                                .getBytes(), StandardOpenOption.APPEND);
-            } catch (IOException e) {
+                Files.write(
+                        Paths.get("./score.csv"),
+                        String
+                                .join(",",
+                                        System.lineSeparator(),
+                                        hardwareDetailsManager.getFormatedCpuDetails(),
+                                        "0",
+                                        hardwareDetailsManager.getFormatedGpuDetails(),
+                                        "",
+                                        "",
+                                        "",
+                                        "",
+                                        "",
+                                        "")
+                                .getBytes(),
+                        StandardOpenOption.APPEND);
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         });
