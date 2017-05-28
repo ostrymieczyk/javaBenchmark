@@ -6,13 +6,21 @@ import Helper.Timer;
 import java.util.Random;
 
 /**
- * Created by Robert on 22.11.2016.
+ *
  */
 public class Quicksort {
 
+    /**
+     *
+     */
     private static int RESULT = 0;
-    private static long TOTAL_TIME = 0;
 
+    /**
+     * @param array
+     * @param left
+     * @param right
+     * @return
+     */
     private static int partition(int array[], int left, int right)
     {
         int indexLeft = left, indexRight = right;
@@ -35,7 +43,13 @@ public class Quicksort {
         return indexLeft;
     }
 
-    public static int[] quickSort(int arr[], int left, int right) {
+    /**
+     * @param arr
+     * @param left
+     * @param right
+     * @return
+     */
+    private static int[] quickSort(int arr[], int left, int right) {
         int index = partition(arr, left, right);
         if (left < index - 1)
             quickSort(arr, left, index - 1);
@@ -44,20 +58,27 @@ public class Quicksort {
         return arr;
     }
 
-    private static int[] generateArray(int size){
+    /**
+     * @return
+     */
+    private static int[] generateArray(){
         Random random = new Random();
-        int [] array = new int[size];
+        int [] array = new int[2_500_000];
         for(int i = 0; i<array.length; i++){
             array[i] = random.nextInt();
         }
         return array;
     }
 
+    /**
+     * @param loop
+     * @return
+     */
     private static long quicksortTest(int loop){
         System.out.println("\nquicksortTest\n");
         long time = 0;
         for (int i = 0; i<loop; i++){
-            int[] toSort = generateArray(2_500_000), sorted;
+            int[] toSort = generateArray(), sorted;
             Timer t = new Timer();
             sorted = quickSort(toSort, 0, toSort.length-1);
             time += t.check();
@@ -67,12 +88,14 @@ public class Quicksort {
         return time;
     }
 
-    public static double warmupAndTest(int warmupLoops, int testLoops){
-        TOTAL_TIME = 0;
-        double a = quicksortTest(warmupLoops);
-        TOTAL_TIME += quicksortTest(testLoops);
-        ResultController.setQuicksortReslut(TOTAL_TIME);
-        return a;
+    /**
+     *
+     */
+    public static void warmAndTest(){
+        long TOTAL_TIME = 0;
+        double a = quicksortTest(10);
+        TOTAL_TIME += quicksortTest(60);
+        ResultController.setQuickstartResult(TOTAL_TIME);
     }
 }
 

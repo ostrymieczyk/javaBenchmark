@@ -6,12 +6,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by robert.ostaszewski on 04.05.2017.
- */
 public abstract class HardwareDetailsManager {
 
-    protected List<String> getCommandOutput(String[] command){
+    /**
+     * @param command
+     * @return
+     */
+    List<String> getCommandOutput(String[] command){
         List<String> commandOutput = new ArrayList<>();
         ProcessBuilder builder = new ProcessBuilder(
                 command);
@@ -36,23 +37,28 @@ public abstract class HardwareDetailsManager {
         return commandOutput;
     }
 
-    public abstract List<String> getCpuDetails();
+    /**
+     * @return
+     */
+    public abstract String getFormattedCpuDetails();
 
-    public abstract String getFormatedCpuDetails();
+    /**
+     * @return
+     */
+    public abstract String getFormattedGpuDetails();
 
-    public abstract List<String> getGpuDetails();
+    /**
+     * @return
+     */
+    public abstract String getFormattedDiskDetails();
 
-    public abstract String getFormatedGpuDetails();
+    /**
+     * @return
+     */
+    public abstract String getFormattedRamDetails();
 
-    public abstract List<String> getDiskDetails();
-
-    public abstract String getFormatedDiskDetails();
-
-    public abstract List<String> getRamDetails();
-
-    public abstract String getFormatedRamDetails();
-
-    public abstract List<String> getName();
-
-    public abstract String getFormatedName();
+    /**
+     * @return
+     */
+    public abstract String getFormattedName();
 }

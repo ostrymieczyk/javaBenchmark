@@ -10,35 +10,54 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.Random;
 
 /**
- * Created by Robert on 22.11.2016.
+ *
  */
-public class DataEncryptior {
+public class DataEncryption {
 
+    /**
+     *
+     */
     private static int RESULT = 0;
-    private static long TOTAL_TIME = 0;
+    /**
+     *
+     */
     private static byte[] encryptedData;
 
-    public static byte[] encrypt(String key, String initVector, byte[] decryptedData) {
-        return crypto(key, initVector, decryptedData, Cipher.ENCRYPT_MODE);
+    /**
+     * @param key
+     * @param initVector
+     * @param decryptedData
+     * @return
+     */
+    private static byte[] encrypt(String key, String initVector, byte[] decryptedData) {
+        return crypto(key, initVector, decryptedData);
     }
 
-    private static byte[] crypto (String key, String initVector, byte[] data, int mode){
+    /**
+     * @param key
+     * @param initVector
+     * @param data
+     * @return
+     */
+    private static byte[] crypto(String key, String initVector, byte[] data){
         try {
             IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
             SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
 
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-            cipher.init(mode, skeySpec, iv);
+            cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
 
-            byte[] original = cipher.doFinal(data);
-
-            return original;
+            return cipher.doFinal(data);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         return null;
     }
 
+    /**
+     * @param size
+     * @return
+     */
     private static byte[] getRandomByteArrayInSize(int size){
         Random random = new Random();
         byte[] b = new byte[size];
@@ -46,16 +65,29 @@ public class DataEncryptior {
         return b;
     }
 
+    /**
+     * @param key
+     * @param initVector
+     * @param decryptedData
+     * @return
+     */
     private static long measureEncryptTime(String key, String initVector, byte[] decryptedData) {
         Timer t = new Timer();
         encryptedData = encrypt(key, initVector, decryptedData);
         return t.check();
     }
 
+    /**
+     *
+     */
     private static void getIntFromCompressedDataAndAddItToResult(){
         RESULT += encryptedData.hashCode();
     }
 
+    /**
+     * @param loop
+     * @return
+     */
     private static long encryptTest(int loop){
         System.out.println("\nencryptTest\n");
         long time = 0;
@@ -71,11 +103,13 @@ public class DataEncryptior {
         return time;
     }
 
-    public static long warmupAndTest(int warmupLoops, int testLoops){
-        TOTAL_TIME = 0;
-        long a = encryptTest(warmupLoops);
-        TOTAL_TIME += encryptTest(testLoops);
-        ResultController.setEncryptReslut(TOTAL_TIME);
-        return a;
+    /**
+     *
+     */
+    public static void warmupAndTest(){
+        long TOTAL_TIME = 0;
+        long a = encryptTest(30);
+        TOTAL_TIME += encryptTest(180);
+        ResultController.setEncryptResult(TOTAL_TIME);
     }
 }

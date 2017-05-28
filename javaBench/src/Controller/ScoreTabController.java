@@ -29,34 +29,67 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-/**
- * Created by robert.ostaszewski on 02.05.2017.
- */
 public class ScoreTabController implements Initializable {
 
+    /**
+     *
+     */
     @FXML
     private TableView<Record> tableView;
+    /**
+     *
+     */
     @FXML
     private TableColumn<Record, String> id;
+    /**
+     *
+     */
     @FXML
     private TableColumn<Record, String> cpuScore;
+    /**
+     *
+     */
     @FXML
     private TableColumn<Record, String> gpuScore;
+    /**
+     *
+     */
     @FXML
     private TableColumn<Record, String> diskScore;
+    /**
+     *
+     */
     @FXML
     private TableColumn<Record, String> ramScore;
+    /**
+     *
+     */
     @FXML
     private TableColumn<Record, String> totalScore;
+    /**
+     *
+     */
     @FXML
     private TextFlow textFlow;
+    /**
+     *
+     */
     @FXML
     private AnchorPane anchorPane;
 
-    private List<Record> recordList = new ArrayList<>();
-    public static Path defaultPath = Paths.get("./score.csv");
+    /**
+     *
+     */
+    private final List<Record> recordList = new ArrayList<>();
+    /**
+     *
+     */
+    private static final Path defaultPath = Paths.get("./score.csv");
 
-    public void loadCSV(){
+    /**
+     *
+     */
+    private void loadCSV(){
 
         if (Files.notExists(defaultPath)) {
             try {
@@ -90,13 +123,13 @@ public class ScoreTabController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        tableView.getColumns().stream().forEach(column -> column.setStyle("-fx-alignment: CENTER"));
-        id.setCellValueFactory(new PropertyValueFactory<Record,String>("id"));
-        cpuScore.setCellValueFactory(new PropertyValueFactory<Record,String>("cpuScore"));
-        gpuScore.setCellValueFactory(new PropertyValueFactory<Record,String>("gpuScore"));
-        diskScore.setCellValueFactory(new PropertyValueFactory<Record,String>("diskScore"));
-        ramScore.setCellValueFactory(new PropertyValueFactory<Record,String>("ramScore"));
-        totalScore.setCellValueFactory(new PropertyValueFactory<Record,String>("totalScore"));
+        tableView.getColumns().forEach(column -> column.setStyle("-fx-alignment: CENTER"));
+        id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        cpuScore.setCellValueFactory(new PropertyValueFactory<>("cpuScore"));
+        gpuScore.setCellValueFactory(new PropertyValueFactory<>("gpuScore"));
+        diskScore.setCellValueFactory(new PropertyValueFactory<>("diskScore"));
+        ramScore.setCellValueFactory(new PropertyValueFactory<>("ramScore"));
+        totalScore.setCellValueFactory(new PropertyValueFactory<>("totalScore"));
         loadCSV();
         tableView.getItems().setAll(recordList);
         anchorPane.addEventHandler(Tab.SELECTION_CHANGED_EVENT, event ->

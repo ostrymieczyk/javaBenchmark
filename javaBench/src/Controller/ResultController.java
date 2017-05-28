@@ -6,106 +6,168 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by robert.ostaszewski on 22.05.2017.
+ *
  */
 public class ResultController {
 
-    private static long cpuReferenceScore = 20000;
-    private static double cpuReferenceTime = 10000;
-    private static long cpuSlope = 100;
-
-    private static long gpuReferenceScore = 20000;
-    private static long gpuReferenceFps = 150;
-    private static long gpuSlope = 100;
-
-    private static long diskReferenceScore = 20000;
-    private static double diskReferenceTime = 10000;
-    private static long diskSlope = 100;
-
-    private static long ramReferenceScore = 2000;
-    private static double ramReferenceTime = 10000;
-    private static long ramSlope = 100;
-
-    private static Map<String, Long> cpuResults = new HashMap<>();
-    private static Map<String, Long> ramResults = new HashMap<>();
-    private static Map<String, Long> diskResults = new HashMap<>();
+    /**
+     *
+     */
+    private static final Map<String, Long> cpuResults = new HashMap<>();
+    /**
+     *
+     */
+    private static final Map<String, Long> ramResults = new HashMap<>();
+    /**
+     *
+     */
+    private static final Map<String, Long> diskResults = new HashMap<>();
+    /**
+     *
+     */
     private static long gpuResults;
 
-    public static void setIntReslut(long time){
+    /**
+     * @param time
+     */
+    public static void setIntResult(long time){
         cpuResults.put("intResult", time);
     }
 
-    public static void setLongReslut(long time){
+    /**
+     * @param time
+     */
+    public static void setLongResult(long time){
         cpuResults.put("longResult", time);
     }
 
-    public static void setDoubleReslut(long time){
+    /**
+     * @param time
+     */
+    public static void setDoubleResult(long time){
         cpuResults.put("DoubleResult", time);
     }
 
-    public static void setQuicksortReslut(long time){
+    /**
+     * @param time
+     */
+    public static void setQuickstartResult(long time){
         cpuResults.put("QuicksortResult", time);
     }
 
-    public static void setCompressReslut(long time){
+    /**
+     * @param time
+     */
+    public static void setCompressResult(long time){
         cpuResults.put("compressResult", time);
     }
 
-    public static void setEncryptReslut(long time){
+    /**
+     * @param time
+     */
+    public static void setEncryptResult(long time){
         cpuResults.put("encryptResult", time);
     }
 
-    public static void setPrimeNumberReslut(long time){
+    /**
+     * @param time
+     */
+    public static void setPrimeNumberResult(long time){
         cpuResults.put("primeNumberResult", time);
     }
 
-    public static void setDiskReadReslut(long time){
+    /**
+     * @param time
+     */
+    public static void setDiskReadResult(long time){
         diskResults.put("readResult", time);
     }
 
-    public static void setDiskWriteReslut(long time){
+    /**
+     * @param time
+     */
+    public static void setDiskWriteResult(long time){
         diskResults.put("writetResult", time);
     }
 
-    public static void setRamLinearWalkReslut(long time){
+    /**
+     * @param time
+     */
+    public static void setRamLinearWalkResult(long time){
         ramResults.put("linearResult", time);
     }
 
-    public static void setRamRandomPageWalkReslut(long time){
+    /**
+     * @param time
+     */
+    public static void setRamRandomPageWalkResult(long time){
         ramResults.put("randomPageResult", time);
     }
 
-    public static void setRamRandomHeapWalkReslut(long time){
+    /**
+     * @param time
+     */
+    public static void setRamRandomHeapWalkResult(long time){
         ramResults.put("randomHeapResult", time);
     }
 
-    public static void setGpuReslut(long fps){
+    /**
+     * @param fps
+     */
+    public static void setGnuResult(long fps){
         gpuResults = fps;
     }
 
+    /**
+     * @return
+     */
     public static long getCpuScore(){
         double sumOfTime = 0.0;
         for(double time : cpuResults.values()) sumOfTime += time;
-        return (sumOfTime > 0) ? (long) (-cpuSlope/100 * sumOfTime + (cpuReferenceScore - cpuSlope/100*cpuReferenceTime)) : Long.MIN_VALUE;
+        long cpuSlope = 100;
+        double cpuReferenceTime = 10000;
+        long cpuReferenceScore = 20000;
+        return (sumOfTime > 0) ? (long) (-cpuSlope /100 * sumOfTime + (cpuReferenceScore - cpuSlope /100* cpuReferenceTime)) : Long.MIN_VALUE;
     }
 
+    /**
+     * @return
+     */
     public static long getGpuScore(){
-        return (gpuResults > 0) ? (gpuSlope/10 * gpuResults + (gpuReferenceScore - gpuSlope/100*gpuReferenceFps)) : Long.MIN_VALUE;
+        long gpuSlope = 100;
+        long gpuReferenceFps = 150;
+        long gpuReferenceScore = 20000;
+        return (gpuResults > 0) ? (gpuSlope /10 * gpuResults + (gpuReferenceScore - gpuSlope /100* gpuReferenceFps)) : Long.MIN_VALUE;
     }
 
+    /**
+     * @return
+     */
     public static long getRamScore(){
         double sumOfTime = 0.0;
         for(double time : ramResults.values()) sumOfTime += time;
-        return (sumOfTime > 0) ? (long) (-ramSlope/100 * sumOfTime + (ramReferenceScore - ramSlope/100*ramReferenceTime)) : Long.MIN_VALUE;
+        long ramSlope = 100;
+        double ramReferenceTime = 10000;
+        long ramReferenceScore = 2000;
+        return (sumOfTime > 0) ? (long) (-ramSlope /100 * sumOfTime + (ramReferenceScore - ramSlope /100* ramReferenceTime)) : Long.MIN_VALUE;
     }
 
 
+    /**
+     * @return
+     */
     public static long getDiskScore(){
         double sumOfTime = 0.0;
         for(double time : diskResults.values()) sumOfTime += time;
-        return (sumOfTime > 0) ? (long) (-diskSlope/100 * sumOfTime + (diskReferenceScore - diskSlope/100*diskReferenceTime)) : Long.MIN_VALUE;
+        long diskSlope = 100;
+        double diskReferenceTime = 10000;
+        long diskReferenceScore = 20000;
+        return (sumOfTime > 0) ? (long) (-diskSlope /100 * sumOfTime + (diskReferenceScore - diskSlope /100* diskReferenceTime)) : Long.MIN_VALUE;
     }
 
+    /**
+     * @return
+     */
     public static long getTotalScore(){
         List<Long> results = new ArrayList<>();
         long sum = 0;
@@ -120,6 +182,9 @@ public class ResultController {
         return sum;
     }
 
+    /**
+     *
+     */
     public static void reset(){
         cpuResults.clear();
         gpuResults = 0;

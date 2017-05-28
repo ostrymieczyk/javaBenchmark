@@ -3,24 +3,60 @@ package Test.RAM;
 import Controller.ResultController;
 import Helper.Timer;
 
+/**
+ *
+ */
 public class TestMemoryAccessPatterns
 {
+    /**
+     *
+     */
     private static final int LONG_SIZE = 8;
+    /**
+     *
+     */
     private static final int PAGE_SIZE = 2 * 1024 * 1024;
+    /**
+     *
+     */
     private static final int ONE_GIG = 1024 * 1024 * 1024;
+    /**
+     *
+     */
     private static final long TWO_GIG = 2L * ONE_GIG;
 
+    /**
+     *
+     */
     private static final int ARRAY_SIZE = (int)(TWO_GIG / LONG_SIZE);
+    /**
+     *
+     */
     private static final int WORDS_PER_PAGE = PAGE_SIZE / LONG_SIZE;
 
+    /**
+     *
+     */
     private static final int ARRAY_MASK = ARRAY_SIZE - 1;
+    /**
+     *
+     */
     private static final int PAGE_MASK = WORDS_PER_PAGE - 1;
 
+    /**
+     *
+     */
     private static final int PRIME_INC = 514229;
 
+    /**
+     *
+     */
     private static final long[] memory = new long[ARRAY_SIZE];
 
-    static long TOTAL_TIME = 0;
+    /**
+     *
+     */
+    private static long TOTAL_TIME = 0;
 
     static
     {
@@ -30,8 +66,14 @@ public class TestMemoryAccessPatterns
         }
     }
 
-    public enum StrideType
+    /**
+     *
+     */
+    private enum StrideType
     {
+        /**
+         *
+         */
         LINEAR_WALK
                 {
                     public int next(final int pageOffset, final int wordOffset, final int pos)
@@ -40,6 +82,9 @@ public class TestMemoryAccessPatterns
                     }
                 },
 
+        /**
+         *
+         */
         RANDOM_PAGE_WALK
                 {
                     public int next(final int pageOffset, final int wordOffset, final int pos)
@@ -48,6 +93,9 @@ public class TestMemoryAccessPatterns
                     }
                 },
 
+        /**
+         *
+         */
         RANDOM_HEAP_WALK
                 {
                     public int next(final int pageOffset, final int wordOffset, final int pos)
@@ -56,9 +104,18 @@ public class TestMemoryAccessPatterns
                     }
                 };
 
+        /**
+         * @param pageOffset
+         * @param wordOffset
+         * @param pos
+         * @return
+         */
         public abstract int next(int pageOffset, int wordOffset, int pos);
     }
 
+    /**
+     *
+     */
     public void run()
     {
         System.out.println(ARRAY_SIZE);
@@ -66,20 +123,24 @@ public class TestMemoryAccessPatterns
         {
             TOTAL_TIME += perfTest(StrideType.LINEAR_WALK);
         }
-        ResultController.setRamLinearWalkReslut(TOTAL_TIME);
+        ResultController.setRamLinearWalkResult(TOTAL_TIME);
         TOTAL_TIME = 0;
         for (int i = 0; i < 2; i++)
         {
             TOTAL_TIME += perfTest(StrideType.RANDOM_HEAP_WALK);
-        }ResultController.setRamRandomPageWalkReslut(TOTAL_TIME);
+        }ResultController.setRamRandomPageWalkResult(TOTAL_TIME);
         TOTAL_TIME = 0;
         for (int i = 0; i < 2; i++)
         {
             TOTAL_TIME += perfTest(StrideType.RANDOM_PAGE_WALK);
-        }ResultController.setRamRandomHeapWalkReslut(TOTAL_TIME);
+        }ResultController.setRamRandomHeapWalkResult(TOTAL_TIME);
         TOTAL_TIME = 0;
     }
 
+    /**
+     * @param strideType
+     * @return
+     */
     private static long perfTest(final StrideType strideType)
     {
         Timer t = new Timer();

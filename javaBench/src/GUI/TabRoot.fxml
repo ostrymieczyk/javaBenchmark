@@ -3,7 +3,6 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
-
 <TabPane maxHeight="-Infinity"
          maxWidth="-Infinity"
          minHeight="-Infinity"

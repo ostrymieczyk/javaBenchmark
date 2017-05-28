@@ -1,23 +1,22 @@
 package Test.GPU;
 
-import java.util.*;
-import java.util.List;
-
-
 import Controller.ResultController;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.Animator;
 
+import java.util.*;
+
 public class Window implements GLEventListener {
 
-    private GLU glu = new GLU();
-    static Set<Cube> cubes = new HashSet<>();
+    private final GLU glu = new GLU();
+    private static final Set<Cube> cubes = new HashSet<>();
     private static final float point = 1.0f;
-    Float out = 20f, rotate = 0f;
+    private Float out = 20f;
+    private Float rotate = 0f;
 
-    static long FPS = 0;
+    private static long FPS = 0;
 
     public void addCube(float diffx, float diffy, float diffz){
         Random rand = new Random();
@@ -71,7 +70,7 @@ public class Window implements GLEventListener {
         }
     }
 
-    public void addCubes()throws InterruptedException{
+    public void addCubes() {
 
         final GLProfile profile = GLProfile.get(GLProfile.GL2);
         GLCapabilities capabilities = new GLCapabilities(profile);
@@ -117,7 +116,7 @@ public class Window implements GLEventListener {
             }
             max += 2.5f;
         }
-        ResultController.setGpuReslut(FPS);
+        ResultController.setGnuResult(FPS);
         FPS = 0;
         animator.stop();
         glWindow.destroy();

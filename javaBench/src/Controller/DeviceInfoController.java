@@ -10,25 +10,38 @@ import javafx.scene.text.TextFlow;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+
 /**
- * Created by robert.ostaszewski on 28.12.2016.
+ *
  */
 public class DeviceInfoController implements Initializable{
 
+    /**
+     *
+     */
     @FXML
     private TextFlow textFlow;
 
-    private HardwareDetailsManager hardwareDetailsManager = Main.getHardwareDetailsManager();
+    /**
+     *
+     */
+    private final HardwareDetailsManager hardwareDetailsManager = Main.getHardwareDetailsManager();
 
-    public String SystemInfo() {
-        String info = "# CPU: " + hardwareDetailsManager.getFormatedCpuDetails() + "\n" +
-                    "# GPU: " + hardwareDetailsManager.getFormatedGpuDetails() + "\n" +
-                    "# Disk: " + hardwareDetailsManager.getFormatedDiskDetails() + "\n" +
-                    "# Ram: " + hardwareDetailsManager.getFormatedRamDetails() + "\n";
+    /**
+     * @return
+     */
+    private String SystemInfo() {
 
-        return info ;
+        return "# CPU: " + hardwareDetailsManager.getFormattedCpuDetails() + "\n" +
+                    "# GPU: " + hardwareDetailsManager.getFormattedGpuDetails() + "\n" +
+                    "# Disk: " + hardwareDetailsManager.getFormattedDiskDetails() + "\n" +
+                    "# Ram: " + hardwareDetailsManager.getFormattedRamDetails() + "\n";
     }
 
+    /**
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         textFlow.getChildren().add(new Text(SystemInfo()));

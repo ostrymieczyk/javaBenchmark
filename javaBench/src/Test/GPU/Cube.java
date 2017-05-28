@@ -1,11 +1,18 @@
 package Test.GPU;
 
 /**
- * Created by Robert Ostaszewski on 08.01.2017.
+ *
  */
-public class Cube {
-    private Wall[] walls = new Wall[6];
+class Cube {
+    /**
+     *
+     */
+    private final Wall[] walls = new Wall[6];
 
+    /**
+     * @param points
+     * @param color
+     */
     public Cube (float[][][] points, float[][] color){
         for (int i = 0; i<6; i++){
             float[] rightTop = points[i][0];
@@ -16,6 +23,9 @@ public class Cube {
         }
     }
 
+    /**
+     * @return
+     */
     public Wall[] getWalls(){
         return walls;
     }

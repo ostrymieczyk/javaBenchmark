@@ -6,17 +6,26 @@ import Helper.Timer;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Created by Robert on 22.11.2016.
+ *
  */
 public class PrimeNumberTest {
 
+    /**
+     *
+     */
     private static int RESULT = 0;
-    private static long TOTAL_TIME = 0;
 
-    private static int[] generateNumbers(int size){
-        return ThreadLocalRandom.current().ints(size,0, 10000).toArray();
+    /**
+     * @return
+     */
+    private static int[] generateNumbers(){
+        return ThreadLocalRandom.current().ints(100_000,0, 10000).toArray();
     }
 
+    /**
+     * @param n
+     * @return
+     */
     private static boolean isPrime(int n) {
         for(int i=2;i<n;i++) {
             if(n%i==0)
@@ -25,11 +34,15 @@ public class PrimeNumberTest {
         return true;
     }
 
+    /**
+     * @param loop
+     * @return
+     */
     private static long primeNumberTest(int loop){
         System.out.println("\nprimeNumberTest\n");
         long time = 0;
         for(int i=0; i<loop; i++) {
-            int[] array = generateNumbers(100_000);
+            int[] array = generateNumbers();
             Timer t = new Timer();
             for (int number : array) {
                 if (isPrime(number))
@@ -42,12 +55,14 @@ public class PrimeNumberTest {
         return time;
     }
 
-    public static double warmupAndTest(int warmupLoops, int testLoops){
-        TOTAL_TIME = 0;
-        double a = primeNumberTest(warmupLoops);
-        TOTAL_TIME += primeNumberTest(testLoops);
-        ResultController.setPrimeNumberReslut(TOTAL_TIME);
-        return a;
+    /**
+     *
+     */
+    public static void warmupAndTest(){
+        long TOTAL_TIME = 0;
+        double a = primeNumberTest(5);
+        TOTAL_TIME += primeNumberTest(30);
+        ResultController.setPrimeNumberResult(TOTAL_TIME);
     }
 
 }

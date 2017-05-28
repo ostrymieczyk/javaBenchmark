@@ -4,21 +4,54 @@ import javafx.beans.property.SimpleStringProperty;
 import org.apache.commons.csv.CSVRecord;
 
 /**
- * Created by robert.ostaszewski on 02.05.2017.
+ *
  */
 public class Record {
 
-    private SimpleStringProperty id;
-    private SimpleStringProperty cpuName;
+    /**
+     *
+     */
+    private final SimpleStringProperty id;
+    /**
+     *
+     */
+    private final SimpleStringProperty cpuName;
+    /**
+     *
+     */
     private final SimpleStringProperty cpuScore;
+    /**
+     *
+     */
     private final SimpleStringProperty gpuName;
+    /**
+     *
+     */
     private final SimpleStringProperty gpuScore;
+    /**
+     *
+     */
     private final SimpleStringProperty diskName;
+    /**
+     *
+     */
     private final SimpleStringProperty diskScore;
+    /**
+     *
+     */
     private final SimpleStringProperty ramName;
+    /**
+     *
+     */
     private final SimpleStringProperty ramScore;
+    /**
+     *
+     */
     private final SimpleStringProperty totalScore;
 
+    /**
+     * @param csvRecord
+     */
     public Record(CSVRecord csvRecord){
 
         id = new SimpleStringProperty(csvRecord.get(CsvHeaders.ID));
@@ -34,82 +67,142 @@ public class Record {
 
     }
 
+    /**
+     * @return
+     */
     public String getId() {
         return id.get();
     }
 
+    /**
+     * @return
+     */
     public SimpleStringProperty idProperty() {
         return id;
     }
 
+    /**
+     * @return
+     */
     public String getCpuName() {
         return cpuName.get();
     }
 
+    /**
+     * @return
+     */
     public SimpleStringProperty cpuNameProperty() {
         return cpuName;
     }
 
+    /**
+     * @return
+     */
     public String getCpuScore() {
         return cpuScore.get();
     }
 
+    /**
+     * @return
+     */
     public SimpleStringProperty cpuScoreProperty() {
         return cpuScore;
     }
 
+    /**
+     * @return
+     */
     public String getGpuName() {
         return gpuName.get();
     }
 
+    /**
+     * @return
+     */
     public SimpleStringProperty gpuNameProperty() {
         return gpuName;
     }
 
+    /**
+     * @return
+     */
     public String getGpuScore() {
         return gpuScore.get();
     }
 
+    /**
+     * @return
+     */
     public SimpleStringProperty gpuScoreProperty() {
         return gpuScore;
     }
 
+    /**
+     * @return
+     */
     public String getDiskName() {
         return diskName.get();
     }
 
+    /**
+     * @return
+     */
     public SimpleStringProperty diskNameProperty() {
         return diskName;
     }
 
+    /**
+     * @return
+     */
     public String getDiskScore() {
         return diskScore.get();
     }
 
+    /**
+     * @return
+     */
     public SimpleStringProperty diskScoreProperty() {
         return diskScore;
     }
 
+    /**
+     * @return
+     */
     public String getRamScore() {
         return ramScore.get();
     }
 
+    /**
+     * @return
+     */
     public SimpleStringProperty ramScoreProperty() {
         return ramScore;
     }
 
+    /**
+     * @return
+     */
     public String getRamName() {
         return ramName.get();
     }
 
+    /**
+     * @return
+     */
     public SimpleStringProperty ramNameProperty() {
         return ramName;
     }
 
+    /**
+     * @return
+     */
     public String getTotalScore() {
         return totalScore.get();
     }
 
+    /**
+     * @return
+     */
     public SimpleStringProperty totalScoreProperty() {
         return totalScore;
     }

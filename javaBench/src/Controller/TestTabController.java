@@ -6,7 +6,6 @@ import Test.CPU.*;
 import Test.GPU.Window;
 import Test.HardDrive.MeasureIOPerformance;
 import Test.RAM.TestMemoryAccessPatterns;
-import com.sun.org.apache.regexp.internal.RE;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,36 +23,75 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ResourceBundle;
 
-/**
- * Created by robert.ostaszewski on 28.12.2016.
- */
 public class TestTabController implements Initializable{
 
+    /**
+     *
+     */
     @FXML
     private Button startBtn;
+    /**
+     *
+     */
     @FXML
     private Button cancelButton;
+    /**
+     *
+     */
     @FXML
     private ProgressBar progressBar;
+    /**
+     *
+     */
     @FXML
     private Label workingOn;
+    /**
+     *
+     */
     @FXML
     private CheckBox cpu;
+    /**
+     *
+     */
     @FXML
     private CheckBox gpu;
+    /**
+     *
+     */
     @FXML
     private CheckBox disk;
+    /**
+     *
+     */
     @FXML
     private CheckBox ram;
+    /**
+     *
+     */
     @FXML
     private TextFlow textFlow;
 
+    /**
+     *
+     */
     private double progressPick = 0.0;
 
-    Thread first;
-    Window cube;
-    HardwareDetailsManager hardwareDetailsManager = Main.getHardwareDetailsManager();
+    /**
+     *
+     */
+    private Thread first;
+    /**
+     *
+     */
+    private Window cube;
+    /**
+     *
+     */
+    private final HardwareDetailsManager hardwareDetailsManager = Main.getHardwareDetailsManager();
 
+    /**
+     *
+     */
     @FXML
     public void setStartBtn() {
         first = new Thread(() -> {
@@ -76,31 +114,31 @@ public class TestTabController implements Initializable{
             }
             if(cpu.isSelected()){
                 increaseProgressAndChangeText("CPU: Int test...");
-                IntTest.measureAll(50, 300, 1_250_000);
+                IntTest.measureAll();
             }
             if(cpu.isSelected()) {
                 increaseProgressAndChangeText("CPU: Long test...");
-                LongTest.measureAll(50, 300, 1_250_000);
+                LongTest.measureAll();
             }
             if(cpu.isSelected()) {
                 increaseProgressAndChangeText("CPU: Double test...");
-                DoubleTest.measureAll(50, 300, 1_250_000);
+                DoubleTest.measureAll();
             }
             if(cpu.isSelected()) {
                 increaseProgressAndChangeText("CPU: Quicksort test...");
-                Quicksort.warmupAndTest(10, 60);
+                Quicksort.warmAndTest();
             }
             if(cpu.isSelected()) {
                 increaseProgressAndChangeText("CPU: Prime Number test...");
-                PrimeNumberTest.warmupAndTest(5, 30);
+                PrimeNumberTest.warmupAndTest();
             }
             if(cpu.isSelected()) {
                 increaseProgressAndChangeText("CPU: compress test...");
-                CompressTest.warmupAndTest(5, 30);
+                CompressTest.warmAndTest();
             }
             if(cpu.isSelected()) {
                 increaseProgressAndChangeText("CPU: encryption test...");
-                DataEncryptior.warmupAndTest(30, 180);
+                DataEncryption.warmupAndTest();
             }
 
             if(disk.isSelected()){
@@ -131,14 +169,14 @@ public class TestTabController implements Initializable{
                         Paths.get("./score.csv"),
                         String
                                 .join(",",
-                                        System.lineSeparator() + hardwareDetailsManager.getFormatedName(),
-                                        hardwareDetailsManager.getFormatedCpuDetails(),
+                                        System.lineSeparator() + hardwareDetailsManager.getFormattedName(),
+                                        hardwareDetailsManager.getFormattedCpuDetails(),
                                         getFormatedResult(ResultController.getCpuScore()),
-                                        hardwareDetailsManager.getFormatedGpuDetails(),
+                                        hardwareDetailsManager.getFormattedGpuDetails(),
                                         getFormatedResult(ResultController.getGpuScore()),
-                                        hardwareDetailsManager.getFormatedDiskDetails(),
+                                        hardwareDetailsManager.getFormattedDiskDetails(),
                                         getFormatedResult(ResultController.getDiskScore()),
-                                        hardwareDetailsManager.getFormatedRamDetails(),
+                                        hardwareDetailsManager.getFormattedRamDetails(),
                                         getFormatedResult(ResultController.getRamScore()),
                                         getFormatedResult(ResultController.getTotalScore()))
                                 .getBytes(),
@@ -152,18 +190,31 @@ public class TestTabController implements Initializable{
         first.start();
     }
 
+    /**
+     * @param l
+     * @return
+     */
     private String getFormatedResult(Long l){
         return (l != Long.MIN_VALUE) ? Long.toString(l) : "-";
     }
 
+    /**
+     *
+     */
     private void diableControlls(){
         changeDisableStatus(true);
     }
 
+    /**
+     *
+     */
     private void enableControlls(){
         changeDisableStatus(false);
     }
 
+    /**
+     * @param value
+     */
     private void changeDisableStatus(boolean value){
         cancelButton.setDisable(!value);
         startBtn.setDisable(value);
@@ -173,6 +224,9 @@ public class TestTabController implements Initializable{
         disk.setDisable(value);
     }
 
+    /**
+     *
+     */
     private void countNumOfTests(){
         int numOfTests = 0;
 
@@ -190,10 +244,16 @@ public class TestTabController implements Initializable{
 
     }
 
+    /**
+     *
+     */
     private void resetProgressBar(){
         progressBar.setProgress(0.0);
     }
 
+    /**
+     * @param text
+     */
     private void increaseProgressAndChangeText(String text){
 
         double progress = progressBar.getProgress() + progressPick;
@@ -201,10 +261,13 @@ public class TestTabController implements Initializable{
         setText(text);
     }
 
+    /**
+     *
+     */
     private void displayResults(){
         Platform.runLater(() -> {
             Text toShow = new Text(
-                    "Name: " + hardwareDetailsManager.getFormatedName() + System.lineSeparator() +
+                    "Name: " + hardwareDetailsManager.getFormattedName() + System.lineSeparator() +
                     "Total score: " +getFormatedResult(ResultController.getTotalScore()) + System.lineSeparator() +
                     "CPU: " + getFormatedResult(ResultController.getCpuScore()) + System.lineSeparator() +
                     "GPU: " + getFormatedResult(ResultController.getGpuScore()) + System.lineSeparator() +
@@ -217,13 +280,19 @@ public class TestTabController implements Initializable{
         });
     }
 
+    /**
+     * @param text
+     */
     private void setText(String text){
         Platform.runLater(() -> workingOn.setText(text));
     }
 
+    /**
+     * @throws InterruptedException
+     */
     @FXML
     private void closeThread() throws InterruptedException {
-        setText("Cancelling..");;
+        setText("Cancelling..");
         cancelButton.setDisable(true);
         cpu.setSelected(false);
         gpu.setSelected(false);
@@ -232,6 +301,9 @@ public class TestTabController implements Initializable{
         resetProgressBar();
     }
 
+    /**
+     *
+     */
     @FXML
     private void changeButtonsStatus(){
         if(cpu.isSelected() || ram.isSelected() || gpu.isSelected() || disk.isSelected())

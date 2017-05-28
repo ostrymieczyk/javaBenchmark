@@ -1,6 +1,5 @@
 package GUI;
 
-
 import Helper.HardwareDetailsManager;
 import Helper.LinuxHardwareDetailsManager;
 import Helper.WindowsHardwareDetailsManager;
@@ -16,9 +15,18 @@ import java.io.IOException;
 
 public class Main extends Application {
 
+    /**
+     *
+     */
     private Stage primaryStage;
+    /**
+     *
+     */
     private TabPane rootLayout;
 
+    /**
+     *
+     */
     private static HardwareDetailsManager hardwareDetailsManager;
 
     @Override
@@ -38,12 +46,15 @@ public class Main extends Application {
         showInfoTab();
     }
 
-    public void initRootLayout() {
+    /**
+     *
+     */
+    private void initRootLayout() {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("/GUI/TabRoot.fxml"));
-            rootLayout = (TabPane) loader.load();
+            rootLayout = loader.load();
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
@@ -52,22 +63,26 @@ public class Main extends Application {
         }
     }
 
+
     /**
-     * Shows the person overview inside the root layout.
+     *
      */
-    public void showTestTab() {
+    private void showTestTab() {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("/GUI/TestTab.fxml"));
-            AnchorPane testTab = (AnchorPane) loader.load();
+            AnchorPane testTab = loader.load();
             rootLayout.getTabs().get(0).setContent(testTab);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void showRankingTab(){
+    /**
+     *
+     */
+    private void showRankingTab(){
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
@@ -85,11 +100,14 @@ public class Main extends Application {
         }
     }
 
-    public void showInfoTab(){
+    /**
+     *
+     */
+    private void showInfoTab(){
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("/GUI/InfoTab.fxml"));
-            AnchorPane infoTab = (AnchorPane) loader.load();
+            AnchorPane infoTab = loader.load();
             rootLayout.getTabs().get(2).setContent(infoTab);
 
         } catch (IOException e) {
@@ -97,6 +115,9 @@ public class Main extends Application {
         }
     }
 
+    /**
+     *
+     */
     public Main(){
         if(System.getProperty("os.name")
                 .toLowerCase().startsWith("windows")){
@@ -107,10 +128,16 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * @return
+     */
     public static HardwareDetailsManager getHardwareDetailsManager() {
         return hardwareDetailsManager;
     }

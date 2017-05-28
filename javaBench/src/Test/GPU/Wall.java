@@ -1,39 +1,77 @@
 package Test.GPU;
 
 /**
- * Created by Robert Ostaszewski on 08.01.2017.
+ *
  */
 public class Wall {
+
+    /**
+     * @return
+     */
     public float[] getRightTop() {
         return rightTop;
     }
 
-    float[] rightTop = new float[3];
+    /**
+     *
+     */
+    private float[] rightTop = new float[3];
 
+    /**
+     * @return
+     */
     public float[] getLeftTop() {
         return leftTop;
     }
 
-    float[] leftTop = new float[3];
+    /**
+     *
+     */
+    private float[] leftTop = new float[3];
 
+    /**
+     * @return
+     */
     public float[] getRightBottom() {
         return rightBottom;
     }
 
-    float[] rightBottom = new float[3];
+    /**
+     *
+     */
+    private float[] rightBottom = new float[3];
 
+    /**
+     * @return
+     */
     public float[] getLeftBottom() {
         return leftBottom;
     }
 
-    float[] leftBottom = new float[3];
+    /**
+     *
+     */
+    private float[] leftBottom = new float[3];
 
+    /**
+     * @return
+     */
     public float[] getColor() {
         return color;
     }
 
-    float[] color = new float[3];
+    /**
+     *
+     */
+    private float[] color = new float[3];
 
+    /**
+     * @param rightTop
+     * @param leftTop
+     * @param rightBottom
+     * @param leftBottom
+     * @param color
+     */
     Wall (float[] rightTop, float[] leftTop, float[] rightBottom, float[] leftBottom, float[] color){
         this.rightTop = rightTop;
         this.leftTop = leftTop;
