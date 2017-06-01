@@ -6,120 +6,155 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Klasa odpowiadajaca za zapamietanie uzyskanego czasu, oraz przetworzenie go na wynik.
  */
 public class ResultController {
 
     /**
-     *
+     * Obiekt zawierajacy informacje o czasie trwania
+     * odpowiedniego testu mierzacego wydajnosc procesora
      */
     private static final Map<String, Long> cpuResults = new HashMap<>();
+
     /**
-     *
+     * Obiekt zawierajacy informacje o czasie trwania
+     * odpowiedniego testu mierzacego wydajnosc pamieci Ram
      */
     private static final Map<String, Long> ramResults = new HashMap<>();
+
     /**
-     *
+     * Obiekt zawierajacy informacje o czasie trwania
+     * odpowiedniego testu mierzacego wydajnosc dysku
      */
     private static final Map<String, Long> diskResults = new HashMap<>();
+
     /**
-     *
+     * Obiekt zawierajacy informacje o czasie trwania
+     * testu mierzacego wydajnosc karty graficznej
      */
     private static long gpuResults;
 
     /**
-     * @param time
+     * Ustawia laczny czas trwania operacji matematycznych na iczbach typu int
+     *
+     * @param time Laczny czas trwania operacji matematycznych
      */
     public static void setIntResult(long time){
         cpuResults.put("intResult", time);
     }
 
     /**
-     * @param time
+     * Ustawia laczny czas trwania operacji matematycznych na iczbach typu long
+     *
+     * @param time Laczny czas trwania operacji matematycznych
      */
     public static void setLongResult(long time){
         cpuResults.put("longResult", time);
     }
 
     /**
-     * @param time
+     * Ustawia laczny czas trwania operacji matematycznych na iczbach typu double
+     *
+     * @param time Laczny czas trwania operacji matematycznych
      */
     public static void setDoubleResult(long time){
         cpuResults.put("DoubleResult", time);
     }
 
     /**
-     * @param time
+     * Ustawia laczny czas trwania operacji sortowania metoda quicksort
+     *
+     * @param time Laczny czas trwania operacji
      */
     public static void setQuickstartResult(long time){
         cpuResults.put("QuicksortResult", time);
     }
 
     /**
-     * @param time
+     * Ustawia laczny czas trwania operacji kompresji danych
+     *
+     * @param time Laczny czas trwania operacji
      */
     public static void setCompressResult(long time){
         cpuResults.put("compressResult", time);
     }
 
     /**
-     * @param time
+     * Ustawia laczny czas trwania operacji szyfrowania danych
+     *
+     * @param time Laczny czas trwania operacji
      */
     public static void setEncryptResult(long time){
         cpuResults.put("encryptResult", time);
     }
 
     /**
-     * @param time
+     * Ustawia laczny czas trwania operacji znajdowania liczb pierwszych
+     *
+     * @param time Laczny czas trwania operacji
      */
     public static void setPrimeNumberResult(long time){
         cpuResults.put("primeNumberResult", time);
     }
 
     /**
-     * @param time
+     * Ustawia laczny czas trwania operacji czytania danych z pliku
+     *
+     * @param time Laczny czas trwania operacji
      */
     public static void setDiskReadResult(long time){
         diskResults.put("readResult", time);
     }
 
     /**
-     * @param time
+     * Ustawia laczny czas trwania operacji zapisu danych do pliku
+     *
+     * @param time Laczny czas trwania operacji
      */
     public static void setDiskWriteResult(long time){
         diskResults.put("writetResult", time);
     }
 
     /**
-     * @param time
+     * Ustawia laczny czas trwania operacji liniowego odwolywania sie do komorek pamieci ram
+     *
+     * @param time Laczny czas trwania operacji
      */
     public static void setRamLinearWalkResult(long time){
         ramResults.put("linearResult", time);
     }
 
     /**
-     * @param time
+     * Ustawia laczny czas trwania operacji losowego odwolywania sie do komorek pamieci ram w obszarze strony
+     *
+     * @param time Laczny czas trwania operacji
      */
     public static void setRamRandomPageWalkResult(long time){
         ramResults.put("randomPageResult", time);
     }
 
     /**
-     * @param time
+     * Ustawia laczny czas trwania operacji losowego odwolywania sie do komorek pamieci ram w obszarze stosu
+     *
+     * @param time Laczny czas trwania operacji
      */
     public static void setRamRandomHeapWalkResult(long time){
         ramResults.put("randomHeapResult", time);
     }
 
     /**
-     * @param fps
+     * Ustawia srednia liczbe klatek na sekunde uzyskana podczas wyswietlania animacji
+     *
+     * @param fps Serdnia liczba klatek na sekunde
      */
-    public static void setGnuResult(long fps){
+    public static void setGpuResult(long fps){
         gpuResults = fps;
     }
 
     /**
-     * @return
+     * Zwraca wynik uzyskany przez pricesor. Obliczany za pomoca danych w {@link ResultController#cpuResults}
+     *
+     * @return uzyskany wynik
      */
     public static long getCpuScore(){
         double sumOfTime = 0.0;
@@ -131,7 +166,9 @@ public class ResultController {
     }
 
     /**
-     * @return
+     * Zwraca wynik uzyskany przez karte graficzna. Obliczany za pomoca danych w {@link ResultController#gpuResults}
+     *
+     * @return uzyskany wynik
      */
     public static long getGpuScore(){
         long gpuSlope = 100;
@@ -141,7 +178,9 @@ public class ResultController {
     }
 
     /**
-     * @return
+     * Zwraca wynik uzyskany przez pamiec ram. Obliczany za pomoca danych w {@link ResultController#ramResults}
+     *
+     * @return uzyskany wynik
      */
     public static long getRamScore(){
         double sumOfTime = 0.0;
@@ -154,7 +193,9 @@ public class ResultController {
 
 
     /**
-     * @return
+     * Zwraca wynik uzyskany przez dysk. Obliczany za pomoca danych w {@link ResultController#diskResults}
+     *
+     * @return uzyskany wynik
      */
     public static long getDiskScore(){
         double sumOfTime = 0.0;
@@ -166,7 +207,10 @@ public class ResultController {
     }
 
     /**
-     * @return
+     * Zwraca wynik okreslany jako suma poszczegolnych wynikow. Jesli test na dany podzespol nie zostal wykonany
+     * to nie jest tu uwzgledniony.
+     *
+     * @return suma poszczegolnych testow
      */
     public static long getTotalScore(){
         List<Long> results = new ArrayList<>();
@@ -183,7 +227,7 @@ public class ResultController {
     }
 
     /**
-     *
+     * Odpowiada za wyczyszczenie wynikow przed ponownym wywolaniem testow.
      */
     public static void reset(){
         cpuResults.clear();

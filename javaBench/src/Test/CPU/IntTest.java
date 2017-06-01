@@ -6,25 +6,25 @@ import Helper.Timer;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- *
+ * Klasa zawierajaca w sobie zestawy testow operacji matematycznych na liczbach typu {@link int}
  */
 public class IntTest {
 
     /**
      * Zmienna, do ktorej zostaja przypisywane wyniki,
-     * w celu unikniecia optymalizacji wprowadzanych przez JVM
+     * w celu unikniecia optymalizacji wprowadzanych przez JVM.
      */
     private static int RESULT = 50;
 
     /**
-     * Zmienna w ktorej trzymana jest suma czasu wykonywanych testow w nanosekudach
+     * Zmienna w ktorej trzymana jest suma czasu wykonywanych testow.
      */
     private static long TOTAL_TIME = 0;
 
     /**
-     * Generuje tablice losowych liczb typu int o pdanym rozmiarze.<br>
+     * Generuje tablice losowych liczb typu int o podanym rozmiarze.<br>
      * Zakres generownych liczb miesci sie w granicach:
-     * od {@link Integer#MIN_VALUE} do {@link Integer#MAX_VALUE}
+     * od {@link Integer#MIN_VALUE} do {@link Integer#MAX_VALUE}.
      *
      * @param arraySize - rozmir generownej tablicy
      * @return tablica z wylosowanymi liczbami
@@ -100,10 +100,17 @@ public class IntTest {
     }
 
     /**
-     * @param loops
-     * @param arraySize
-     * @param testable
-     * @return
+     * Mierzy czas wykoywania konkretnych operacji matematycznych na liczbach typu int.
+     * Przez okreslona ilosc razy generuje rozne tablice liczb na ktorych sa wykonywane operacje.
+     *
+     * @param loops Ilosc powtorzen wykonywanych operacji na jednej tablicy liczb
+     * @param arraySize Wielkosc generwanej tablicy
+     * @param testable Interfejs wskazujacy na operacje dodawania, odejmowania, mnozenia lub dzielenia
+     * @return Calkowity czas trwania wykonywanych operacji matematycznych
+     * @see IntTest#add(int[])
+     * @see IntTest#subtract(int[])
+     * @see IntTest#multiply(int[])
+     * @see IntTest#divide(int[])
      */
     private static long measure(int loops, int arraySize, MathInterface testable){
         long time = 0;
@@ -119,21 +126,26 @@ public class IntTest {
     }
 
     /**
-     *
+     * Interfejs pozwalajacy dynamicznie wybierac operacje matematyczne
      */
     private interface MathInterface {
+
         /**
-         * @param ints
+         * Funkcja wskazujaca liczby typu int na ktorych wykonywane sa dynamiczne operacje matematyczne
+         *
+         * @param ints Tablica liczb na ktorych wykonywane sa operacje
          */
         void operate(int[] ints);
     }
 
     /**
-     *
+     * Typ wyliczeniowy zawierajacy w sobie fragmety kodu Pozwalajacego wskazac,
+     * jakie operacje matematyczne maja zostac przetestowane
      */
     private enum WarmAndMeasure{
+
         /**
-         *
+         * Fragment testujacy dodawanie
          */
         ADD {
             @Override
@@ -144,8 +156,9 @@ public class IntTest {
                 return a;
             }
         },
+
         /**
-         *
+         * Fragment testujacy odejmowanie
          */
         SUBTRACT {
             @Override
@@ -156,8 +169,9 @@ public class IntTest {
                 return a;
             }
         },
+
         /**
-         *
+         * Fragment testujacy mnozenie
          */
         MULTIPLY {
             @Override
@@ -168,8 +182,9 @@ public class IntTest {
                 return a;
             }
         },
+
         /**
-         *
+         * Fragment testujacy dzielenie
          */
         DIVIDE {
             @Override
@@ -182,21 +197,27 @@ public class IntTest {
         };
 
         /**
-         *
+         * zmienna do ktorej zostaja przypisane czasy trwania operacji rozgrzewkowych
          */
         long a = 0;
 
         /**
-         * @param warmupLoops
-         * @param testLoops
-         * @param arraySize
-         * @return
+         * Odpowiada za wykonanie kodu testujacego jedna operacje matematyczna,
+         * z uwzglednieniem czesci rozgrzewkowej i testujacej.
+         * Wynik czasu trwania kazdej operacji sumowany jest ze zmienna {@link IntTest#TOTAL_TIME}.
+         *
+         * @param warmupLoops Okresla ilosc powtorzen operacji rozgrzewkowych na tablicy intow
+         * @param testLoops Okresla ilosc powtorzen operacji testowych na tablicy intow
+         * @param arraySize Okresla wielkosc generowanej losowej tablicy na ktorej wykonywane
+         *                  sa operacje w jednym powtorzeniu petli
+         * @return zwracana jest zmienna {@link WarmAndMeasure#a} w celu zapobiegniecia niepozadanym operacjom JVM
          */
         public abstract long test(int warmupLoops, int testLoops, int arraySize);
     }
 
     /**
-     *
+     * Wykonuje wszystkie dostepne operacje: dodawanie, odejmowanie, mnozenie, dzielenie.
+     * Sume czasu trwania wykonywania wszystkich dzialan dodaje do {@link ResultController}
      */
     public static void measureAll(){
         System.out.println("\nINT");

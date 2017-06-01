@@ -116,7 +116,7 @@ public class Window implements GLEventListener {
             }
             max += 2.5f;
         }
-        ResultController.setGnuResult(FPS);
+        ResultController.setGpuResult(FPS);
         FPS = 0;
         animator.stop();
         glWindow.destroy();

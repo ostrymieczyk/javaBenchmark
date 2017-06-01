@@ -30,11 +30,13 @@ public class TestTabController implements Initializable{
      */
     @FXML
     private Button startBtn;
+
     /**
      *
      */
     @FXML
     private Button cancelButton;
+
     /**
      *
      */
@@ -112,34 +114,34 @@ public class TestTabController implements Initializable{
             if (cube != null){
                 cube.clearCubes();
             }
-            if(cpu.isSelected()){
-                increaseProgressAndChangeText("CPU: Int test...");
-                IntTest.measureAll();
-            }
-            if(cpu.isSelected()) {
-                increaseProgressAndChangeText("CPU: Long test...");
-                LongTest.measureAll();
-            }
-            if(cpu.isSelected()) {
-                increaseProgressAndChangeText("CPU: Double test...");
-                DoubleTest.measureAll();
-            }
+//            if(cpu.isSelected()){
+//                increaseProgressAndChangeText("CPU: Int test...");
+//                IntTest.measureAll();
+//            }
+//            if(cpu.isSelected()) {
+//                increaseProgressAndChangeText("CPU: Long test...");
+//                LongTest.measureAll();
+//            }
+//            if(cpu.isSelected()) {
+//                increaseProgressAndChangeText("CPU: Double test...");
+//                DoubleTest.measureAll();
+//            }
             if(cpu.isSelected()) {
                 increaseProgressAndChangeText("CPU: Quicksort test...");
                 Quicksort.warmAndTest();
             }
-            if(cpu.isSelected()) {
-                increaseProgressAndChangeText("CPU: Prime Number test...");
-                PrimeNumberTest.warmupAndTest();
-            }
-            if(cpu.isSelected()) {
-                increaseProgressAndChangeText("CPU: compress test...");
-                CompressTest.warmAndTest();
-            }
-            if(cpu.isSelected()) {
-                increaseProgressAndChangeText("CPU: encryption test...");
-                DataEncryption.warmupAndTest();
-            }
+//            if(cpu.isSelected()) {
+//                increaseProgressAndChangeText("CPU: Prime Number test...");
+//                PrimeNumberTest.warmAndTest();
+//            }
+//            if(cpu.isSelected()) {
+//                increaseProgressAndChangeText("CPU: compress test...");
+//                CompressTest.warmAndTest();
+//            }
+//            if(cpu.isSelected()) {
+//                increaseProgressAndChangeText("CPU: encryption test...");
+//                DataEncryption.warmAndTest();
+//            }
 
             if(disk.isSelected()){
                 increaseProgressAndChangeText("DISK: write, read speed test...");
@@ -288,10 +290,10 @@ public class TestTabController implements Initializable{
     }
 
     /**
-     * @throws InterruptedException
+     *
      */
     @FXML
-    private void closeThread() throws InterruptedException {
+    private void closeThread() {
         setText("Cancelling..");
         cancelButton.setDisable(true);
         cpu.setSelected(false);

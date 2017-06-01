@@ -7,18 +7,22 @@ import com.sauljohnson.huff.HuffmanCompressor;
 import java.util.Random;
 
 /**
- *
+ * Klasa zawierajaca statyczne metody testujace szybkosc kompresli losowych danych.
+ * Do dzialania wykorzystuje algorytm Huffman'a.
  */
 public class CompressTest {
 
     /**
-     *
+     * Zmienna, do ktorej zostaje dodany hash code zaszyfrowanych danych.
+     * Uzywana w celu unikniecia optymalizacji wprowadzanych przez JVM.
      */
     private static int RESULT;
 
     /**
-     * @param size
-     * @return
+     * Funkcja zwracajaca losowa tablice bajtow.
+     *
+     * @param size Rozmiar tablicy.
+     * @return Tablica losowych danych.
      */
     private static byte[] getRandomByteArrayInSize(int size){
         Random random = new Random();
@@ -28,8 +32,10 @@ public class CompressTest {
     }
 
     /**
-     * @param data
-     * @return
+     * Mierzy czas kompresji danych. Przyjmowany argument jest przekazywany do: {@link HuffmanCompressor#compress(byte[])}.
+     *
+     * @param data Tablica danych do kompresji.
+     * @return Czas szyfrowania danych (w nanosekundach).
      */
     private static long measureCompressTime(byte[] data){
         HuffmanCompressor compressor = new HuffmanCompressor();
@@ -39,8 +45,11 @@ public class CompressTest {
     }
 
     /**
-     * @param loop
-     * @return
+     * Funkcja odpowiedzialna za logike testu. Na podstawie parametru {@code loop} powtarza operacje
+     * tworzenia losowej tablicy o rozmiarze 1 mb, nastepnie kompresji danych.
+     *
+     * @param loop Okresla ilosc powtorzen pomiaru czasu kompresji danych.
+     * @return Laczny czas kompresji powtorzony {@code loop} razy.
      */
     private static long compressTest(int loop) {
         System.out.println("\nCompressTest\n");
@@ -54,7 +63,8 @@ public class CompressTest {
     }
 
     /**
-     *
+     * Wykonuje test przez uruchomienie rundy rozgrzewkowej oraz testowej.
+     * Wpisuje wynik do {@link ResultController}
      */
     public static void warmAndTest(){
         long TOTAL_TIME = 0;

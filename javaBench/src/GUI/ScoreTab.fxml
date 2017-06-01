@@ -15,7 +15,7 @@
                <children>
                   <TableView fx:id="tableView" onMouseClicked="#clickItem" prefHeight="300.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TableColumn fx:id="id" prefWidth="75.0" text="id" />
+                      <TableColumn fx:id="name" prefWidth="75.0" text="id" />
                         <TableColumn fx:id="cpuScore" prefWidth="75.0" text="CPU score" />
                         <TableColumn fx:id="gpuScore" prefWidth="75.0" text="GPU score" />
                         <TableColumn fx:id="diskScore" prefWidth="75.0" text="Disk score" />
