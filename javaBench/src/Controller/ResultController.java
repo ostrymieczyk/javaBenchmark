@@ -152,17 +152,18 @@ public class ResultController {
     }
 
     /**
-     * Zwraca wynik uzyskany przez pricesor. Obliczany za pomoca danych w {@link ResultController#cpuResults}
+     * Zwraca wynik uzyskany przez procesor. Obliczany za pomoca danych w {@link ResultController#cpuResults}
      *
      * @return uzyskany wynik
      */
     public static long getCpuScore(){
         double sumOfTime = 0.0;
         for(double time : cpuResults.values()) sumOfTime += time;
-        long cpuSlope = 100;
-        double cpuReferenceTime = 10000;
-        long cpuReferenceScore = 20000;
-        return (sumOfTime > 0) ? (long) (-cpuSlope /100 * sumOfTime + (cpuReferenceScore - cpuSlope /100* cpuReferenceTime)) : Long.MIN_VALUE;
+        double cpuSlope = -33E-7;
+        double cpuReferenceTime = 3.5E10;
+        long cpuReferenceScore = 50000;
+        System.out.println("CPU: " + sumOfTime);
+        return (sumOfTime > 0) ? (long) (cpuSlope * sumOfTime + (cpuReferenceScore - cpuSlope * cpuReferenceTime)) : Long.MIN_VALUE;
     }
 
     /**
@@ -171,10 +172,11 @@ public class ResultController {
      * @return uzyskany wynik
      */
     public static long getGpuScore(){
-        long gpuSlope = 100;
-        long gpuReferenceFps = 150;
-        long gpuReferenceScore = 20000;
-        return (gpuResults > 0) ? (gpuSlope /10 * gpuResults + (gpuReferenceScore - gpuSlope /100* gpuReferenceFps)) : Long.MIN_VALUE;
+        long gpuSlope = 10;
+        long gpuReferenceFps = 1700;
+        long gpuReferenceScore = 50000;
+        System.out.println("GPU: " + gpuResults);
+        return (gpuResults > 0) ? (gpuSlope * gpuResults + (gpuReferenceScore - gpuSlope * gpuReferenceFps)) : Long.MIN_VALUE;
     }
 
     /**
@@ -185,10 +187,11 @@ public class ResultController {
     public static long getRamScore(){
         double sumOfTime = 0.0;
         for(double time : ramResults.values()) sumOfTime += time;
-        long ramSlope = 100;
-        double ramReferenceTime = 10000;
-        long ramReferenceScore = 2000;
-        return (sumOfTime > 0) ? (long) (-ramSlope /100 * sumOfTime + (ramReferenceScore - ramSlope /100* ramReferenceTime)) : Long.MIN_VALUE;
+        double ramSlope = -33E-7;
+        double ramReferenceTime = 3E10;
+        long ramReferenceScore = 50000;
+        System.out.println("RAM: " + sumOfTime);
+        return (sumOfTime > 0) ? (long) (ramSlope * sumOfTime + (ramReferenceScore - ramSlope * ramReferenceTime)) : Long.MIN_VALUE;
     }
 
 
@@ -200,10 +203,11 @@ public class ResultController {
     public static long getDiskScore(){
         double sumOfTime = 0.0;
         for(double time : diskResults.values()) sumOfTime += time;
-        long diskSlope = 100;
-        double diskReferenceTime = 10000;
-        long diskReferenceScore = 20000;
-        return (sumOfTime > 0) ? (long) (-diskSlope /100 * sumOfTime + (diskReferenceScore - diskSlope /100* diskReferenceTime)) : Long.MIN_VALUE;
+        double diskSlope = -33E-7;
+        double diskReferenceTime = 3E9;
+        long diskReferenceScore = 50000;
+        System.out.println("DISK: " + sumOfTime);
+        return (sumOfTime > 0) ? (long) (diskSlope * sumOfTime + (diskReferenceScore - diskSlope * diskReferenceTime)) : Long.MIN_VALUE;
     }
 
     /**

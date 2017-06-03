@@ -23,84 +23,103 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ResourceBundle;
 
+/**
+ * Kontroler zachowania zakladki Test w stworzonej aplikacji
+ */
 public class TestTabController implements Initializable{
 
     /**
-     *
+     * Obiekt reprezentujacy przycisk Start
      */
     @FXML
     private Button startBtn;
 
     /**
-     *
+     * Obiekt reprezentujacy przycisk Cancel
      */
     @FXML
     private Button cancelButton;
 
     /**
-     *
+     * Obiekt reprezentujacy pasek progresu. Dane pobiera z {@link TestTabController#progressPick}
      */
     @FXML
     private ProgressBar progressBar;
+    
     /**
-     *
+     * Obiekt reprezentujacy pole tekstowe informujace o etapie testowania
      */
     @FXML
     private Label workingOn;
+    
     /**
-     *
+     * Obiekt reprezentujacy znacznik umozliwiajacy przetestowanie procesora 
      */
     @FXML
     private CheckBox cpu;
+    
     /**
-     *
+     * Obiekt reprezentujacy znacznik umozliwiajacy przetestowanie karty graficznej
      */
     @FXML
     private CheckBox gpu;
+    
     /**
-     *
+     * Obiekt reprezentujacy znacznik umozliwiajacy przetestowanie dysku
      */
     @FXML
     private CheckBox disk;
+    
     /**
-     *
+     * Obiekt reprezentujacy znacznik umozliwiajacy przetestowanie pamieci RAM
      */
     @FXML
     private CheckBox ram;
+    
     /**
-     *
+     * Obiekt reprezentujacy pole tekstowe wyswietlajace uzystkany wynik
      */
     @FXML
     private TextFlow textFlow;
 
     /**
-     *
+     * Zmienna informujaca o stanie progresu przebiegu testow
      */
     private double progressPick = 0.0;
-
+    
     /**
-     *
-     */
-    private Thread first;
-    /**
-     *
-     */
-    private Window cube;
-    /**
-     *
+     * Obiekt pozwalajacy uzykac informacje o sprzecie
      */
     private final HardwareDetailsManager hardwareDetailsManager = Main.getHardwareDetailsManager();
 
     /**
-     *
+     * Funkcja testujaca. Tworzy nowy watek w ktorym kolejno uruchamiane sa zaznaczone testy.
+     * Ostatnim etapem dzialania jest zapis danych do pliku score.csv.
      */
     @FXML
     public void setStartBtn() {
-        first = new Thread(() -> {
+        Thread first = new Thread(() -> {
+            Window cube = null;
             resetProgressBar();
             countNumOfTests();
             diableControlls();
             ResultController.reset();
+            if(cpu.isSelected()){
+                increaseProgressAndChangeText("CPU: Int test...");
+                IntTest.measureAll();
+                increaseProgressAndChangeText("CPU: Long test...");
+                LongTest.measureAll();
+                increaseProgressAndChangeText("CPU: Double test...");
+                DoubleTest.measureAll();
+                increaseProgressAndChangeText("CPU: Quicksort test...");
+                Quicksort.warmAndTest();
+                increaseProgressAndChangeText("CPU: Prime Number test...");
+                PrimeNumberTest.warmAndTest();
+                increaseProgressAndChangeText("CPU: compress test...");
+                CompressTest.warmAndTest();
+                increaseProgressAndChangeText("CPU: encryption test...");
+                DataEncryption.warmAndTest();
+            }
             if(gpu.isSelected()) {
                 increaseProgressAndChangeText("GPU test...");
                 cube = new Window();
@@ -114,34 +133,6 @@ public class TestTabController implements Initializable{
             if (cube != null){
                 cube.clearCubes();
             }
-//            if(cpu.isSelected()){
-//                increaseProgressAndChangeText("CPU: Int test...");
-//                IntTest.measureAll();
-//            }
-//            if(cpu.isSelected()) {
-//                increaseProgressAndChangeText("CPU: Long test...");
-//                LongTest.measureAll();
-//            }
-//            if(cpu.isSelected()) {
-//                increaseProgressAndChangeText("CPU: Double test...");
-//                DoubleTest.measureAll();
-//            }
-            if(cpu.isSelected()) {
-                increaseProgressAndChangeText("CPU: Quicksort test...");
-                Quicksort.warmAndTest();
-            }
-//            if(cpu.isSelected()) {
-//                increaseProgressAndChangeText("CPU: Prime Number test...");
-//                PrimeNumberTest.warmAndTest();
-//            }
-//            if(cpu.isSelected()) {
-//                increaseProgressAndChangeText("CPU: compress test...");
-//                CompressTest.warmAndTest();
-//            }
-//            if(cpu.isSelected()) {
-//                increaseProgressAndChangeText("CPU: encryption test...");
-//                DataEncryption.warmAndTest();
-//            }
 
             if(disk.isSelected()){
                 increaseProgressAndChangeText("DISK: write, read speed test...");
@@ -193,29 +184,36 @@ public class TestTabController implements Initializable{
     }
 
     /**
-     * @param l
-     * @return
+     * Funkcja parsujaca zmienna typu {@link long} do typu {@link String}.
+     * Jesli {@code l} wynosi {@link Long#MIN_VALUE}, to zwracany jest "-".
+     *
+     * @param l liczba do parsowania
+     * @return liczba jako obiekt {@link String}
      */
     private String getFormatedResult(Long l){
-        return (l != Long.MIN_VALUE) ? Long.toString(l) : "-";
+        return (l != Long.MIN_VALUE || l != null) ? Long.toString(l) : "-";
     }
 
     /**
-     *
+     * Blokuje mozliwosc naciskania elementow graficznego intefejsu, w czasie trwania testow.
+     * wywoluje funkcje {@link TestTabController#changeDisableStatus(boolean)} z paramatrem {@code true}.
      */
     private void diableControlls(){
         changeDisableStatus(true);
     }
 
     /**
-     *
+     * Odblokowuje mozliwosc naciskania elementow graficznego intefejsu pozakonczeniu testow.
+     * wywoluje funkcje {@link TestTabController#changeDisableStatus(boolean)} z paramatrem {@code false}.
      */
     private void enableControlls(){
         changeDisableStatus(false);
     }
 
     /**
-     * @param value
+     * Zgodnie z parametrem {@code value} blokuje lub odblokowuje przyciski graficznego interfejsu
+     *
+     * @param value Okresla status elementow graficznego interfejsu.
      */
     private void changeDisableStatus(boolean value){
         cancelButton.setDisable(!value);
@@ -227,7 +225,8 @@ public class TestTabController implements Initializable{
     }
 
     /**
-     *
+     * Funkcja zliczajaca ilosc testow koniecznych do wykonania,
+     * umozliwia to odpowiednie sterowanie paskiem progresu {@link TestTabController#progressBar}.
      */
     private void countNumOfTests(){
         int numOfTests = 0;
@@ -247,14 +246,18 @@ public class TestTabController implements Initializable{
     }
 
     /**
-     *
+     * Resetuje postep paska progresu do stanu poczatkowego.
+     * Uruchamiana w momencie ponownego testowania.
      */
     private void resetProgressBar(){
         progressBar.setProgress(0.0);
     }
 
     /**
-     * @param text
+     * Ziwkesza pogres na {@link TestTabController#progressBar},
+     * oraz zmienia wyswietlany tekst na {@link TestTabController#workingOn}
+     *
+     * @param text tekst do wyswietlenia.
      */
     private void increaseProgressAndChangeText(String text){
 
@@ -264,7 +267,7 @@ public class TestTabController implements Initializable{
     }
 
     /**
-     *
+     * Wyswietla otrzymane rezultaty po zakonczonym dzialaniu w elmencie {@link TestTabController#textFlow}
      */
     private void displayResults(){
         Platform.runLater(() -> {
@@ -283,14 +286,16 @@ public class TestTabController implements Initializable{
     }
 
     /**
-     * @param text
+     * Funkcja zmieniajaca wyswietlana wartosc w elemencie {@link TestTabController#workingOn}
+     *
+     * @param text tekst do wyswietlenia.
      */
     private void setText(String text){
         Platform.runLater(() -> workingOn.setText(text));
     }
 
     /**
-     *
+     * Funkcja anulujaca testowanie.
      */
     @FXML
     private void closeThread() {
@@ -304,7 +309,8 @@ public class TestTabController implements Initializable{
     }
 
     /**
-     *
+     * Zmienia status przycisku {@link TestTabController#startBtn},
+     * w zaleznosci od tego, czy zostal wybrany jakikolwiek z podzespolow do testowania.
      */
     @FXML
     private void changeButtonsStatus(){

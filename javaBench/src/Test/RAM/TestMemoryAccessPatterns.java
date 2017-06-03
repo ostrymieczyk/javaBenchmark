@@ -12,14 +12,17 @@ public class TestMemoryAccessPatterns
      *
      */
     private static final int LONG_SIZE = 8;
+
     /**
      *
      */
     private static final int PAGE_SIZE = 2 * 1024 * 1024;
+
     /**
      *
      */
     private static final int ONE_GIG = 1024 * 1024 * 1024;
+
     /**
      *
      */
@@ -29,6 +32,7 @@ public class TestMemoryAccessPatterns
      *
      */
     private static final int ARRAY_SIZE = (int)(TWO_GIG / LONG_SIZE);
+
     /**
      *
      */
@@ -38,6 +42,7 @@ public class TestMemoryAccessPatterns
      *
      */
     private static final int ARRAY_MASK = ARRAY_SIZE - 1;
+
     /**
      *
      */

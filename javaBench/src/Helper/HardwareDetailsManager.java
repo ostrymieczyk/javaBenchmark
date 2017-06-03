@@ -6,11 +6,16 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ */
 public abstract class HardwareDetailsManager {
 
     /**
-     * @param command
-     * @return
+     * Wykonuje okreslona komende podana w parametrze w konsoli lub terminualu.
+     *
+     * @param command komenda do wykonania
+     * @return wynik komendy (jeden element, to jedna linia)
      */
     List<String> getCommandOutput(String[] command){
         List<String> commandOutput = new ArrayList<>();

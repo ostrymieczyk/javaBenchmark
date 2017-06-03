@@ -11,7 +11,7 @@ public class Record {
     /**
      *
      */
-    private final SimpleStringProperty id;
+    private final SimpleStringProperty name;
     /**
      *
      */
@@ -54,7 +54,7 @@ public class Record {
      */
     public Record(CSVRecord csvRecord){
 
-        id = new SimpleStringProperty(csvRecord.get(CsvHeaders.ID));
+        name = new SimpleStringProperty(csvRecord.get(CsvHeaders.NAME));
         cpuName = new SimpleStringProperty(csvRecord.get(CsvHeaders.CPU_NAME));
         cpuScore = new SimpleStringProperty(csvRecord.get(CsvHeaders.CPU_SCORE));
         gpuName = new SimpleStringProperty(csvRecord.get(CsvHeaders.GPU_NAME));
@@ -70,15 +70,15 @@ public class Record {
     /**
      * @return
      */
-    public String getId() {
-        return id.get();
+    public String getName() {
+        return name.get();
     }
 
     /**
      * @return
      */
-    public SimpleStringProperty idProperty() {
-        return id;
+    public SimpleStringProperty nameProperty() {
+        return name;
     }
 
     /**

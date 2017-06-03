@@ -1,16 +1,14 @@
 package Helper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class LinuxHardwareDetailsManager extends HardwareDetailsManager {
-    public List<String> getCpuDetails() {
-        return getCommandOutput(new String[]{"sh", "-c", "inxi -C -c 0"});
-    }
 
     @Override
     public String getFormattedCpuDetails() {
-        List<String> commandOutputLines = getCpuDetails();
+        List<String> commandOutputLines = getCommandOutput(new String[]{"sh", "-c", "inxi -C -c 0"});
         List<String> output = new ArrayList<>();
         String lookingFor = "cpu:";
         commandOutputLines.forEach(line -> {
@@ -22,13 +20,9 @@ public class LinuxHardwareDetailsManager extends HardwareDetailsManager {
         return String.join("; ", output);
     }
 
-    public List<String> getGpuDetails() {
-        return getCommandOutput(new String[]{"sh", "-c", "inxi -G -c 0"});
-    }
-
     @Override
     public String getFormattedGpuDetails() {
-        List<String> commandOutputLines = getGpuDetails();
+        List<String> commandOutputLines = getCommandOutput(new String[]{"sh", "-c", "inxi -G -c 0"});
         List<String> output = new ArrayList<>();
         String lookingFor = "card-";
         commandOutputLines.forEach(line -> {
@@ -40,13 +34,9 @@ public class LinuxHardwareDetailsManager extends HardwareDetailsManager {
         return String.join("; ", output);
     }
 
-    public List<String> getDiskDetails() {
-        return getCommandOutput(new String[]{"sh", "-c", "inxi -D -c 0"});
-    }
-
     @Override
     public String getFormattedDiskDetails() {
-        List<String> commandOutputLines = getDiskDetails();
+        List<String> commandOutputLines = getCommandOutput(new String[]{"sh", "-c", "inxi -D -c 0"});
         List<String> output = new ArrayList<>();
         String lookingFor = "model:";
         commandOutputLines.forEach(line -> {
@@ -58,13 +48,9 @@ public class LinuxHardwareDetailsManager extends HardwareDetailsManager {
         return String.join("; ", output);
     }
 
-    public List<String> getRamDetails() {
-        return getCommandOutput(new String[]{"sh", "-c", "inxi -I -c 0"});
-    }
-
     @Override
     public String getFormattedRamDetails() {
-        List<String> commandOutputLines = getRamDetails();
+        List<String> commandOutputLines = getCommandOutput(new String[]{"sh", "-c", "inxi -I -c 0"});
         List<String> output = new ArrayList<>();
         String lookingFor = "memory:";
         commandOutputLines.forEach(line -> {
@@ -81,6 +67,19 @@ public class LinuxHardwareDetailsManager extends HardwareDetailsManager {
 
     @Override
     public String getFormattedName() {
-        return null;
+        List<String> commandOutputLines = getCommandOutput(new String[]{"sh", "-c", "inxi -M -c 0"});
+        List<String> output = new ArrayList<>();
+        String lookingFor = "model:";
+        commandOutputLines.forEach(line -> {
+            if(line.toLowerCase().contains(lookingFor)){
+                int indexFrom = line.toLowerCase().indexOf(lookingFor);
+                String tempString = line.substring(indexFrom + lookingFor.length()).trim();
+                int indexTo = tempString.toLowerCase().indexOf(":");
+                String[] name = tempString.substring(0, indexTo).split("\\s+");
+                output.add(String.join(" ", Arrays.copyOf(name, name.length-1)));
+            }
+        });
+        return String.join("; ", output);
     }
+
 }

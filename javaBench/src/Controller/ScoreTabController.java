@@ -109,28 +109,35 @@ public class ScoreTabController implements Initializable {
     private static final Path defaultPath = Paths.get("./score.csv");
 
     /**
+     * Funkcja tworząca plik csv w którym zostają zapisane wyniki.
+     */
+    private void createNewCsv(){
+        try {
+            Files.write( defaultPath,
+                    Arrays.stream(CsvHeaders.class.getDeclaredFields())
+                            .map(field -> {
+                                try {
+                                    return field.get(field).toString();
+                                } catch (IllegalAccessException e) {
+                                    e.printStackTrace();
+                                    return null;
+                                }
+                            })
+                            .collect(Collectors.joining(","))
+                            .getBytes() );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Funkcja wczytujaca dane z pliku csv.
-     * Jesli plik nie istnieje, to jest tworzony
+     * Jesli plik nie istnieje, zostaje tworzony.
      */
     private void loadFromCSV(){
 
         if (Files.notExists(defaultPath)) {
-            try {
-                Files.write( defaultPath,
-                    Arrays.stream(CsvHeaders.class.getDeclaredFields())
-                        .map(field -> {
-                            try {
-                                return field.get(field).toString();
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                                return null;
-                            }
-                        })
-                        .collect(Collectors.joining(","))
-                        .getBytes() );
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            createNewCsv();
         }
 
         try(Reader in = Files.newBufferedReader(defaultPath);
@@ -163,10 +170,9 @@ public class ScoreTabController implements Initializable {
     }
 
     /**
-     * Odpowiada za wyswietlenie danych o sprzecie na wyniki ktorego uzytkownik nacisnal.
-     * Zmienna
+     * Odpowiada za wyswietlenie danych o sprzecie dla nacisnietego wyniku.
      *
-     * @param event
+     * @param event obiekt typu {@link MouseEvent} rzucany w momencie nacisniecia rekordu
      */
     @FXML
     public void clickItem(MouseEvent event)
@@ -179,9 +185,9 @@ public class ScoreTabController implements Initializable {
             String ramModel = record.getRamName();
             String diskModel = record.getDiskName();
 
-            Text toShow = new Text("CPU: " + cpuModel + "\n" +
-                    "GPU: " + gpuModel + "\n" +
-                    "Disk: " + diskModel + "\n" +
+            Text toShow = new Text("CPU: " + cpuModel + System.lineSeparator() +
+                    "GPU: " + gpuModel + System.lineSeparator() +
+                    "Disk: " + diskModel + System.lineSeparator() +
                     "RAM: " + ramModel);
 
             textFlow.getChildren().clear();

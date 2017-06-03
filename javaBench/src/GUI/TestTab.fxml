@@ -30,7 +30,7 @@
                <children>
                   <CheckBox fx:id="cpu" mnemonicParsing="false" onMouseClicked="#changeButtonsStatus" text="CPU" HBox.hgrow="ALWAYS" />
                   <CheckBox fx:id="gpu" mnemonicParsing="false" onMouseClicked="#changeButtonsStatus" text="GPU" />
-                  <CheckBox fx:id="disk" mnemonicParsing="false" onMouseClicked="#changeButtonsStatus" text="Drive" />
+                  <CheckBox fx:id="disk" mnemonicParsing="false" onMouseClicked="#changeButtonsStatus" text="Disk" />
                   <CheckBox fx:id="ram" mnemonicParsing="false" onMouseClicked="#changeButtonsStatus" text="RAM" />
                </children>
             </HBox>

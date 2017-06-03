@@ -201,11 +201,11 @@ public class Window implements GLEventListener {
         gl.glLoadIdentity();
     }
 
+    /**
+     *
+     */
     public void clearCubes(){
         cubes.clear();
     }
 
-    public Window(){
-
-    }
 }
