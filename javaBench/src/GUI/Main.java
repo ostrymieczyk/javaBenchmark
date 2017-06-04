@@ -13,19 +13,23 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Tworzy okno programu na podstawie plikow fxml.
+ */
 public class Main extends Application {
 
     /**
-     *
+     * Glowna scena do ktorej dodawane sa obiekty GUI
      */
     private Stage primaryStage;
+
     /**
-     *
+     * Obiekt w ktorym znajduja sie karty GUI
      */
     private TabPane rootLayout;
 
     /**
-     *
+     * Obiekt odczytujacy informacje o komputerze
      */
     private static HardwareDetailsManager hardwareDetailsManager;
 
@@ -47,11 +51,10 @@ public class Main extends Application {
     }
 
     /**
-     *
+     * Inicjalizuje {@link Main#rootLayout} na podstawie pliku fxml
      */
     private void initRootLayout() {
         try {
-            // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("/GUI/TabRoot.fxml"));
             rootLayout = loader.load();
@@ -65,11 +68,10 @@ public class Main extends Application {
 
 
     /**
-     *
+     * Inicjalizuje karty {@link Main#rootLayout} na podstawie pliku fxml
      */
     private void showTestTab() {
         try {
-            // Load person overview.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("/GUI/TestTab.fxml"));
             AnchorPane testTab = loader.load();
@@ -80,7 +82,7 @@ public class Main extends Application {
     }
 
     /**
-     *
+     * Inicjalizuje karty {@link Main#rootLayout} na podstawie pliku fxml
      */
     private void showRankingTab(){
         try {
@@ -101,7 +103,7 @@ public class Main extends Application {
     }
 
     /**
-     *
+     * Inicjalizuje karty {@link Main#rootLayout} na podstawie pliku fxml
      */
     private void showInfoTab(){
         try {
@@ -116,7 +118,8 @@ public class Main extends Application {
     }
 
     /**
-     *
+     * Konstruktor w ktorym tworzony jest obiekt typu {@link HardwareDetailsManager}
+     * odpowiedni dla systemu operacyjnego
      */
     public Main(){
         if(System.getProperty("os.name")
@@ -129,14 +132,19 @@ public class Main extends Application {
     }
 
     /**
-     * @param args
+     * Glowna funkcja programu wywoluje metode {@link Application#launch(String...)}
+     *
+     * @param args parametry przekazywane do {@link Application#launch(String...)}
      */
     public static void main(String[] args) {
         launch(args);
     }
 
     /**
-     * @return
+     * Zwraca obiekt typu {@link HardwareDetailsManager}
+     * odpowiedni dla systemu operacyjnego
+     *
+     * @return obiekt typu {@link HardwareDetailsManager}
      */
     public static HardwareDetailsManager getHardwareDetailsManager() {
         return hardwareDetailsManager;

@@ -3,7 +3,7 @@ package Controller;
 import GUI.Main;
 import Helper.HardwareDetailsManager;
 import Test.CPU.*;
-import Test.GPU.Window;
+import Test.GPU.GpuTestWindow;
 import Test.HardDrive.MeasureIOPerformance;
 import Test.RAM.TestMemoryAccessPatterns;
 import javafx.application.Platform;
@@ -99,7 +99,7 @@ public class TestTabController implements Initializable{
     @FXML
     public void setStartBtn() {
         Thread first = new Thread(() -> {
-            Window cube = null;
+            GpuTestWindow cube = null;
             resetProgressBar();
             countNumOfTests();
             diableControlls();
@@ -122,10 +122,10 @@ public class TestTabController implements Initializable{
             }
             if(gpu.isSelected()) {
                 increaseProgressAndChangeText("GPU test...");
-                cube = new Window();
+                cube = new GpuTestWindow();
                 cube.addCube(0f, 0f, 0f);
                 try {
-                    cube.addCubes();
+                    cube.measure();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -136,13 +136,14 @@ public class TestTabController implements Initializable{
 
             if(disk.isSelected()){
                 increaseProgressAndChangeText("DISK: write, read speed test...");
-                new MeasureIOPerformance().run();
+                MeasureIOPerformance.test();
+
             }
 
             if(ram.isSelected()){
                 increaseProgressAndChangeText("RAM test...");
                 try {
-                    new TestMemoryAccessPatterns().run();
+                    new TestMemoryAccessPatterns().warmAndTest();
                 } catch (OutOfMemoryError e){
                     setText("java.lang.OutOfMemoryError: Java heap space");
                     throw new OutOfMemoryError(e.getMessage());
@@ -154,31 +155,31 @@ public class TestTabController implements Initializable{
             changeButtonsStatus();
             if(cpu.isSelected() || ram.isSelected() || gpu.isSelected() || disk.isSelected()) {
                 increaseProgressAndChangeText("Done!");
+                try {
+                    Files.write(
+                            Paths.get("./score.csv"),
+                            String
+                                    .join(",",
+                                            System.lineSeparator() + hardwareDetailsManager.getFormattedName(),
+                                            hardwareDetailsManager.getFormattedCpuDetails(),
+                                            getFormatedResult(ResultController.getCpuScore()),
+                                            hardwareDetailsManager.getFormattedGpuDetails(),
+                                            getFormatedResult(ResultController.getGpuScore()),
+                                            hardwareDetailsManager.getFormattedDiskDetails(),
+                                            getFormatedResult(ResultController.getDiskScore()),
+                                            hardwareDetailsManager.getFormattedRamDetails(),
+                                            getFormatedResult(ResultController.getRamScore()),
+                                            getFormatedResult(ResultController.getTotalScore()))
+                                    .getBytes(),
+                            StandardOpenOption.APPEND);
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+                displayResults();
             } else {
                 setText("Aborted");
             }
-            try {
-                Files.write(
-                        Paths.get("./score.csv"),
-                        String
-                                .join(",",
-                                        System.lineSeparator() + hardwareDetailsManager.getFormattedName(),
-                                        hardwareDetailsManager.getFormattedCpuDetails(),
-                                        getFormatedResult(ResultController.getCpuScore()),
-                                        hardwareDetailsManager.getFormattedGpuDetails(),
-                                        getFormatedResult(ResultController.getGpuScore()),
-                                        hardwareDetailsManager.getFormattedDiskDetails(),
-                                        getFormatedResult(ResultController.getDiskScore()),
-                                        hardwareDetailsManager.getFormattedRamDetails(),
-                                        getFormatedResult(ResultController.getRamScore()),
-                                        getFormatedResult(ResultController.getTotalScore()))
-                                .getBytes(),
-                        StandardOpenOption.APPEND);
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-            displayResults();
         });
         first.start();
     }
@@ -191,7 +192,7 @@ public class TestTabController implements Initializable{
      * @return liczba jako obiekt {@link String}
      */
     private String getFormatedResult(Long l){
-        return (l != Long.MIN_VALUE || l != null) ? Long.toString(l) : "-";
+        return (l != Long.MIN_VALUE || l == null) ? Long.toString(l) : "-";
     }
 
     /**

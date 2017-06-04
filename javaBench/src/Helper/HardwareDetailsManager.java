@@ -7,15 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Klasa abstrakcyjna zawierajaca metody niezbede do zaimplementowania
+ * przez klasy dziedziczace, pozwalajaca na odczytanie informacji o sprzecie.
+ * Klasa dziedziczaca implementuje metody dla konkretnego systemu.
  */
 public abstract class HardwareDetailsManager {
 
     /**
-     * Wykonuje okreslona komende podana w parametrze w konsoli lub terminualu.
+     * Wykonuje okreslona komende (podana jako parametr) w konsoli lub terminualu.
+     * Metoda wspolna dla wszytskich klas dziedziczacych.
      *
-     * @param command komenda do wykonania
-     * @return wynik komendy (jeden element, to jedna linia)
+     * @param command komenda do wykonania.
+     * @return wynik komendy (jeden element listy, to jedna linia).
      */
     List<String> getCommandOutput(String[] command){
         List<String> commandOutput = new ArrayList<>();
@@ -43,27 +46,37 @@ public abstract class HardwareDetailsManager {
     }
 
     /**
-     * @return
+     * Odczytuje informacje na temat procesora.
+     *
+     * @return Informacje w formacie odpowiednim do wyswietlenia.
      */
     public abstract String getFormattedCpuDetails();
 
     /**
-     * @return
+     * Odczytuje informacje na temat karty graficznej.
+     *
+     * @return Informacje w formacie odpowiednim do wyswietlenia.
      */
     public abstract String getFormattedGpuDetails();
 
     /**
-     * @return
+     * Odczytuje informacje na temat dysku.
+     *
+     * @return Informacje w formacie odpowiednim do wyswietlenia.
      */
     public abstract String getFormattedDiskDetails();
 
     /**
-     * @return
+     * Odczytuje informacje na temat pamieci RAM.
+     *
+     * @return Informacje w formacie odpowiednim do wyswietlenia.
      */
     public abstract String getFormattedRamDetails();
 
     /**
-     * @return
+     * Odczytuje informacje na temat nazwy modelu komputera.
+     *
+     * @return Informacje w formacie odpowiednim do wyswietlenia.
      */
     public abstract String getFormattedName();
 }

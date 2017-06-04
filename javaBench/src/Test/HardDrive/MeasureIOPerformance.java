@@ -3,128 +3,163 @@ package Test.HardDrive;
 import Controller.ResultController;
 import Helper.Timer;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- *
+ * Klasa zawierajaca zestawy metod testowych wykonywanych przy pomiarach wydajnosci dysku.
  */
-public final class MeasureIOPerformance implements Runnable {
+public final class MeasureIOPerformance {
+
     /**
-     *
+     * Wielkosc jednego pliku operacyjnego wyrazona w bajtach
      */
-    private static final int SIZE_GB = 1024 * 1024 * 1024;
+    private static final int SIZE_GB = 230 * 1024 * 1024;
+
     /**
-     *
+     * Rozmiar bufora uzywanego do operacji zapisu i odczytu
      */
     private static final int BLOCK_SIZE = 2 * 1024 * 1024;
+
     /**
-     *
+     * Ilosc blokow o rozmiarze {@link MeasureIOPerformance#BLOCK_SIZE}, aby uzykac {@link MeasureIOPerformance#SIZE_GB}
      */
     private static final int blocks = SIZE_GB / BLOCK_SIZE;
+
     /**
-     *
+     * Czas trwania jedej operacji zapisu lub odczytu
      */
     private static long TOTAL_TIME = 0;
 
     /**
-     *
+     * Kontener w ktorym znajuda sie wyniki zapisu do pliku
      */
     private static final List<Long> writeResults = new ArrayList<>();
+
     /**
-     *
+     * Kontener w ktorym znajuda sie wyniki odczytu z pliku
      */
     private static final List<Long> readResults = new ArrayList<>();
 
     /**
-     * @param rw
-     * @param i
-     * @throws IOException
+     * Pliki do zapisane
      */
-    private static void measure(StreamRw rw, int i)
-            throws IOException {
-        File writeFile = new File(System.getProperty("user.dir") +
-                "/temp_file_to_delete_" +
+    private static File[] writeFiles = new File[3];
+
+    /**
+     * Pliki do odczytu
+     */
+    private static File[] readFiles = new File[3];
+
+    /**
+     * Ciag bajtow z danymi do zapisu lub odczytu, o rozmiarze {@link MeasureIOPerformance#BLOCK_SIZE}
+     */
+    static final byte[] buffer = new byte[BLOCK_SIZE];
+
+
+    /**
+     * Mierzy czas trwania jednej operacji zapisu i odczytu,
+     * nastepnie dodaje go do {@link MeasureIOPerformance#writeResults}, lub
+     * {@link MeasureIOPerformance#readResults}
+     *
+     * @param i Okresla plik na ktorym zostaja wykonane operacje {@link MeasureIOPerformance#readFiles},
+     *          {@link MeasureIOPerformance#writeFiles}.
+     */
+    private static void measure(int i){
+        writeFiles[i] = new File("temp_file_to_delete_" +
                 ThreadLocalRandom.current().nextInt());
-        writeFile.deleteOnExit();
-        File[] readFiles = new File[3];
-        Arrays.setAll(readFiles, n -> new File(
-                System.getProperty("user.dir") + "/" + "readTest" + (n+1)));
-        rw.write(writeFile);
+        writeFiles[i].deleteOnExit();
+        write(writeFiles[i]);
         writeResults.add(TOTAL_TIME);
         TOTAL_TIME = 0;
-        rw.read(readFiles[i]);
+        read(readFiles[i]);
         readResults.add(TOTAL_TIME);
         TOTAL_TIME = 0;
-        writeFile.delete();
     }
 
     /**
-     *
+     * Sumuje czasy w {@link MeasureIOPerformance#writeResults} i {@link MeasureIOPerformance#readResults},
+     * Nastepenie dodaje je do {@link ResultController}, oraz czysci {@link MeasureIOPerformance#writeResults} i
+     * {@link MeasureIOPerformance#readResults}.
      */
-    private void addToResultController(){
+    private static void addToResultController(){
         long writeTime = 0, readTime = 0;
         for(long time : writeResults) writeTime += time;
         for(long time : readResults) readTime += time;
         ResultController.setDiskReadResult(readTime);
         ResultController.setDiskWriteResult(writeTime);
-    }
-
-    @Override
-    public void run() {
-        try {
-            for (int i = 0; i<3 ; i++){
-                measure(new StreamRw(), i);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        addToResultController();
+        writeResults.clear();
+        readResults.clear();
     }
 
     /**
-     *
+     * Wskazuje jakie pliki nalezy odczytac a nastepnie wywoluje {@link MeasureIOPerformance#measure(int)} trzy razy
      */
-    static class StreamRw {
-        final byte[] buffer = new byte[BLOCK_SIZE];
-
-        /**
-         * @param f
-         * @throws IOException
-         */
-        public void write(File f) throws IOException {
-            try (FileOutputStream out = new FileOutputStream(f)) {
-                for (int i = 0; i < blocks; i++) {
-                    Timer t = new Timer();
-                    out.write(buffer);
-                    TOTAL_TIME += t.check();
-                }
+    public static void test() {
+        Arrays.setAll(readFiles, n -> new File("readTest" + n));
+        for (int i = 0; i < 3; i++) {
+            try {
+                new ProcessBuilder("sudo", "su", "-c", "echo 3 > /proc/sys/vm/drop_caches")
+                        .start().waitFor();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            measure(i);
         }
+        addToResultController();
+        Arrays.stream(writeFiles).forEach(file -> file.delete());
+    }
 
-        /**
-         * @param f
-         * @throws IOException
-         */
-        public void read(File f) throws IOException {
-            int checksum =  0;
-            int temp = 0;
-            try (FileInputStream in = new FileInputStream(f)) {
-                for (int i = 0; i < blocks; i++) {
-                    Timer t = new Timer();
-                    temp = in.read(buffer);
-                    TOTAL_TIME += t.check();
-                    checksum += buffer.hashCode();
-                    if (temp == -1)
-                        break;
-                }
+
+
+    /**
+     * Funkcja testujaca zapis
+     *
+     * @param file plik, do ktorego ma odbyc sie zapis
+     */
+    public static void write(File file){
+        Random random = new Random();
+        random.nextBytes(buffer);
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            for (int i = 0; i < blocks; i++) {
+                Timer t = new Timer();
+                out.write(buffer);
+                TOTAL_TIME += t.check();
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * funkcja testujaca odczyt
+     *
+     * @param file plik z ktorego dane sa odczytane
+     */
+    public static void read(File file){
+        int checksum =  0;
+        int temp = 0;
+        try (FileInputStream in = new FileInputStream(file)) {
+            for (int i = 0; i < blocks; i++) {
+                Timer t = new Timer();
+                temp = in.read(buffer);
+                TOTAL_TIME += t.check();
+                checksum += buffer.hashCode();
+                if (temp == -1)
+                    break;
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

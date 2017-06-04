@@ -4,53 +4,65 @@ import javafx.beans.property.SimpleStringProperty;
 import org.apache.commons.csv.CSVRecord;
 
 /**
- *
+ * Klasa symulujaca rekord w tabeli oraz pliku score.csv.
+ * Niezbedna do porawnego wyswietlenia danych przez biblioteke JavaFX.
  */
 public class Record {
 
     /**
-     *
+     * Zmienna pamietajaca dane w kolumnie Name
      */
     private final SimpleStringProperty name;
+
     /**
-     *
+     * Zmienna pamietajaca dane w kolumnie CPU score
      */
     private final SimpleStringProperty cpuName;
+
     /**
-     *
+     * Zmienna pamietajaca dane w kolumnie CPU score
      */
     private final SimpleStringProperty cpuScore;
+
     /**
-     *
+     * Zmienna pamietajaca dane w kolumnie GPU name
      */
     private final SimpleStringProperty gpuName;
+
     /**
-     *
+     * Zmienna pamietajaca dane w kolumnie GPU score
      */
     private final SimpleStringProperty gpuScore;
+
     /**
-     *
+     * Zmienna pamietajaca dane w kolumnie Disk name
      */
     private final SimpleStringProperty diskName;
+
     /**
-     *
+     * Zmienna pamietajaca dane w kolumnie Diskscore
      */
     private final SimpleStringProperty diskScore;
+
     /**
-     *
+     * Zmienna pamietajaca dane w kolumnie RAM name
      */
     private final SimpleStringProperty ramName;
+
     /**
-     *
+     * Zmienna pamietajaca dane w kolumnie RAM score
      */
     private final SimpleStringProperty ramScore;
+
     /**
-     *
+     * Zmienna pamietajaca dane w kolumnie Total score
      */
     private final SimpleStringProperty totalScore;
 
     /**
-     * @param csvRecord
+     * Konstruktor klasy tworzonej na podstawie rekordu pliku score.csv.
+     *
+     * @param csvRecord rekord z pliku score.csv
      */
     public Record(CSVRecord csvRecord){
 
@@ -68,142 +80,92 @@ public class Record {
     }
 
     /**
-     * @return
+     * Zwraca wartosc pola {@link Record#name} jako {@link String}
+     *
+     * @return pole {@link Record#name} jako {@link String}
      */
     public String getName() {
         return name.get();
     }
 
     /**
-     * @return
-     */
-    public SimpleStringProperty nameProperty() {
-        return name;
-    }
-
-    /**
-     * @return
+     * Zwraca wartosc pola {@link Record#cpuName} jako {@link String}
+     *
+     * @return pole {@link Record#cpuName} jako {@link String}
      */
     public String getCpuName() {
         return cpuName.get();
     }
 
     /**
-     * @return
-     */
-    public SimpleStringProperty cpuNameProperty() {
-        return cpuName;
-    }
-
-    /**
-     * @return
+     * Zwraca wartosc pola {@link Record#cpuScore} jako {@link String}
+     *
+     * @return pole {@link Record#cpuScore} jako {@link String}
      */
     public String getCpuScore() {
         return cpuScore.get();
     }
 
     /**
-     * @return
-     */
-    public SimpleStringProperty cpuScoreProperty() {
-        return cpuScore;
-    }
-
-    /**
-     * @return
+     * Zwraca wartosc pola {@link Record#gpuName} jako {@link String}
+     *
+     * @return pole {@link Record#gpuName} jako {@link String}
      */
     public String getGpuName() {
         return gpuName.get();
     }
 
     /**
-     * @return
-     */
-    public SimpleStringProperty gpuNameProperty() {
-        return gpuName;
-    }
-
-    /**
-     * @return
+     * Zwraca wartosc pola {@link Record#gpuScore} jako {@link String}
+     *
+     * @return pole {@link Record#gpuScore} jako {@link String}
      */
     public String getGpuScore() {
         return gpuScore.get();
     }
 
     /**
-     * @return
-     */
-    public SimpleStringProperty gpuScoreProperty() {
-        return gpuScore;
-    }
-
-    /**
-     * @return
+     * Zwraca wartosc pola {@link Record#diskName} jako {@link String}
+     *
+     * @return pole {@link Record#diskName} jako {@link String}
      */
     public String getDiskName() {
         return diskName.get();
     }
 
     /**
-     * @return
-     */
-    public SimpleStringProperty diskNameProperty() {
-        return diskName;
-    }
-
-    /**
-     * @return
+     * Zwraca wartosc pola {@link Record#diskScore} jako {@link String}
+     *
+     * @return pole {@link Record#diskScore} jako {@link String}
      */
     public String getDiskScore() {
         return diskScore.get();
     }
 
     /**
-     * @return
-     */
-    public SimpleStringProperty diskScoreProperty() {
-        return diskScore;
-    }
-
-    /**
-     * @return
+     * Zwraca wartosc pola {@link Record#ramScore} jako {@link String}
+     *
+     * @return pole {@link Record#ramScore} jako {@link String}
      */
     public String getRamScore() {
         return ramScore.get();
     }
 
     /**
-     * @return
-     */
-    public SimpleStringProperty ramScoreProperty() {
-        return ramScore;
-    }
-
-    /**
-     * @return
+     * Zwraca wartosc pola {@link Record#ramName} jako {@link String}
+     *
+     * @return pole {@link Record#ramName} jako {@link String}
      */
     public String getRamName() {
         return ramName.get();
     }
 
     /**
-     * @return
-     */
-    public SimpleStringProperty ramNameProperty() {
-        return ramName;
-    }
-
-    /**
-     * @return
+     * Zwraca wartosc pola {@link Record#totalScore} jako {@link String}
+     *
+     * @return pole {@link Record#totalScore} jako {@link String}
      */
     public String getTotalScore() {
         return totalScore.get();
-    }
-
-    /**
-     * @return
-     */
-    public SimpleStringProperty totalScoreProperty() {
-        return totalScore;
     }
 }

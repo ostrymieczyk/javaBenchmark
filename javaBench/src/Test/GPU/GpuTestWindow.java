@@ -8,18 +8,50 @@ import com.jogamp.opengl.util.Animator;
 
 import java.util.*;
 
-public class Window implements GLEventListener {
+/**
+ * Klasa zawierajaca metody testowania karty graficznej
+ */
+public class GpuTestWindow implements GLEventListener {
 
+    /**
+     * Obiekt klasy {@link GLU} niezbedny do poprawnego wyswietlenia
+     * animacji
+     */
     private final GLU glu = new GLU();
+
+    /**
+     * Kontener z wyswietlanymi brylami
+     */
     private static final Set<Cube> cubes = new HashSet<>();
-    private static final float point = 1.0f;
+
+    /**
+     * Zmienna w ktorej zapamietana jest wartosc oddalenia
+     * ekranu od srodka wyswietlanej animacji.
+     */
     private Float out = 20f;
+
+    /**
+     * Odpowiadajaca za kat obrotu wzgledem
+     * wyswietlanej animacji.
+     */
     private Float rotate = 0f;
 
+    /**
+     * Zmienna do ktorej zostaje przypisana ilosc wyswietlonych
+     * klatek w czasie trwania animacji
+     */
     private static long FPS = 0;
 
+    /**
+     * Funkcja tworzaca nowy szescian oraz dodajaca go do {@link GpuTestWindow#cubes}
+     *
+     * @param diffx wartosc oddalenia od punktu 1.0 na osi x
+     * @param diffy wartosc oddalenia od punktu 1.0 na osi y
+     * @param diffz wartosc oddalenia od punktu 1.0 na osi z
+     */
     public void addCube(float diffx, float diffy, float diffz){
         Random rand = new Random();
+        final float point = 1.0f;
         float[][][] f = {
                 {
                     {point + diffx, point + diffy, -point + diffz},
@@ -58,7 +90,8 @@ public class Window implements GLEventListener {
                     {point + diffx, -point + diffy, -point + diffz}
                 }};
 
-        float[][] c = {{rand.nextFloat(), rand.nextFloat(), rand.nextFloat()},
+        float[][] c = {
+                {rand.nextFloat(), rand.nextFloat(), rand.nextFloat()},
                 {rand.nextFloat(), rand.nextFloat(), rand.nextFloat()},
                 {rand.nextFloat(), rand.nextFloat(), rand.nextFloat()},
                 {rand.nextFloat(), rand.nextFloat(), rand.nextFloat()},
@@ -70,7 +103,12 @@ public class Window implements GLEventListener {
         }
     }
 
-    public void addCubes() {
+    /**
+     * Tworzy nowe okno w ktorym odbywa sie wyswietlanie animacji,
+     * a nastepnie dodaje 6 bryl co 10 milisekund.
+     * Na koniec dodaje wartosc {@link GpuTestWindow#FPS} do {@link ResultController}
+     */
+    public void measure() {
 
         final GLProfile profile = GLProfile.get(GLProfile.GL2);
         GLCapabilities capabilities = new GLCapabilities(profile);
@@ -88,7 +126,7 @@ public class Window implements GLEventListener {
 
         float max = 2.5f;
         long end = System.currentTimeMillis() + 30000;
-        flag:
+        breakFlag:
         while (true) {
             for (float i = -max; i <= max; i += 2.5f) {
                 for (float j = -max; j <= max; j += 2.5f)
@@ -105,7 +143,7 @@ public class Window implements GLEventListener {
                         e.printStackTrace();
                     }
                     if (System.currentTimeMillis() > end)
-                        break flag;
+                        break breakFlag;
                     synchronized (rotate) {
                         rotate += 0.5f;
                     }
@@ -202,7 +240,7 @@ public class Window implements GLEventListener {
     }
 
     /**
-     *
+     * odpowiada za usuniecie elementow z {@link GpuTestWindow#cubes}
      */
     public void clearCubes(){
         cubes.clear();
